@@ -81,6 +81,7 @@ Class=clsFormMovementManager; CODIGO\clsFormMovementManager.cls
 Class=clsForum; CODIGO\clsForum.cls
 Form=CODIGO\frmGuildMember.frm
 Form=CODIGO\frmTutorial.frm
+Class=clsArrayList; CODIGO\clsArrayList.cls
 IconForm="frmMain"
 Startup="Sub Main"
 HelpFile=""

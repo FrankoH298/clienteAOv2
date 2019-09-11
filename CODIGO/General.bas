@@ -395,7 +395,7 @@ Sub MoveTo(ByVal Direccion As E_Heading)
 ' 06/28/2008: NicoNZ - Saqué lo que impedía que si el usuario estaba paralizado se ejecute el sub.
 '***************************************************
     Dim LegalOk As Boolean
-    
+    Static lastMovement As Long
     If Cartel Then Cartel = False
     
     Select Case Direccion
@@ -416,12 +416,16 @@ Sub MoveTo(ByVal Direccion As E_Heading)
             MoveScreen Direccion
         End If
     Else
-        If charlist(UserCharIndex).Heading <> Direccion Then
-            Call WriteChangeHeading(Direccion)
+        If (charlist(UserCharIndex).Heading <> Direccion) And (timeGetTime > lastMovement) Then
+              Call WriteChangeHeading(Direccion)
+              lastMovement = timeGetTime + 96
         End If
     End If
     
+    If frmMain.TrainingMacro.Enabled Then frmMain.DesactivarMacroHechizos
     If frmMain.macrotrabajo.Enabled Then Call frmMain.DesactivarMacroTrabajo
+    
+    frmMain.Coord.Caption = UserMap & " X: " & UserPos.X & " Y: " & UserPos.Y
     
     ' Update 3D sounds!
     Call Audio.MoveListener(UserPos.X, UserPos.Y)
@@ -440,7 +444,6 @@ Private Sub CheckKeys()
 '*****************************************************************
 'Checks keys and respond
 '*****************************************************************
-    Static LastMovement As Long
     
     'No input allowed while Argentum is not the active window
     If Not Application.IsAppActive() Then Exit Sub
@@ -456,47 +459,54 @@ Private Sub CheckKeys()
     
     'TODO: Debería informarle por consola?
     If Traveling Then Exit Sub
-
-    'Control movement interval (this enforces the 1 step loss when meditating / resting client-side)
-    If timeGetTime > LastMovement Then
-        LastMovement = timeGetTime + 56
-    Else
-        Exit Sub
-    End If
-    
     'Don't allow any these keys during movement..
     If UserMoving = 0 Then
         If Not UserEstupido Then
-            'Move Up
             If GetKeyState(CustomKeys.BindedKey(eKeyType.mKeyUp)) < 0 Then
-                If frmMain.TrainingMacro.Enabled Then frmMain.DesactivarMacroHechizos
+                If lastKeys.itemExist(CustomKeys.BindedKey(eKeyType.mKeyUp)) = False Then lastKeys.Add (CustomKeys.BindedKey(eKeyType.mKeyUp)) ' Agrega la tecla al arraylist
+            Else
+                If lastKeys.itemExist(CustomKeys.BindedKey(eKeyType.mKeyUp)) Then lastKeys.Remove (CustomKeys.BindedKey(eKeyType.mKeyUp)) ' Remueve la tecla que teniamos presionada
+            End If
+            
+            If GetKeyState(CustomKeys.BindedKey(eKeyType.mKeyDown)) < 0 Then
+                If lastKeys.itemExist(CustomKeys.BindedKey(eKeyType.mKeyDown)) = False Then lastKeys.Add (CustomKeys.BindedKey(eKeyType.mKeyDown)) ' Agrega la tecla al arraylist
+            Else
+                If lastKeys.itemExist(CustomKeys.BindedKey(eKeyType.mKeyDown)) Then lastKeys.Remove (CustomKeys.BindedKey(eKeyType.mKeyDown)) ' Remueve la tecla que teniamos presionada
+            End If
+            
+            If GetKeyState(CustomKeys.BindedKey(eKeyType.mKeyLeft)) < 0 Then
+                If lastKeys.itemExist(CustomKeys.BindedKey(eKeyType.mKeyLeft)) = False Then lastKeys.Add (CustomKeys.BindedKey(eKeyType.mKeyLeft)) ' Agrega la tecla al arraylist
+            Else
+                If lastKeys.itemExist(CustomKeys.BindedKey(eKeyType.mKeyLeft)) Then lastKeys.Remove (CustomKeys.BindedKey(eKeyType.mKeyLeft)) ' Remueve la tecla que teniamos presionada
+            End If
+            
+            If GetKeyState(CustomKeys.BindedKey(eKeyType.mKeyRight)) < 0 Then
+                If lastKeys.itemExist(CustomKeys.BindedKey(eKeyType.mKeyRight)) = False Then lastKeys.Add (CustomKeys.BindedKey(eKeyType.mKeyRight)) ' Agrega la tecla al arraylist
+            Else
+                If lastKeys.itemExist(CustomKeys.BindedKey(eKeyType.mKeyRight)) Then lastKeys.Remove (CustomKeys.BindedKey(eKeyType.mKeyRight)) ' Remueve la tecla que teniamos presionada
+            End If
+            
+            'Move Up
+            If lastKeys.Count() = 38 Then
                 Call MoveTo(NORTH)
-                frmMain.Coord.Caption = UserMap & " X: " & UserPos.X & " Y: " & UserPos.Y
                 Exit Sub
             End If
             
             'Move Right
-            If GetKeyState(CustomKeys.BindedKey(eKeyType.mKeyRight)) < 0 Then
-                If frmMain.TrainingMacro.Enabled Then frmMain.DesactivarMacroHechizos
+            If lastKeys.Count() = 39 Then
                 Call MoveTo(EAST)
-                'frmMain.Coord.Caption = "(" & UserMap & "," & UserPos.x & "," & UserPos.y & ")"
-                frmMain.Coord.Caption = UserMap & " X: " & UserPos.X & " Y: " & UserPos.Y
                 Exit Sub
             End If
         
             'Move down
-            If GetKeyState(CustomKeys.BindedKey(eKeyType.mKeyDown)) < 0 Then
-                If frmMain.TrainingMacro.Enabled Then frmMain.DesactivarMacroHechizos
+            If lastKeys.Count() = 40 Then
                 Call MoveTo(SOUTH)
-                frmMain.Coord.Caption = UserMap & " X: " & UserPos.X & " Y: " & UserPos.Y
                 Exit Sub
             End If
         
             'Move left
-            If GetKeyState(CustomKeys.BindedKey(eKeyType.mKeyLeft)) < 0 Then
-                If frmMain.TrainingMacro.Enabled Then frmMain.DesactivarMacroHechizos
+            If lastKeys.Count() = 37 Then
                 Call MoveTo(WEST)
-                frmMain.Coord.Caption = UserMap & " X: " & UserPos.X & " Y: " & UserPos.Y
                 Exit Sub
             End If
             
@@ -873,7 +883,8 @@ UserMap = 1
     Call CargarAnimArmas
     Call CargarAnimEscudos
     Call CargarColores
-    
+    Set lastKeys = New clsArrayList
+    Call lastKeys.Initialize(1, 4)
     Call AddtoRichTextBox(frmCargando.status, "Hecho", 255, 0, 0, True, False, False)
     
     Call AddtoRichTextBox(frmCargando.status, "Iniciando DirectSound... ", 255, 255, 255, True, False, True)
@@ -890,11 +901,6 @@ UserMap = 1
     Call Audio.MusicMP3Play(App.path & "\MP3\" & MP3_Inicio & ".mp3")
     
     Call AddtoRichTextBox(frmCargando.status, "Hecho", 255, 0, 0, True, False, False)
-    
-#If SeguridadAlkon Then
-    CualMI = 0
-    Call InitMI
-#End If
     
     Call AddtoRichTextBox(frmCargando.status, "                    ¡Bienvenido a Argentum Online!", 255, 255, 255, True, False, True)
     
@@ -954,7 +960,12 @@ UserMap = 1
             'Play ambient sounds
             Call RenderSounds
             
-            Call CheckKeys
+            If GetKeyState(CustomKeys.BindedKey(eKeyType.mKeyUp)) < 0 Or _
+                GetKeyState(CustomKeys.BindedKey(eKeyType.mKeyDown)) < 0 Or _
+                GetKeyState(CustomKeys.BindedKey(eKeyType.mKeyLeft)) < 0 Or _
+                GetKeyState(CustomKeys.BindedKey(eKeyType.mKeyRight)) < 0 Then _
+                Call CheckKeys
+            
         End If
         'FPS Counter - mostramos las FPS
         If timeGetTime >= lFrameTimer Then
@@ -1290,6 +1301,7 @@ Public Sub CloseClient()
     Set Dialogos = Nothing
     Set DialogosClanes = Nothing
     Set Audio = Nothing
+    Set lastKeys = Nothing
     Set Inventario = Nothing
     Set MainTimer = Nothing
     Set incomingData = Nothing

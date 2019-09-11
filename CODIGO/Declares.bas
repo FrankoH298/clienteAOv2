@@ -43,6 +43,7 @@ Public Actual As Integer
 Public DialogosClanes As New clsGuildDlg
 Public Dialogos As New clsDialogs
 Public Audio As New clsAudio
+Public lastKeys As clsArrayList
 Public Inventario As New clsGraphicalInventory
 Public InvBanco(1) As New clsGraphicalInventory
 

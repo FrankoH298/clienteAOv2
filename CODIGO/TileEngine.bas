@@ -61,6 +61,7 @@ Private Const GrhFogata As Integer = 1521
 'Sets a Grh animation to loop indefinitely.
 Private Const INFINITE_LOOPS As Integer = -1
 
+Public Movement_Speed As Single
 
 'Encabezado bmp
 Type BITMAPFILEHEADER
@@ -1126,7 +1127,7 @@ On Error GoTo error
         
     If Animate Then
         If Grh.Started = 1 Then
-            Grh.FrameCounter = Grh.FrameCounter + (timerElapsedTime * GrhData(Grh.GrhIndex).NumFrames / Grh.Speed)
+            Grh.FrameCounter = Grh.FrameCounter + (timerElapsedTime * GrhData(Grh.GrhIndex).NumFrames / Grh.Speed) * Movement_Speed
             If Grh.FrameCounter > GrhData(Grh.GrhIndex).NumFrames Then
                 Grh.FrameCounter = (Grh.FrameCounter Mod GrhData(Grh.GrhIndex).NumFrames) + 1
                 
@@ -1214,7 +1215,7 @@ On Error GoTo error
     
     If Animate Then
         If Grh.Started = 1 Then
-            Grh.FrameCounter = Grh.FrameCounter + (timerElapsedTime * GrhData(Grh.GrhIndex).NumFrames / Grh.Speed)
+            Grh.FrameCounter = Grh.FrameCounter + (timerElapsedTime * GrhData(Grh.GrhIndex).NumFrames / Grh.Speed) * Movement_Speed
             
             If Grh.FrameCounter > GrhData(Grh.GrhIndex).NumFrames Then
                 Grh.FrameCounter = (Grh.FrameCounter Mod GrhData(Grh.GrhIndex).NumFrames) + 1
@@ -1283,7 +1284,7 @@ Sub DDrawTransGrhtoSurfaceAlpha(ByRef Grh As Grh, ByVal X As Integer, ByVal Y As
     
     If Animate Then
         If Grh.Started = 1 Then
-            Grh.FrameCounter = Grh.FrameCounter + (timerElapsedTime * GrhData(Grh.GrhIndex).NumFrames / Grh.Speed)
+            Grh.FrameCounter = Grh.FrameCounter + (timerElapsedTime * GrhData(Grh.GrhIndex).NumFrames / Grh.Speed) * Movement_Speed
             
             If Grh.FrameCounter > GrhData(Grh.GrhIndex).NumFrames Then
                 Grh.FrameCounter = (Grh.FrameCounter Mod GrhData(Grh.GrhIndex).NumFrames) + 1
@@ -1736,6 +1737,7 @@ Public Function InitTileEngine(ByVal setDisplayFormhWnd As Long, ByVal setMainVi
     'Dim SurfaceDesc As DDSURFACEDESC2
     'Dim ddck As DDCOLORKEY
     
+    Movement_Speed = 1
     IniPath = App.path & "\Init\"
     
     'Fill startup variables
@@ -1949,8 +1951,6 @@ Sub ShowNextFrame(ByVal DisplayFormTop As Integer, ByVal DisplayFormLeft As Inte
         DirectDevice.EndScene
         DirectDevice.Present ByVal 0, ByVal 0, 0, ByVal 0
     End If
-    
-    'Inventario.DrawInv
 End Sub
 Private Function fontInitializing() As Boolean
 
@@ -2144,6 +2144,8 @@ Private Sub CharRender(ByVal CharIndex As Long, ByVal PixelOffsetX As Integer, B
         
         If .Head.Head(.Heading).GrhIndex Then
             If Not .invisible Then
+                Movement_Speed = 0.5
+
                 'Draw Body
                 If .Body.Walk(.Heading).GrhIndex Then _
                     Call DDrawTransGrhtoSurface(.Body.Walk(.Heading), PixelOffsetX, PixelOffsetY, 1, 1)
@@ -2206,7 +2208,8 @@ Private Sub CharRender(ByVal CharIndex As Long, ByVal PixelOffsetX As Integer, B
         
         'Update dialogs
         Call Dialogos.UpdateDialogPos(PixelOffsetX + .Body.HeadOffset.X, PixelOffsetY + .Body.HeadOffset.Y + OFFSET_HEAD, CharIndex)   '34 son los pixeles del grh de la cabeza que quedan superpuestos al cuerpo
-        
+        Movement_Speed = 1
+
         'Draw FX
         If .FxIndex <> 0 Then
 #If (ConAlfaB = 1) Then
@@ -2249,7 +2252,7 @@ Private Sub CleanViewPort()
     'Call BackBufferSurface.BltColorFill(r, vbBlack)
 End Sub
 Public Sub Geometry_Create_Box(ByRef verts() As TLVERTEX, ByRef dest As RECT, ByRef src As RECT, ByRef rgb_list() As Long, _
-                                Optional ByRef Textures_Width As Long, Optional ByRef Textures_Height As Long, Optional ByVal angle As Single)
+                                Optional ByRef Textures_Width As Long, Optional ByRef Textures_Height As Long, Optional ByVal Angle As Single)
 '**************************************************************
 'Author: Aaron Perkins
 'Modified by Juan Martín Sotuyo Dodero
@@ -2272,7 +2275,7 @@ Public Sub Geometry_Create_Box(ByRef verts() As TLVERTEX, ByRef dest As RECT, By
     Dim right_point As Single
     Dim temp As Single
     
-    If angle > 0 Then
+    If Angle > 0 Then
         'Center coordinates on screen of the square
         x_center = dest.Left + (dest.Right - dest.Left) / 2
         y_center = dest.Top + (dest.bottom - dest.Top) / 2
@@ -2287,12 +2290,12 @@ Public Sub Geometry_Create_Box(ByRef verts() As TLVERTEX, ByRef dest As RECT, By
     End If
     
     'Calculate screen coordinates of sprite, and only rotate if necessary
-    If angle = 0 Then
+    If Angle = 0 Then
         x_Cor = dest.Left
         y_Cor = dest.bottom
     Else
-        x_Cor = x_center + Cos(-left_point - angle) * radius
-        y_Cor = y_center - Sin(-left_point - angle) * radius
+        x_Cor = x_center + Cos(-left_point - Angle) * radius
+        y_Cor = y_center - Sin(-left_point - Angle) * radius
     End If
     
     
@@ -2303,12 +2306,12 @@ Public Sub Geometry_Create_Box(ByRef verts() As TLVERTEX, ByRef dest As RECT, By
         verts(0) = Geometry_Create_TLVertex(x_Cor, y_Cor, 0, 1, rgb_list(0), 0, 0, 0)
     End If
     'Calculate screen coordinates of sprite, and only rotate if necessary
-    If angle = 0 Then
+    If Angle = 0 Then
         x_Cor = dest.Left
         y_Cor = dest.Top
     Else
-        x_Cor = x_center + Cos(left_point - angle) * radius
-        y_Cor = y_center - Sin(left_point - angle) * radius
+        x_Cor = x_center + Cos(left_point - Angle) * radius
+        y_Cor = y_center - Sin(left_point - Angle) * radius
     End If
     
     
@@ -2319,12 +2322,12 @@ Public Sub Geometry_Create_Box(ByRef verts() As TLVERTEX, ByRef dest As RECT, By
         verts(1) = Geometry_Create_TLVertex(x_Cor, y_Cor, 0, 1, rgb_list(1), 0, 0, 1)
     End If
     'Calculate screen coordinates of sprite, and only rotate if necessary
-    If angle = 0 Then
+    If Angle = 0 Then
         x_Cor = dest.Right
         y_Cor = dest.bottom
     Else
-        x_Cor = x_center + Cos(-right_point - angle) * radius
-        y_Cor = y_center - Sin(-right_point - angle) * radius
+        x_Cor = x_center + Cos(-right_point - Angle) * radius
+        y_Cor = y_center - Sin(-right_point - Angle) * radius
     End If
     
     
@@ -2335,12 +2338,12 @@ Public Sub Geometry_Create_Box(ByRef verts() As TLVERTEX, ByRef dest As RECT, By
         verts(2) = Geometry_Create_TLVertex(x_Cor, y_Cor, 0, 1, rgb_list(2), 0, 1, 0)
     End If
     'Calculate screen coordinates of sprite, and only rotate if necessary
-    If angle = 0 Then
+    If Angle = 0 Then
         x_Cor = dest.Right
         y_Cor = dest.Top
     Else
-        x_Cor = x_center + Cos(right_point - angle) * radius
-        y_Cor = y_center - Sin(right_point - angle) * radius
+        x_Cor = x_center + Cos(right_point - Angle) * radius
+        y_Cor = y_center - Sin(right_point - Angle) * radius
     End If
     
     
@@ -2368,7 +2371,7 @@ Public Function Geometry_Create_TLVertex(ByVal X As Single, ByVal Y As Single, B
     Geometry_Create_TLVertex.tu = tu
     Geometry_Create_TLVertex.tv = tv
 End Function
-Public Sub Device_Textured_Render(ByVal X As Integer, ByVal Y As Integer, ByVal texture As Direct3DTexture8, ByRef src_rect As RECT, Optional alpha As Boolean = False)
+Public Sub Device_Textured_Render(ByVal X As Integer, ByVal Y As Integer, ByVal texture As Direct3DTexture8, ByRef src_rect As RECT, Optional Alpha As Boolean = False)
     Dim dest_rect As RECT
     Dim temp_verts(3) As TLVERTEX
     Dim light_value(0 To 3) As Long
@@ -2395,14 +2398,14 @@ Public Sub Device_Textured_Render(ByVal X As Integer, ByVal Y As Integer, ByVal 
     
     DirectDevice.SetTexture 0, texture
     
-    If alpha Then
+    If Alpha Then
         DirectDevice.SetRenderState D3DRS_SRCBLEND, D3DBLEND_ONE
         DirectDevice.SetRenderState D3DRS_DESTBLEND, D3DBLEND_ONE
     End If
     
     DirectDevice.DrawPrimitiveUP D3DPT_TRIANGLESTRIP, 2, temp_verts(0), Len(temp_verts(0))
     
-    If alpha Then
+    If Alpha Then
         DirectDevice.SetRenderState D3DRS_SRCBLEND, D3DBLEND_SRCALPHA
         DirectDevice.SetRenderState D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA
     End If

@@ -387,8 +387,8 @@ Private Sub DrawInventory()
     DirectDevice.BeginScene
         For loopC = InventoryOffset * (InventoryWindow.ScaleWidth \ ownTilePixelWidth) + 1 To UBound(Inventory)
             
-            startdX = ((loopC - 1) Mod (frmMain.picInv.Width / 32)) * 32
-            startdY = ((loopC - 1) \ (frmMain.picInv.Width / 32)) * 32
+            startdX = ((loopC - 1) Mod (frmMain.PicInv.Width / 32)) * 32
+            startdY = ((loopC - 1) \ (frmMain.PicInv.Width / 32)) * 32
             
             If Inventory(loopC).GrhIndex Then
             
@@ -403,7 +403,7 @@ Private Sub DrawInventory()
                 'Render a box around the selected item
                 If InvSelectedItem = loopC Then
                     If ImgContainer Then
-                        Draw_FillBox startdX, startdY + 2, 10, 10, D3DColorXRGB(0, 0, 1), -65536
+                        Device_Textured_Render startdX, startdY, SurfaceDB.Surface(CLng(GrhData(4).FileNum)), SrcRect
                     End If
                 End If
                 
