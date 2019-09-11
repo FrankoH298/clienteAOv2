@@ -458,8 +458,8 @@ Private Sub CheckKeys()
     If Traveling Then Exit Sub
 
     'Control movement interval (this enforces the 1 step loss when meditating / resting client-side)
-    If GetTickCount - LastMovement > 56 Then
-        LastMovement = GetTickCount
+    If timeGetTime > LastMovement Then
+        LastMovement = timeGetTime + 56
     Else
         Exit Sub
     End If
@@ -902,13 +902,7 @@ UserMap = 1
     Call Sleep(500)
     
     Unload frmCargando
-    
-    Dim PresPath As String
-    PresPath = DirGraficos & "Presentacion" & RandomNumber(1, 4) & ".jpg"
-    
-    frmPres.Picture = LoadPicture(PresPath)
-    frmPres.Show vbModal    'Es modal, así que se detiene la ejecución de Main hasta que se desaparece
-    
+
 #If UsarWrench = 1 Then
     frmMain.Socket1.Startup
 #End If
@@ -947,7 +941,7 @@ UserMap = 1
     Dialogos.Font = frmMain.Font
     DialogosClanes.Font = frmMain.Font
     
-    lFrameTimer = GetTickCount
+    lFrameTimer = timeGetTime
     
     ' Load the form for screenshots
     Call Load(frmScreenshots)
@@ -963,15 +957,10 @@ UserMap = 1
             Call CheckKeys
         End If
         'FPS Counter - mostramos las FPS
-        If GetTickCount - lFrameTimer >= 1000 Then
+        If timeGetTime >= lFrameTimer Then
             If FPSFLAG Then frmMain.lblFPS.Caption = Mod_TileEngine.FPS
-            
-            lFrameTimer = GetTickCount
+            lFrameTimer = timeGetTime + 1000
         End If
-        
-#If SeguridadAlkon Then
-        Call CheckSecurity
-#End If
         
         ' If there is anything to be sent, we send it
         Call FlushBuffer

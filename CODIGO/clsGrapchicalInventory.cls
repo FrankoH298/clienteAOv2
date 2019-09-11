@@ -370,7 +370,7 @@ Private Sub DrawInventory()
 'Last Modify Date: 27/07/04
 'Renders the inventory to the given PictureBox
 '***************************************************
-    Dim LoopC As Long
+    Dim loopC As Long
     Dim SrcRect As RECT
     Dim TempRect As RECT
     Dim destRect As RECT
@@ -385,52 +385,49 @@ Private Sub DrawInventory()
     'Clear the inventory window
     DirectDevice.Clear 0, ByVal 0, D3DCLEAR_TARGET, 0, 0#, 0
     DirectDevice.BeginScene
-        For LoopC = InventoryOffset * (InventoryWindow.ScaleWidth \ ownTilePixelWidth) + 1 To UBound(Inventory)
+        For loopC = InventoryOffset * (InventoryWindow.ScaleWidth \ ownTilePixelWidth) + 1 To UBound(Inventory)
             
-            startdX = ((LoopC - 1) Mod (frmMain.PicInv.Width / 32)) * 32
-            startdY = ((LoopC - 1) \ (frmMain.PicInv.Width / 32)) * 32
+            startdX = ((loopC - 1) Mod (frmMain.picInv.Width / 32)) * 32
+            startdY = ((loopC - 1) \ (frmMain.picInv.Width / 32)) * 32
             
-            If Inventory(LoopC).GrhIndex Then
+            If Inventory(loopC).GrhIndex Then
             
                 'Get source rect
                 With SrcRect
-                    .Left = GrhData(Inventory(LoopC).GrhIndex).sX
-                    .Top = GrhData(Inventory(LoopC).GrhIndex).sY
+                    .Left = GrhData(Inventory(loopC).GrhIndex).sX
+                    .Top = GrhData(Inventory(loopC).GrhIndex).sY
                     .Right = .Left + ownTilePixelWidth
                     .bottom = .Top + ownTilePixelHeight
                 End With
                 
                 'Render a box around the selected item
-                If InvSelectedItem = LoopC Then
+                If InvSelectedItem = loopC Then
                     If ImgContainer Then
                         Draw_FillBox startdX, startdY + 2, 10, 10, D3DColorXRGB(0, 0, 1), -65536
                     End If
                 End If
                 
-                Device_Textured_Render startdX, startdY, SurfaceDB.Surface(CLng(GrhData(Inventory(LoopC).GrhIndex).FileNum)), SrcRect
+                Device_Textured_Render startdX, startdY, SurfaceDB.Surface(CLng(GrhData(Inventory(loopC).GrhIndex).FileNum)), SrcRect
             
                 'If equipped we render "E"
-                If Inventory(LoopC).Equipped Then
+                If Inventory(loopC).Equipped Then
                     DrawText startdX + 20, startdY + 20, "E", -256
                 End If
                 
                 'Render the item grh and the amount
-                DrawText startdX, startdY, Inventory(LoopC).Amount, -1
+                DrawText startdX, startdY, Inventory(loopC).Amount, -1
                 
             End If
-        Next LoopC
+        Next loopC
     DirectDevice.EndScene
     DirectDevice.Present destRect, ByVal 0, InventoryWindow.hWnd, ByVal 0
     
 End Sub
 Public Sub DrawInv()
-
-    If GetTickCount - LastRender > 56 Then ' GSZAO
-        LastRender = GetTickCount
-        DoEvents
-        Call DrawInventory
-    End If
-    
+    Call DrawInventory
+    DoEvents
+    Call DrawInventory
+    DoEvents
 End Sub
 #If ConMenuesConextuales = 1 Then   'Argument list varies!!!
     Public Sub Initialize(ByRef DirectD3D As DirectD3D7, ByRef InvPic As PictureBox, ByVal MaxObjs As Byte, _

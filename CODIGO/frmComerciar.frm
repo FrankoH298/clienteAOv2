@@ -508,6 +508,6 @@ End Sub
 
 Private Sub Timer1_Timer()
 On Error Resume Next
-    InvComUsu.DrawInv
-    InvComNpc.DrawInv
+    'InvComUsu.DrawInv
+    'InvComNpc.DrawInv
 End Sub

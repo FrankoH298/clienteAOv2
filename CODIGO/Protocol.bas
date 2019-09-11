@@ -1013,14 +1013,14 @@ Private Sub HandleLogged()
     
     If bShowTutorial Then frmTutorial.Show
     
-    Inventario.DrawInv
-    
     'Show tip
     If tipf = "1" And PrimeraVez Then
         Call CargarTip
         frmtip.Visible = True
         PrimeraVez = False
     End If
+    
+    Inventario.DrawInv
 End Sub
 
 ''
@@ -3741,6 +3741,9 @@ End Sub
 ''
 ' Handles the ErrorMessage message.
 
+''
+' Handles the ErrorMessage message.
+ 
 Private Sub HandleErrorMessage()
 '***************************************************
 'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -3754,7 +3757,7 @@ Private Sub HandleErrorMessage()
     
 On Error GoTo ErrHandler
     'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
-    Dim Buffer As New clsByteQueue
+    Dim Buffer As clsByteQueue: Set Buffer = New clsByteQueue
     Call Buffer.CopyBuffer(incomingData)
     
     'Remove packet ID
@@ -3762,7 +3765,7 @@ On Error GoTo ErrHandler
     
     Call MsgBox(Buffer.ReadASCIIString())
     
-    If frmConnect.Visible Then
+    If frmConnect.Visible And (Not frmCrearPersonaje.Visible) Then
 #If UsarWrench = 1 Then
         frmMain.Socket1.Disconnect
         frmMain.Socket1.Cleanup
@@ -3782,7 +3785,7 @@ On Error GoTo 0
     
     'Destroy auxiliar buffer
     Set Buffer = Nothing
-
+ 
     If error <> 0 Then _
         Err.Raise error
 End Sub
@@ -5262,7 +5265,7 @@ Private Sub HandlePong()
 '***************************************************
     Call incomingData.ReadByte
     
-    Call AddtoRichTextBox(frmMain.RecTxt, "El ping es " & (GetTickCount - pingTime) & " ms.", 255, 0, 0, True, False, True)
+    Call AddtoRichTextBox(frmMain.RecTxt, "El ping es " & (timeGetTime - pingTime) & " ms.", 255, 0, 0, True, False, True)
     
     pingTime = 0
 End Sub
@@ -10059,7 +10062,7 @@ Public Sub WritePing()
     Call FlushBuffer
     DoEvents
     
-    pingTime = GetTickCount
+    pingTime = timeGetTime
 End Sub
 
 ''

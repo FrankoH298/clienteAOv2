@@ -75,8 +75,6 @@ Private useVideoMemory As Boolean
 
 Private ResourcePath As String
 
-Private Declare Function GetTickCount Lib "kernel32" () As Long
-
 Private Const DIB_PAL_COLORS As Long = 1
 Private Const DIB_RGB_COLORS As Long = 0
 Private Declare Function SetDIBitsToDevice Lib "GDI32.dll" _

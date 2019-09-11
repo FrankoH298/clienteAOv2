@@ -61,7 +61,7 @@ Public InvMaderasCarpinteria(1 To MAX_LIST_ITEMS) As New clsGraphicalInventory
 Public SurfaceDB As clsSurfaceManager   'No va new porque es una interfaz, el new se pone al decidir que clase de objeto es
 Public CustomKeys As New clsCustomKeys
 Public CustomMessages As New clsCustomMessages
-
+Public Declare Function timeGetTime Lib "winmm.dll" () As Long
 Public incomingData As New clsByteQueue
 Public outgoingData As New clsByteQueue
 

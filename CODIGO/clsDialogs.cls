@@ -97,7 +97,6 @@ Private usedFont As StdFont
 
 ''
 ' A millisecond precision timer
-Private Declare Function GetTickCount Lib "kernel32" () As Long
 
 ''
 ' Initializes the instance of the class.
@@ -195,7 +194,7 @@ Public Sub CreateDialog(ByRef chat As String, ByVal CharIndex As Integer, ByVal 
         .CharIndex = CharIndex
         .color = ColorToDX8(color)
         .renderable = False
-        .startTime = GetTickCount()
+        .startTime = timeGetTime()
         .textLine = FormatChat(chat)
         .lifeTime = MS_ADD_EXTRA + (MS_PER_CHAR * Len(chat))
     End With
@@ -322,7 +321,7 @@ Public Sub Render()
         'Decrease index to prevent jumping over a dialog
         'Crappy VB will cache the limit of the For loop, so even if it changed, it won't matter
         With dialogs(i - removedDialogs)
-            If (GetTickCount() - .startTime) >= .lifeTime Then
+            If (timeGetTime() - .startTime) >= .lifeTime Then
                 Call RemoveDialog(.CharIndex)
                 
                 removedDialogs = removedDialogs + 1

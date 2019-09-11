@@ -916,16 +916,16 @@ Function NextOpenChar() As Integer
 '*****************************************************************
 'Finds next open char slot in CharList
 '*****************************************************************
-    Dim LoopC As Long
+    Dim loopC As Long
     Dim Dale As Boolean
     
-    LoopC = 1
-    Do While charlist(LoopC).Active And Dale
-        LoopC = LoopC + 1
-        Dale = (LoopC <= UBound(charlist))
+    loopC = 1
+    Do While charlist(loopC).Active And Dale
+        loopC = loopC + 1
+        Dale = (loopC <= UBound(charlist))
     Loop
     
-    NextOpenChar = LoopC
+    NextOpenChar = loopC
 End Function
 
 ''
@@ -1557,15 +1557,26 @@ Sub RenderScreen(ByVal tilex As Integer, ByVal tiley As Integer, ByVal PixelOffs
     
     'Draw floor layer
     For Y = screenminY To screenmaxY
+        PixelOffsetYTemp = (ScreenY - 1) * TilePixelHeight + PixelOffsetY
         For X = screenminX To screenmaxX
+            PixelOffsetXTemp = (ScreenX - 1) * TilePixelWidth + PixelOffsetX
+            
             
             'Layer 1 **********************************
-            Call DDrawGrhtoSurface(MapData(X, Y).Graphic(1), _
-                (ScreenX - 1) * TilePixelWidth + PixelOffsetX, _
-                (ScreenY - 1) * TilePixelHeight + PixelOffsetY, _
-                0, 1)
+            If MapData(X, Y).Graphic(1).GrhIndex <> 0 Then _
+                Call DDrawGrhtoSurface(MapData(X, Y).Graphic(1), _
+                    PixelOffsetXTemp, _
+                    PixelOffsetYTemp, _
+                    0, 1)
             '******************************************
             
+            'Layer 2 **********************************
+            If MapData(X, Y).Graphic(2).GrhIndex <> 0 Then _
+                Call DDrawTransGrhtoSurface(MapData(X, Y).Graphic(2), _
+                        PixelOffsetXTemp, _
+                        PixelOffsetYTemp, _
+                        1, 1)
+            '******************************************
             ScreenX = ScreenX + 1
         Next X
         
@@ -1574,33 +1585,13 @@ Sub RenderScreen(ByVal tilex As Integer, ByVal tiley As Integer, ByVal PixelOffs
         ScreenY = ScreenY + 1
     Next Y
     
-    'Draw floor layer 2
-    ScreenY = minYOffset - TileBufferSize
-    For Y = minY To maxY
-        ScreenX = minXOffset - TileBufferSize
-        For X = minX To maxX
-            
-            'Layer 2 **********************************
-            If MapData(X, Y).Graphic(2).GrhIndex <> 0 Then
-                Call DDrawTransGrhtoSurface(MapData(X, Y).Graphic(2), _
-                        ScreenX * TilePixelWidth + PixelOffsetX, _
-                        ScreenY * TilePixelHeight + PixelOffsetY, _
-                        1, 1)
-            End If
-            '******************************************
-            
-            ScreenX = ScreenX + 1
-        Next X
-        ScreenY = ScreenY + 1
-    Next Y
-    
     'Draw Transparent Layers
     ScreenY = minYOffset - TileBufferSize
     For Y = minY To maxY
         ScreenX = minXOffset - TileBufferSize
+        PixelOffsetYTemp = ScreenY * TilePixelHeight + PixelOffsetY
         For X = minX To maxX
             PixelOffsetXTemp = ScreenX * TilePixelWidth + PixelOffsetX
-            PixelOffsetYTemp = ScreenY * TilePixelHeight + PixelOffsetY
             
             With MapData(X, Y)
                 'Object Layer **********************************
@@ -1637,8 +1628,9 @@ Sub RenderScreen(ByVal tilex As Integer, ByVal tiley As Integer, ByVal PixelOffs
         ScreenY = minYOffset - TileBufferSize
         For Y = minY To maxY
             ScreenX = minXOffset - TileBufferSize
+            PixelOffsetYTemp = ScreenY * TilePixelHeight + PixelOffsetY
             For X = minX To maxX
-                
+                PixelOffsetXTemp = ScreenX * TilePixelWidth + PixelOffsetX
                 'Layer 4 **********************************
                 If MapData(X, Y).Graphic(4).GrhIndex Then
                     'Draw
@@ -1659,10 +1651,10 @@ Sub RenderScreen(ByVal tilex As Integer, ByVal tiley As Integer, ByVal PixelOffs
     If bLluvia(UserMap) = 1 Then
         If bRain Then
             'Figure out what frame to draw
-            If llTick < GetTickCount - 50 Then
+            If timeGetTime > llTick Then
                 iFrameIndex = iFrameIndex + 1
                 If iFrameIndex > 7 Then iFrameIndex = 0
-                llTick = GetTickCount
+                llTick = timeGetTime + 50
             End If
 
             For Y = 0 To 4
@@ -1940,17 +1932,12 @@ Sub ShowNextFrame(ByVal DisplayFormTop As Integer, ByVal DisplayFormLeft As Inte
         Call DibujarCartel
         
         Call DialogosClanes.Draw
-
-        'Limit FPS to 100 (an easy number higher than monitor's vertical refresh rates)
-        While (GetTickCount - fpsLastCheck) \ 10 < FramesPerSecCounter
-            Sleep 5
-        Wend
         
         'FPS update
-        If fpsLastCheck + 1000 < GetTickCount Then
+        If timeGetTime > fpsLastCheck Then
             FPS = FramesPerSecCounter
             FramesPerSecCounter = 1
-            fpsLastCheck = GetTickCount
+            fpsLastCheck = timeGetTime + 1000
         Else
             FramesPerSecCounter = FramesPerSecCounter + 1
         End If
@@ -1963,7 +1950,7 @@ Sub ShowNextFrame(ByVal DisplayFormTop As Integer, ByVal DisplayFormLeft As Inte
         DirectDevice.Present ByVal 0, ByVal 0, 0, ByVal 0
     End If
     
-    Inventario.DrawInv
+    'Inventario.DrawInv
 End Sub
 Private Function fontInitializing() As Boolean
 

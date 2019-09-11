@@ -17,11 +17,6 @@ Begin VB.Form frmBancoObj
    ScaleWidth      =   461
    ShowInTaskbar   =   0   'False
    StartUpPosition =   1  'CenterOwner
-   Begin VB.Timer Timer1 
-      Interval        =   50
-      Left            =   480
-      Top             =   720
-   End
    Begin VB.TextBox CantidadOro 
       Alignment       =   2  'Center
       BackColor       =   &H00000000&
@@ -477,10 +472,4 @@ End Sub
 Private Sub imgCerrar_Click()
     Call WriteBankEnd
     NoPuedeMover = False
-End Sub
-
-Private Sub Timer1_Timer()
-On Error Resume Next
-    InvBanco(0).DrawInv
-    InvBanco(1).DrawInv
 End Sub

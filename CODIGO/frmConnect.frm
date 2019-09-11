@@ -22,31 +22,6 @@ Begin VB.Form frmConnect
    ScaleWidth      =   800
    StartUpPosition =   2  'CenterScreen
    Visible         =   0   'False
-   Begin SHDocVwCtl.WebBrowser webNoticias 
-      Height          =   4440
-      Left            =   435
-      TabIndex        =   5
-      Top             =   1680
-      Width           =   2850
-      ExtentX         =   5027
-      ExtentY         =   7832
-      ViewMode        =   0
-      Offline         =   0
-      Silent          =   0
-      RegisterAsBrowser=   0
-      RegisterAsDropTarget=   1
-      AutoArrange     =   0   'False
-      NoClientEdge    =   0   'False
-      AlignLeft       =   0   'False
-      NoWebView       =   0   'False
-      HideFileNames   =   0   'False
-      SingleClick     =   0   'False
-      SingleSelection =   0   'False
-      NoFolders       =   0   'False
-      Transparent     =   0   'False
-      ViewID          =   "{0057D0E0-3573-11CF-AE69-08002B2E1262}"
-      Location        =   ""
-   End
    Begin VB.TextBox txtPasswd 
       BackColor       =   &H00000000&
       BorderStyle     =   0  'None
@@ -134,7 +109,7 @@ Begin VB.Form frmConnect
    Begin SHDocVwCtl.WebBrowser WebAuxiliar 
       Height          =   360
       Left            =   960
-      TabIndex        =   6
+      TabIndex        =   5
       Top             =   0
       Visible         =   0   'False
       Width           =   330
@@ -155,7 +130,7 @@ Begin VB.Form frmConnect
       NoFolders       =   0   'False
       Transparent     =   0   'False
       ViewID          =   "{0057D0E0-3573-11CF-AE69-08002B2E1262}"
-      Location        =   ""
+      Location        =   "http:///"
    End
    Begin VB.Image imgTeclas 
       Height          =   375
@@ -168,12 +143,6 @@ Begin VB.Form frmConnect
       Left            =   4800
       Top             =   3960
       Width           =   1335
-   End
-   Begin VB.Image imgVerForo 
-      Height          =   465
-      Left            =   450
-      Top             =   6120
-      Width           =   2835
    End
    Begin VB.Image imgSalir 
       Height          =   375
@@ -352,8 +321,6 @@ Private Sub Form_Load()
     EngineRun = False
     '[END]
     
-    webNoticias.Navigate ("http://ao.alkon.com.ar/noticiascliente/noticias.php")
-    
     PortTxt.Text = Config_Inicio.Puerto
  
      '[CODE]:MatuX
@@ -437,10 +404,6 @@ Private Sub LoadButtons()
     Call cBotonSalir.Initialize(imgSalir, GrhPath & "BotonSalirConnect.jpg", _
                                     GrhPath & "BotonBotonSalirRolloverConnect.jpg", _
                                     GrhPath & "BotonSalirClickConnect.jpg", Me)
-                                    
-    Call cBotonForo.Initialize(imgVerForo, GrhPath & "BotonVerForo.jpg", _
-                                    GrhPath & "BotonVerForoRollover.jpg", _
-                                    GrhPath & "BotonVerForoClick.jpg", Me)
                                     
     Call cBotonConectarse.Initialize(imgConectarse, GrhPath & "BotonConectarse.jpg", _
                                     GrhPath & "BotonConectarseRollover.jpg", _
