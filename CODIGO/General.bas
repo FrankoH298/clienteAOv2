@@ -83,7 +83,7 @@ Public Function GetRawName(ByRef sName As String) As String
     Pos = InStr(1, sName, "<")
     
     If Pos > 0 Then
-        GetRawName = Trim(Left(sName, Pos - 1))
+        GetRawName = Trim(left(sName, Pos - 1))
     Else
         GetRawName = sName
     End If
@@ -535,86 +535,118 @@ End Sub
 
 'TODO : Si bien nunca estuvo allí, el mapa es algo independiente o a lo sumo dependiente del engine, no va acá!!!
 Sub SwitchMap(ByVal Map As Integer)
-'**************************************************************
-'Formato de mapas optimizado para reducir el espacio que ocupan.
-'Diseñado y creado por Juan Martín Sotuyo Dodero (Maraxus) (juansotuyo@hotmail.com)
-'**************************************************************
-    Dim Y As Long
-    Dim X As Long
-    Dim tempint As Integer
-    Dim ByFlags As Byte
-    Dim handle As Integer
-    
-    handle = FreeFile()
-    
-    Open DirMapas & "Mapa" & Map & ".map" For Binary As handle
-    Seek handle, 1
-            
-    'map Header
-    Get handle, , MapInfo.MapVersion
-    Get handle, , MiCabecera
-    Get handle, , tempint
-    Get handle, , tempint
-    Get handle, , tempint
-    Get handle, , tempint
-    
-    'Load arrays
-    For Y = YMinMapSize To YMaxMapSize
-        For X = XMinMapSize To XMaxMapSize
-            Get handle, , ByFlags
-            
-            MapData(X, Y).Blocked = (ByFlags And 1)
-            
-            Get handle, , MapData(X, Y).Graphic(1).GrhIndex
-            InitGrh MapData(X, Y).Graphic(1), MapData(X, Y).Graphic(1).GrhIndex
-            
-            'Layer 2 used?
-            If ByFlags And 2 Then
-                Get handle, , MapData(X, Y).Graphic(2).GrhIndex
-                InitGrh MapData(X, Y).Graphic(2), MapData(X, Y).Graphic(2).GrhIndex
-            Else
-                MapData(X, Y).Graphic(2).GrhIndex = 0
-            End If
-                
-            'Layer 3 used?
-            If ByFlags And 4 Then
-                Get handle, , MapData(X, Y).Graphic(3).GrhIndex
-                InitGrh MapData(X, Y).Graphic(3), MapData(X, Y).Graphic(3).GrhIndex
-            Else
-                MapData(X, Y).Graphic(3).GrhIndex = 0
-            End If
-                
-            'Layer 4 used?
-            If ByFlags And 8 Then
-                Get handle, , MapData(X, Y).Graphic(4).GrhIndex
-                InitGrh MapData(X, Y).Graphic(4), MapData(X, Y).Graphic(4).GrhIndex
-            Else
-                MapData(X, Y).Graphic(4).GrhIndex = 0
-            End If
-            
-            'Trigger used?
-            If ByFlags And 16 Then
-                Get handle, , MapData(X, Y).Trigger
-            Else
-                MapData(X, Y).Trigger = 0
-            End If
-            
-            'Erase NPCs
-            If MapData(X, Y).CharIndex > 0 Then
-                Call EraseChar(MapData(X, Y).CharIndex)
-            End If
-            
-            'Erase OBJs
-            MapData(X, Y).ObjGrh.GrhIndex = 0
-        Next X
-    Next Y
-    
-    Close handle
-    
-    MapInfo.Name = ""
-    MapInfo.Music = ""
-    
-    CurMap = Map
+      '**************************************************************
+      'Formato de mapas optimizado para reducir el espacio que ocupan.
+      'Diseñado y creado por Juan Martín Sotuyo Dodero (Maraxus) (juansotuyo@hotmail.com)
+      '**************************************************************
+
+      ' @@ Modificacion realizada por Facundo (GodKer), robada por Marcos.. ?
+      ' @@ 06/11/2014
+      ' @@ Facu cabe aporte (?)
+
+      Dim Y         As Long
+      Dim X         As Long
+      Dim ByFlags   As Byte
+      Dim handle    As Integer
+      Dim fileBuff  As clsByteBuffer
+   
+      Dim dData()   As Byte
+      Dim dLen      As Long
+   
+      Set fileBuff = New clsByteBuffer
+   
+      dLen = FileLen(DirMapas & "Mapa" & Map & ".map")
+      ReDim dData(dLen - 1)
+      
+      handle = FreeFile()
+   
+      Open DirMapas & "Mapa" & Map & ".map" For Binary As handle
+      'Seek handle, 1
+      Get handle, , dData
+      Close handle
+     
+      fileBuff.initializeReader dData
+
+      MapInfo.MapVersion = fileBuff.getInteger
+   
+      MiCabecera.Desc = fileBuff.getString(Len(MiCabecera.Desc))
+      MiCabecera.CRC = fileBuff.getLong
+      MiCabecera.MagicWord = fileBuff.getLong
+   
+      fileBuff.getDouble
+   
+      'Load arrays
+
+      For Y = YMinMapSize To YMaxMapSize
+            For X = XMinMapSize To XMaxMapSize
+                  'Get handle, , ByFlags
+                  ByFlags = fileBuff.getByte()
+           
+                  MapData(X, Y).Blocked = (ByFlags And 1)
+           
+                  'Get handle, , MapData(X, Y).Graphic(1).GrhIndex
+                  MapData(X, Y).Graphic(1).GrhIndex = fileBuff.getInteger()
+                  InitGrh MapData(X, Y).Graphic(1), MapData(X, Y).Graphic(1).GrhIndex
+           
+                  'Layer 2 used?
+
+                  If ByFlags And 2 Then
+                        'Get handle, , MapData(X, Y).Graphic(2).GrhIndex
+                        MapData(X, Y).Graphic(2).GrhIndex = fileBuff.getInteger()
+                        InitGrh MapData(X, Y).Graphic(2), MapData(X, Y).Graphic(2).GrhIndex
+                  Else
+                        MapData(X, Y).Graphic(2).GrhIndex = 0
+                  End If
+               
+                  'Layer 3 used?
+
+                  If ByFlags And 4 Then
+                        'Get handle, , MapData(X, Y).Graphic(3).GrhIndex
+                        MapData(X, Y).Graphic(3).GrhIndex = fileBuff.getInteger()
+                        InitGrh MapData(X, Y).Graphic(3), MapData(X, Y).Graphic(3).GrhIndex
+                  Else
+                        MapData(X, Y).Graphic(3).GrhIndex = 0
+                  End If
+               
+                  'Layer 4 used?
+
+                  If ByFlags And 8 Then
+                        'Get handle, , MapData(X, Y).Graphic(4).GrhIndex
+                        MapData(X, Y).Graphic(4).GrhIndex = fileBuff.getInteger()
+                        InitGrh MapData(X, Y).Graphic(4), MapData(X, Y).Graphic(4).GrhIndex
+                  Else
+                        MapData(X, Y).Graphic(4).GrhIndex = 0
+                  End If
+           
+                  'Trigger used?
+
+                  If ByFlags And 16 Then
+                        'Get handle, , MapData(X, Y).Trigger
+                        MapData(X, Y).Trigger = fileBuff.getInteger()
+                  Else
+                        MapData(X, Y).Trigger = 0
+                  End If
+           
+                  'Erase NPCs
+
+                  If MapData(X, Y).CharIndex > 0 Then
+                        Call EraseChar(MapData(X, Y).CharIndex)
+                  End If
+           
+                  'Erase OBJs
+                  MapData(X, Y).ObjGrh.GrhIndex = 0
+
+            Next X
+      Next Y
+
+      'Close handle
+     
+      Set fileBuff = Nothing ' @@ Tanto te costaba Destruir el buff una ves que se termino de usar?
+      
+      MapInfo.Name = vbNullString
+      MapInfo.Music = vbNullString
+   
+      CurMap = Map
 End Sub
 
 Function ReadField(ByVal Pos As Integer, ByRef Text As String, ByVal SepASCII As Byte) As String
@@ -885,6 +917,8 @@ UserMap = 1
     Call CargarColores
     Set lastKeys = New clsArrayList
     Call lastKeys.Initialize(1, 4)
+    Call modTextos.Engine_Init_FontTextures
+    Call modTextos.Engine_Init_FontSettings
     Call AddtoRichTextBox(frmCargando.status, "Hecho", 255, 0, 0, True, False, False)
     
     Call AddtoRichTextBox(frmCargando.status, "Iniciando DirectSound... ", 255, 255, 255, True, False, True)
@@ -955,7 +989,7 @@ UserMap = 1
     Do While prgRun
         'Sólo dibujamos si la ventana no está minimizada
         If frmMain.WindowState <> 1 And frmMain.Visible Then
-            Call ShowNextFrame(frmMain.Top, frmMain.Left, frmMain.MouseX, frmMain.MouseY)
+            Call ShowNextFrame(frmMain.top, frmMain.left, frmMain.MouseX, frmMain.MouseY)
             
             'Play ambient sounds
             Call RenderSounds
@@ -1000,7 +1034,7 @@ Function GetVar(ByVal file As String, ByVal Main As String, ByVal Var As String)
     getprivateprofilestring Main, Var, vbNullString, sSpaces, Len(sSpaces), file
     
     GetVar = RTrim$(sSpaces)
-    GetVar = Left$(GetVar, Len(GetVar) - 1)
+    GetVar = left$(GetVar, Len(GetVar) - 1)
 End Function
 
 '[CODE 002]:MatuX
@@ -1347,7 +1381,7 @@ If Right(Text, Len(MENSAJE_FRAGSHOOTER_TE_HA_MATADO)) = MENSAJE_FRAGSHOOTER_TE_H
     Call ScreenCapture(True)
     Exit Sub
 End If
-If Left(Text, Len(MENSAJE_FRAGSHOOTER_HAS_MATADO)) = MENSAJE_FRAGSHOOTER_HAS_MATADO Then
+If left(Text, Len(MENSAJE_FRAGSHOOTER_HAS_MATADO)) = MENSAJE_FRAGSHOOTER_HAS_MATADO Then
     EsperandoLevel = True
     Exit Sub
 End If

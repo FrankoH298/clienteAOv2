@@ -85,10 +85,10 @@ Dim Y As Long
 If Not p_Activo Then Exit Sub
     For i = 1 To p_CANTIDADDIALOGOS
         If Trim$(p_Dialogos(i).Texto) <> vbNullString Then
-            If Left$(p_Dialogos(i).Texto, 1) = Chr(3) Then
-                Call Mod_TileEngine.DrawText(10, Y + (i * 10), mid(p_Dialogos(i).Texto, 2), -16711936)
+            If left$(p_Dialogos(i).Texto, 1) = Chr(3) Then
+                Call DrawText(10, Y + (i * 10), mid(p_Dialogos(i).Texto, 2), -16711936)
             Else
-                Call Mod_TileEngine.DrawText(10, Y + (i * 10), p_Dialogos(i).Texto, -256)
+                Call DrawText(10, Y + (i * 10), p_Dialogos(i).Texto, -256)
             End If
         End If
     Next i
@@ -128,7 +128,7 @@ Public Sub PushBackText(ByVal s As String)
         
         If tmp = 0 Then Exit Do
         
-        str = Left$(str, tmp - 1)
+        str = left$(str, tmp - 1)
     Loop
     
     'Show message and continue with the rest

@@ -307,7 +307,22 @@ Private Sub cantidad_KeyPress(KeyAscii As Integer)
         End If
     End If
 End Sub
+Private Sub Form_Activate()
+On Error Resume Next
+    InvBanco(0).DrawInv
+    InvBanco(1).DrawInv
+End Sub
 
+Private Sub Form_GotFocus()
+On Error Resume Next
+    InvBanco(0).DrawInv
+    InvBanco(1).DrawInv
+End Sub
+Private Sub Form_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
+On Error Resume Next
+    InvBanco(0).DrawInv
+    InvBanco(1).DrawInv
+End Sub
 Private Sub CantidadOro_Change()
     If Val(CantidadOro.Text) < 1 Then
         cantidad.Text = 1

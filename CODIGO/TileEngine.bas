@@ -45,7 +45,7 @@ Private Declare Function GlobalAlloc Lib "kernel32" (ByVal uFlags As Long, ByVal
 Private Declare Function GlobalLock Lib "kernel32" (ByVal hMem As Long) As Long
 Private Declare Function GlobalUnlock Lib "kernel32" (ByVal hMem As Long) As Long
 Private Declare Function OleLoadPicture Lib "olepro32" (pStream As Any, ByVal lSize As Long, ByVal fRunmode As Long, riid As Any, ppvObj As Any) As Long
-Private Declare Sub CopyMemory Lib "kernel32.dll" Alias "RtlMoveMemory" (ByRef destination As Any, ByRef source As Any, ByVal length As Long)
+Public Declare Sub CopyMemory Lib "kernel32.dll" Alias "RtlMoveMemory" (ByRef Destination As Any, ByRef source As Any, ByVal Length As Long)
 Private Declare Function SetBitmapBits Lib "gdi32" (ByVal hBitmap As Long, ByVal dwCount As Long, lpBits As Any) As Long
 
 
@@ -1157,10 +1157,10 @@ On Error GoTo error
             End If
         End If
         
-        SourceRect.Left = .sX
-        SourceRect.Top = .sY
-        SourceRect.Right = SourceRect.Left + .pixelWidth
-        SourceRect.bottom = SourceRect.Top + .pixelHeight
+        SourceRect.left = .sX
+        SourceRect.top = .sY
+        SourceRect.Right = SourceRect.left + .pixelWidth
+        SourceRect.bottom = SourceRect.top + .pixelHeight
         
         'Draw
         Call Device_Textured_Render(X, Y, SurfaceDB.Surface(.FileNum), SourceRect)
@@ -1193,10 +1193,10 @@ Sub DDrawTransGrhIndextoSurface(ByVal GrhIndex As Integer, ByVal X As Integer, B
             End If
         End If
         
-        SourceRect.Left = .sX
-        SourceRect.Top = .sY
-        SourceRect.Right = SourceRect.Left + .pixelWidth
-        SourceRect.bottom = SourceRect.Top + .pixelHeight
+        SourceRect.left = .sX
+        SourceRect.top = .sY
+        SourceRect.Right = SourceRect.left + .pixelWidth
+        SourceRect.bottom = SourceRect.top + .pixelHeight
         
         'Draw
         'Call BackBufferSurface.BltFast(X, Y, SurfaceDB.Surface(.FileNum), SourceRect, DDBLTFAST_SRCCOLORKEY Or DDBLTFAST_WAIT)
@@ -1246,10 +1246,10 @@ On Error GoTo error
             End If
         End If
                 
-        SourceRect.Left = .sX
-        SourceRect.Top = .sY
-        SourceRect.Right = SourceRect.Left + .pixelWidth
-        SourceRect.bottom = SourceRect.Top + .pixelHeight
+        SourceRect.left = .sX
+        SourceRect.top = .sY
+        SourceRect.Right = SourceRect.left + .pixelWidth
+        SourceRect.bottom = SourceRect.top + .pixelHeight
         
         'Draw
         'Call BackBufferSurface.BltFast(X, Y, SurfaceDB.Surface(.FileNum), SourceRect, DDBLTFAST_SRCCOLORKEY Or DDBLTFAST_WAIT)
@@ -1314,18 +1314,18 @@ Sub DDrawTransGrhtoSurfaceAlpha(ByRef Grh As Grh, ByVal X As Integer, ByVal Y As
             End If
         End If
         
-        SourceRect.Left = .sX
-        SourceRect.Top = .sY
-        SourceRect.Right = SourceRect.Left + .pixelWidth
-        SourceRect.bottom = SourceRect.Top + .pixelHeight
+        SourceRect.left = .sX
+        SourceRect.top = .sY
+        SourceRect.Right = SourceRect.left + .pixelWidth
+        SourceRect.bottom = SourceRect.top + .pixelHeight
         
         Set src = SurfaceDB.Surface(.FileNum)
         
         src.GetSurfaceDesc ddsdSrc
         BackBufferSurface.GetSurfaceDesc ddsdDest
         
-        rDest.Left = X
-        rDest.Top = Y
+        rDest.left = X
+        rDest.top = Y
         rDest.Right = X + .pixelWidth
         rDest.bottom = Y + .pixelHeight
         
@@ -1374,7 +1374,7 @@ On Local Error GoTo HayErrorAlpha
     Call BackBufferSurface.GetLockedArray(dArray())
     Call src.GetLockedArray(sArray())
     
-    Call BltAlphaFast(ByVal VarPtr(dArray(X + X, Y)), ByVal VarPtr(sArray(SourceRect.Left * 2, SourceRect.Top)), rDest.Right - rDest.Left, rDest.bottom - rDest.Top, ddsdSrc.lPitch, ddsdDest.lPitch, Modo)
+    Call BltAlphaFast(ByVal VarPtr(dArray(X + X, Y)), ByVal VarPtr(sArray(SourceRect.left * 2, SourceRect.top)), rDest.Right - rDest.left, rDest.bottom - rDest.top, ddsdSrc.lPitch, ddsdDest.lPitch, Modo)
     
     BackBufferSurface.Unlock rDest
     DstLock = False
@@ -1422,8 +1422,8 @@ On Error Resume Next
     Dim screen_x As Integer
     Dim screen_y As Integer
     
-    screen_x = destRect.Left
-    screen_y = destRect.Top
+    screen_x = destRect.left
+    screen_y = destRect.top
     
     If GrhIndex <= 0 Then Exit Sub
 
@@ -1464,12 +1464,12 @@ Public Sub DrawTransparentGrhtoHdc(ByVal dsthdc As Long, ByVal srchdc As Long, B
     Dim X As Long
     Dim Y As Long
     
-    For X = SourceRect.Left To SourceRect.Right
-        For Y = SourceRect.Top To SourceRect.bottom
+    For X = SourceRect.left To SourceRect.Right
+        For Y = SourceRect.top To SourceRect.bottom
             color = GetPixel(srchdc, X, Y)
             
             If color <> TransparentColor Then
-                Call SetPixel(dsthdc, destRect.Left + (X - SourceRect.Left), destRect.Top + (Y - SourceRect.Top), color)
+                Call SetPixel(dsthdc, destRect.left + (X - SourceRect.left), destRect.top + (Y - SourceRect.top), color)
             End If
         Next Y
     Next X
@@ -1716,13 +1716,13 @@ Sub LoadGraphics()
     Call SurfaceDB.Initialize(DirectD3D8, ClientSetup.bUseVideo, DirGraficos, ClientSetup.byMemory)
     
     'Set up te rain rects
-    RLluvia(0).Top = 0:      RLluvia(1).Top = 0:      RLluvia(2).Top = 0:      RLluvia(3).Top = 0
-    RLluvia(0).Left = 0:     RLluvia(1).Left = 128:   RLluvia(2).Left = 256:   RLluvia(3).Left = 384
+    RLluvia(0).top = 0:      RLluvia(1).top = 0:      RLluvia(2).top = 0:      RLluvia(3).top = 0
+    RLluvia(0).left = 0:     RLluvia(1).left = 128:   RLluvia(2).left = 256:   RLluvia(3).left = 384
     RLluvia(0).Right = 128:  RLluvia(1).Right = 256:  RLluvia(2).Right = 384:  RLluvia(3).Right = 512
     RLluvia(0).bottom = 128: RLluvia(1).bottom = 128: RLluvia(2).bottom = 128: RLluvia(3).bottom = 128
     
-    RLluvia(4).Top = 128:    RLluvia(5).Top = 128:    RLluvia(6).Top = 128:    RLluvia(7).Top = 128
-    RLluvia(4).Left = 0:     RLluvia(5).Left = 128:   RLluvia(6).Left = 256:   RLluvia(7).Left = 384
+    RLluvia(4).top = 128:    RLluvia(5).top = 128:    RLluvia(6).top = 128:    RLluvia(7).top = 128
+    RLluvia(4).left = 0:     RLluvia(5).left = 128:   RLluvia(6).left = 256:   RLluvia(7).left = 384
     RLluvia(4).Right = 128:  RLluvia(5).Right = 256:  RLluvia(6).Right = 384:  RLluvia(7).Right = 512
     RLluvia(4).bottom = 256: RLluvia(5).bottom = 256: RLluvia(6).bottom = 256: RLluvia(7).bottom = 256
 End Sub
@@ -1784,10 +1784,10 @@ Public Function InitTileEngine(ByVal setDisplayFormhWnd As Long, ByVal setMainVi
     
     'Set the dest rect
     With MainDestRect
-        .Left = TilePixelWidth * TileBufferSize - TilePixelWidth
-        .Top = TilePixelHeight * TileBufferSize - TilePixelHeight
-        .Right = .Left + MainViewWidth
-        .bottom = .Top + MainViewHeight
+        .left = TilePixelWidth * TileBufferSize - TilePixelWidth
+        .top = TilePixelHeight * TileBufferSize - TilePixelHeight
+        .Right = .left + MainViewWidth
+        .bottom = .top + MainViewHeight
     End With
     
 On Error GoTo 0
@@ -1805,7 +1805,6 @@ On Error GoTo 0
     LTLluvia(4) = 736
     
     Call LoadGraphics
-    
     InitTileEngine = True
 End Function
 Public Sub DirectXInit()
@@ -1842,8 +1841,6 @@ Public Sub DirectXInit()
     DirectDevice.SetRenderState D3DRS_SRCBLEND, D3DBLEND_SRCALPHA
     DirectDevice.SetRenderState D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA
     DirectDevice.SetRenderState D3DRS_ALPHABLENDENABLE, True
-    
-    fontInitializing
     
     If Err Then
         MsgBox "No se puede iniciar DirectX. Por favor asegurese de tener la ultima version correctamente instalada."
@@ -1884,10 +1881,10 @@ Sub ShowNextFrame(ByVal DisplayFormTop As Integer, ByVal DisplayFormLeft As Inte
     Static OffsetCounterY As Single
     
     '****** Set main view rectangle ******
-    MainViewRect.Left = (DisplayFormLeft / Screen.TwipsPerPixelX) + MainViewLeft
-    MainViewRect.Top = (DisplayFormTop / Screen.TwipsPerPixelY) + MainViewTop
-    MainViewRect.Right = MainViewRect.Left + MainViewWidth
-    MainViewRect.bottom = MainViewRect.Top + MainViewHeight
+    MainViewRect.left = (DisplayFormLeft / Screen.TwipsPerPixelX) + MainViewLeft
+    MainViewRect.top = (DisplayFormTop / Screen.TwipsPerPixelY) + MainViewTop
+    MainViewRect.Right = MainViewRect.left + MainViewWidth
+    MainViewRect.bottom = MainViewRect.top + MainViewHeight
     
     If EngineRun Then
         DirectDevice.Clear 0, ByVal 0, D3DCLEAR_TARGET, 0, 1#, 0
@@ -1952,48 +1949,6 @@ Sub ShowNextFrame(ByVal DisplayFormTop As Integer, ByVal DisplayFormLeft As Inte
         DirectDevice.Present ByVal 0, ByVal 0, 0, ByVal 0
     End If
 End Sub
-Private Function fontInitializing() As Boolean
-
-    ReDim Preserve Font(1 To 1) As FontInfo
-    
-    Font(1).MainFontFormat.Name = "Tahoma"
-    Font(1).MainFontFormat.Size = 8
-    Font(1).MainFontFormat.bold = True
-    
-    Set Font(1).MainFontDesc = Font(1).MainFontFormat
-    Set Font(1).MainFont = DirectD3D8.CreateFont(DirectDevice, Font(1).MainFontDesc.hFont)
-
-    
-End Function
-Public Sub DrawText(ByVal X As Integer, ByVal Y As Integer, ByVal Text As String, ByVal color As Long)
-    fontRender Text, 1, X, Y, Len(Text) * 8, 12, DT_LEFT, color
-End Sub
-Private Sub fontRender(ByRef Text As String, ByRef Index As Byte, _
-                            ByRef X As Integer, ByRef Y As Integer, _
-                            ByRef Width As Integer, ByRef Height As Integer, _
-                            Format As Long, ByVal color As Long)
-                            
-    Static fontRect As RECT 'This defines where it will be
-    
-    With fontRect
-        .Top = Y
-        .Left = X
-        .bottom = Y + Height
-        .Right = X + Width
-    End With
-    
-    DirectD3D8.DrawText Font(Index).MainFont, color, Text, fontRect, Format
-End Sub
-Private Sub fontDeInitializing()
-    Dim i As Byte
-    
-    For i = 1 To UBound(Font)
-        Set Font(i).MainFont = Nothing
-        Set Font(i).MainFontDesc = Nothing
-        Set Font(i).MainFontFormat = Nothing
-    Next i
-    
-End Sub
 #If ConAlfaB Then
 
 Public Sub EfectoNoche(ByRef Surface As DirectD3DSurface7)
@@ -2005,8 +1960,8 @@ Public Sub EfectoNoche(ByRef Surface As DirectD3DSurface7)
     Surface.GetSurfaceDesc ddsdDest
     
     With rRect
-        .Left = 0
-        .Top = 0
+        .left = 0
+        .top = 0
         .Right = ddsdDest.lWidth
         .bottom = ddsdDest.lHeight
     End With
@@ -2176,20 +2131,20 @@ Private Sub CharRender(ByVal CharIndex As Long, ByVal PixelOffsetX As Integer, B
                             
                             If .priv = 0 Then
                                 If .Atacable Then
-                                    color = D3DColorXRGB(ColoresPJ(48).r, ColoresPJ(48).g, ColoresPJ(48).b)
+                                    color = D3DColorXRGB(ColoresPJ(48).r, ColoresPJ(48).g, ColoresPJ(48).B)
                                 Else
                                     If .Criminal Then
-                                        color = D3DColorXRGB(ColoresPJ(50).r, ColoresPJ(50).g, ColoresPJ(50).b)
+                                        color = D3DColorXRGB(ColoresPJ(50).r, ColoresPJ(50).g, ColoresPJ(50).B)
                                     Else
-                                        color = D3DColorXRGB(ColoresPJ(49).r, ColoresPJ(49).g, ColoresPJ(49).b)
+                                        color = D3DColorXRGB(ColoresPJ(49).r, ColoresPJ(49).g, ColoresPJ(49).B)
                                     End If
                                 End If
                             Else
-                                color = D3DColorXRGB(ColoresPJ(.priv).r, ColoresPJ(.priv).g, ColoresPJ(.priv).b)
+                                color = D3DColorXRGB(ColoresPJ(.priv).r, ColoresPJ(.priv).g, ColoresPJ(.priv).B)
                             End If
                             
                             'Nick
-                            line = Left$(.Nombre, Pos - 2)
+                            line = left$(.Nombre, Pos - 2)
                             Call DrawText(PixelOffsetX - (Len(line) * 6 / 2) + 14, PixelOffsetY + 30, line, color)
                             
                             'Clan
@@ -2277,8 +2232,8 @@ Public Sub Geometry_Create_Box(ByRef verts() As TLVERTEX, ByRef dest As RECT, By
     
     If Angle > 0 Then
         'Center coordinates on screen of the square
-        x_center = dest.Left + (dest.Right - dest.Left) / 2
-        y_center = dest.Top + (dest.bottom - dest.Top) / 2
+        x_center = dest.left + (dest.Right - dest.left) / 2
+        y_center = dest.top + (dest.bottom - dest.top) / 2
         
         'Calculate radius
         radius = Sqr((dest.Right - x_center) ^ 2 + (dest.bottom - y_center) ^ 2)
@@ -2291,7 +2246,7 @@ Public Sub Geometry_Create_Box(ByRef verts() As TLVERTEX, ByRef dest As RECT, By
     
     'Calculate screen coordinates of sprite, and only rotate if necessary
     If Angle = 0 Then
-        x_Cor = dest.Left
+        x_Cor = dest.left
         y_Cor = dest.bottom
     Else
         x_Cor = x_center + Cos(-left_point - Angle) * radius
@@ -2301,14 +2256,14 @@ Public Sub Geometry_Create_Box(ByRef verts() As TLVERTEX, ByRef dest As RECT, By
     
     '0 - Bottom left vertex
     If Textures_Width And Textures_Height Then
-        verts(0) = Geometry_Create_TLVertex(x_Cor, y_Cor, 0, 1, rgb_list(0), 0, src.Left / Textures_Width, (src.bottom + 1) / Textures_Height)
+        verts(0) = Geometry_Create_TLVertex(x_Cor, y_Cor, 0, 1, rgb_list(0), 0, src.left / Textures_Width, (src.bottom + 1) / Textures_Height)
     Else
         verts(0) = Geometry_Create_TLVertex(x_Cor, y_Cor, 0, 1, rgb_list(0), 0, 0, 0)
     End If
     'Calculate screen coordinates of sprite, and only rotate if necessary
     If Angle = 0 Then
-        x_Cor = dest.Left
-        y_Cor = dest.Top
+        x_Cor = dest.left
+        y_Cor = dest.top
     Else
         x_Cor = x_center + Cos(left_point - Angle) * radius
         y_Cor = y_center - Sin(left_point - Angle) * radius
@@ -2317,7 +2272,7 @@ Public Sub Geometry_Create_Box(ByRef verts() As TLVERTEX, ByRef dest As RECT, By
     
     '1 - Top left vertex
     If Textures_Width And Textures_Height Then
-        verts(1) = Geometry_Create_TLVertex(x_Cor, y_Cor, 0, 1, rgb_list(1), 0, src.Left / Textures_Width, src.Top / Textures_Height)
+        verts(1) = Geometry_Create_TLVertex(x_Cor, y_Cor, 0, 1, rgb_list(1), 0, src.left / Textures_Width, src.top / Textures_Height)
     Else
         verts(1) = Geometry_Create_TLVertex(x_Cor, y_Cor, 0, 1, rgb_list(1), 0, 0, 1)
     End If
@@ -2340,7 +2295,7 @@ Public Sub Geometry_Create_Box(ByRef verts() As TLVERTEX, ByRef dest As RECT, By
     'Calculate screen coordinates of sprite, and only rotate if necessary
     If Angle = 0 Then
         x_Cor = dest.Right
-        y_Cor = dest.Top
+        y_Cor = dest.top
     Else
         x_Cor = x_center + Cos(right_point - Angle) * radius
         y_Cor = y_center - Sin(right_point - Angle) * radius
@@ -2349,7 +2304,7 @@ Public Sub Geometry_Create_Box(ByRef verts() As TLVERTEX, ByRef dest As RECT, By
     
     '3 - Top right vertex
     If Textures_Width And Textures_Height Then
-        verts(3) = Geometry_Create_TLVertex(x_Cor, y_Cor, 0, 1, rgb_list(3), 0, (src.Right + 1) / Textures_Width, src.Top / Textures_Height)
+        verts(3) = Geometry_Create_TLVertex(x_Cor, y_Cor, 0, 1, rgb_list(3), 0, (src.Right + 1) / Textures_Width, src.top / Textures_Height)
     Else
         verts(3) = Geometry_Create_TLVertex(x_Cor, y_Cor, 0, 1, rgb_list(3), 0, 1, 1)
     End If
@@ -2371,7 +2326,7 @@ Public Function Geometry_Create_TLVertex(ByVal X As Single, ByVal Y As Single, B
     Geometry_Create_TLVertex.tu = tu
     Geometry_Create_TLVertex.tv = tv
 End Function
-Public Sub Device_Textured_Render(ByVal X As Integer, ByVal Y As Integer, ByVal texture As Direct3DTexture8, ByRef src_rect As RECT, Optional Alpha As Boolean = False)
+Public Sub Device_Textured_Render(ByVal X As Integer, ByVal Y As Integer, ByVal Texture As Direct3DTexture8, ByRef src_rect As RECT, Optional Alpha As Boolean = False)
     Dim dest_rect As RECT
     Dim temp_verts(3) As TLVERTEX
     Dim light_value(0 To 3) As Long
@@ -2383,20 +2338,20 @@ Public Sub Device_Textured_Render(ByVal X As Integer, ByVal Y As Integer, ByVal 
     light_value(3) = -1 'rgb_list(3)
  
     With dest_rect
-        .bottom = Y + (src_rect.bottom - src_rect.Top) ' src_height
-        .Left = X
-        .Right = X + (src_rect.Right - src_rect.Left)
-        .Top = Y
+        .bottom = Y + (src_rect.bottom - src_rect.top) ' src_height
+        .left = X
+        .Right = X + (src_rect.Right - src_rect.left)
+        .top = Y
     End With
     
     Dim texwidth As Long, texheight As Long
-    texture.GetLevelDesc 0, srdesc
+    Texture.GetLevelDesc 0, srdesc
     texwidth = srdesc.Width
     texheight = srdesc.Height
     
     Geometry_Create_Box temp_verts(), dest_rect, src_rect, light_value(), texwidth, texheight, 0
     
-    DirectDevice.SetTexture 0, texture
+    DirectDevice.SetTexture 0, Texture
     
     If Alpha Then
         DirectDevice.SetRenderState D3DRS_SRCBLEND, D3DBLEND_ONE
@@ -2432,16 +2387,16 @@ Public Sub Draw_FillBox(ByVal X As Integer, ByVal Y As Integer, ByVal Width As I
     
     With box_rect
         .bottom = Y + Height
-        .Left = X
+        .left = X
         .Right = X + Width
-        .Top = Y
+        .top = Y
     End With
     
     With Outline
         .bottom = Y + Height + 2
-        .Left = X - 2
+        .left = X - 2
         .Right = X + Width + 2
-        .Top = Y - 2
+        .top = Y - 2
     End With
     
     Geometry_Create_Box Vertex2(), Outline, Outline, rgb_list2(), 0, 0
