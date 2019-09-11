@@ -1,0 +1,6 @@
+Hecho por el moderador Shak - Foro GsZ
+* 12/02/2017: Encriptación con contraseña (GsZ) y carga de .pngs - Gráficos y mapas (Mapas no activado)
+* 12/02/2017: Arreglado el renderizado de pictures. (GsZ)
+* 12/02/2017: Arreglado bug del sonido al cerrar el juego (GsZ)
+* 12/02/2017: Arreglado actualización de los inventarios (GsZ)
+* 12/02/2017: Arreglado el error en los sockets al desconectar un personaje en Debug. (GsZ)
