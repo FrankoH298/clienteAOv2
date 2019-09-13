@@ -502,7 +502,7 @@ Private Sub CargarImagenes()
     Dim ImgPath As String
     Dim Index As Integer
     
-    ImgPath = App.path & "\graficos\"
+    ImgPath = path(Graficos) & ""
 
     Set Pestanias(ePestania.ieArmas) = LoadPicture(ImgPath & "VentanaHerreriaArmas.jpg")
     Set Pestanias(ePestania.ieArmaduras) = LoadPicture(ImgPath & "VentanaHerreriaArmaduras.jpg")
@@ -676,13 +676,13 @@ Private Sub RenderItem(ByRef Pic As PictureBox, ByVal GrhIndex As Long)
         SR.Left = .sX
         SR.Top = .sY
         SR.Right = SR.Left + .pixelWidth
-        SR.Bottom = SR.Top + .pixelHeight
+        SR.bottom = SR.Top + .pixelHeight
     End With
     
     DR.Left = 0
     DR.Top = 0
     DR.Right = 32
-    DR.Bottom = 32
+    DR.bottom = 32
     
     Call DrawGrhtoHdc(Pic.hdc, GrhIndex, SR, DR)
     Pic.Refresh

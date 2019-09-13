@@ -59,7 +59,12 @@ Public Const MAX_LIST_ITEMS As Byte = 4
 Public InvLingosHerreria(1 To MAX_LIST_ITEMS) As New clsGraphicalInventory
 Public InvMaderasCarpinteria(1 To MAX_LIST_ITEMS) As New clsGraphicalInventory
                 
-Public SurfaceDB As clsSurfaceManager   'No va new porque es una interfaz, el new se pone al decidir que clase de objeto es
+Public SurfaceDB As clsTextureManager   'No va new porque es una interfaz, el new se pone al decidir que clase de objeto es
+Public SpriteBatch As clsBatch
+
+Public Projection As D3DMATRIX
+Public View As D3DMATRIX
+
 Public CustomKeys As New clsCustomKeys
 Public CustomMessages As New clsCustomMessages
 Public Declare Function timeGetTime Lib "winmm.dll" () As Long
@@ -69,10 +74,6 @@ Public outgoingData As New clsByteQueue
 ''
 'The main timer of the game.
 Public MainTimer As New clsTimer
-
-#If SeguridadAlkon Then
-Public md5 As New clsMD5
-#End If
 
 'Sonidos
 Public Const SND_CLICK As String = "click.Wav"
@@ -180,7 +181,6 @@ Public UserCiego As Boolean
 Public UserEstupido As Boolean
 
 Public NoRes As Boolean 'no cambiar la resolucion
-Public GraphicsFile As String 'Que graficos.ind usamos
 
 Public RainBufferIndex As Long
 Public FogataBufferIndex As Long
@@ -216,7 +216,6 @@ Public UserBancoInventory(1 To MAX_BANCOINVENTORY_SLOTS) As Inventory
 
 Public TradingUserName As String
 
-Public Tips() As String * 255
 Public Const LoopAdEternum As Integer = 999
 
 'Direcciones
@@ -716,10 +715,7 @@ Public UserExp As Long
 Public UserReputacion As tReputacion
 Public UserEstadisticas As tEstadisticasUsu
 Public UserDescansar As Boolean
-Public tipf As String
-Public PrimeraVez As Boolean
 Public bShowTutorial As Boolean
-Public FPSFLAG As Boolean
 Public pausa As Boolean
 Public UserParalizado As Boolean
 Public UserNavegando As Boolean
@@ -771,8 +767,6 @@ Public Oscuridad As Integer
 'Public logged As Boolean ' www.gs-zone.org
 
 Public UsingSkill As Integer
-
-Public MD5HushYo As String * 16
 
 Public pingTime As Long
 

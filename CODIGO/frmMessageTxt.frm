@@ -257,7 +257,7 @@ Private Sub Form_Load()
         messageTxt(i) = CustomMessages.Message(i)
     Next i
 
-    Me.Picture = LoadPicture(App.path & "\graficos\VentanaMensajesPersonalizados.jpg")
+    Me.Picture = LoadPicture(path(Graficos) & "VentanaMensajesPersonalizados.jpg")
     
     LoadButtons
     
@@ -266,7 +266,7 @@ End Sub
 Private Sub LoadButtons()
     Dim GrhPath As String
     
-    GrhPath = DirGraficos
+    GrhPath = path(Graficos)
     
     Set cBotonGuardar = New clsGraphicalButton
     Set cBotonCancelar = New clsGraphicalButton

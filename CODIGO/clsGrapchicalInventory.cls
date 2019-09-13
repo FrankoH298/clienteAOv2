@@ -371,44 +371,29 @@ Private Sub DrawInventory()
 'Renders the inventory to the given PictureBox
 '***************************************************
     Dim loopC As Long
-    Dim SrcRect As RECT
     Dim TempRect As RECT
-    Dim destRect As RECT
     
     With TempRect
         .bottom = InventoryWindow.Height
         .Right = InventoryWindow.Width
     End With
     
-    destRect = TempRect
-    
     'Clear the inventory window
-    DirectDevice.Clear 0, ByVal 0, D3DCLEAR_TARGET, 0, 0#, 0
-    DirectDevice.BeginScene
+        Call Engine_BeginScene
         For loopC = InventoryOffset * (InventoryWindow.ScaleWidth \ ownTilePixelWidth) + 1 To UBound(Inventory)
             
             startdX = ((loopC - 1) Mod (frmMain.PicInv.Width / 32)) * 32
             startdY = ((loopC - 1) \ (frmMain.PicInv.Width / 32)) * 32
             
             If Inventory(loopC).GrhIndex Then
-            
-                'Get source rect
-                With SrcRect
-                    .Left = GrhData(Inventory(loopC).GrhIndex).sX
-                    .Top = GrhData(Inventory(loopC).GrhIndex).sY
-                    .Right = .Left + ownTilePixelWidth
-                    .bottom = .Top + ownTilePixelHeight
-                End With
                 
                 'Render a box around the selected item
                 If InvSelectedItem = loopC Then
                     If ImgContainer Then
-                        Device_Textured_Render startdX, startdY, SurfaceDB.Surface(CLng(GrhData(4).FileNum)), SrcRect
+                        Call Draw_GrhIndex(2, startdX, startdY, 1, Normal_RGBList)
                     End If
                 End If
-                
-                Device_Textured_Render startdX, startdY, SurfaceDB.Surface(CLng(GrhData(Inventory(loopC).GrhIndex).FileNum)), SrcRect
-            
+                Call Draw_GrhIndex(Inventory(loopC).GrhIndex, startdX, startdY, 1, Normal_RGBList)
                 'If equipped we render "E"
                 If Inventory(loopC).Equipped Then
                     DrawText startdX + 20, startdY + 20, "E", -256
@@ -419,8 +404,7 @@ Private Sub DrawInventory()
                 
             End If
         Next loopC
-    DirectDevice.EndScene
-    DirectDevice.Present destRect, ByVal 0, InventoryWindow.hWnd, ByVal 0
+        Call Engine_EndScene(TempRect, InventoryWindow.hWnd)
     
 End Sub
 Public Sub DrawInv()

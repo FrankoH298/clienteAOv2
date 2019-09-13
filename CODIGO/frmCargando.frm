@@ -31,7 +31,6 @@ Begin VB.Form frmCargando
       _ExtentY        =   2725
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmCargando.frx":0000
@@ -98,8 +97,8 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private Sub Form_Load()
-    Me.Picture = LoadPicture(DirGraficos & "VentanaCargando.jpg")
-    LOGO.Picture = LoadPicture(DirGraficos & "ImagenCargando.jpg")
+    Me.Picture = LoadPicture(Path(Graficos) & "VentanaCargando.jpg")
+    LOGO.Picture = LoadPicture(Path(Graficos) & "ImagenCargando.jpg")
 End Sub
 
 Private Sub LOGO_KeyPress(KeyAscii As Integer)

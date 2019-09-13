@@ -88,7 +88,7 @@ If Not Cartel Then Exit Sub
 Dim X As Integer, Y As Integer
 X = XPosCartel + 20
 Y = YPosCartel + 60
-Call DDrawTransGrhIndextoSurface(textura, XPosCartel, YPosCartel, 0)
+Call Draw_GrhIndex(textura, XPosCartel, YPosCartel, 0, Normal_RGBList)
 Dim j As Integer, desp As Integer
 
 For j = 0 To UBound(LeyendaFormateada)

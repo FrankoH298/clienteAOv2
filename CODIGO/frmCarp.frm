@@ -514,7 +514,7 @@ Private Sub Form_Load()
     
     Call LoadDefaultValues
     
-    Me.Picture = LoadPicture(App.path & "\graficos\VentanaCarpinteriaItems.jpg")
+    Me.Picture = LoadPicture(path(Graficos) & "VentanaCarpinteriaItems.jpg")
     LoadButtons
 End Sub
 
@@ -522,7 +522,7 @@ Private Sub LoadButtons()
     Dim GrhPath As String
     Dim Index As Long
     
-    GrhPath = DirGraficos
+    GrhPath = path(Graficos)
 
     Set Pestanias(ePestania.ieItems) = LoadPicture(GrhPath & "VentanaCarpinteriaItems.jpg")
     Set Pestanias(ePestania.ieMejorar) = LoadPicture(GrhPath & "VentanaCarpinteriaMejorar.jpg")
@@ -705,13 +705,13 @@ Private Sub RenderItem(ByRef Pic As PictureBox, ByVal GrhIndex As Long)
         SR.Left = .sX
         SR.Top = .sY
         SR.Right = SR.Left + .pixelWidth
-        SR.Bottom = SR.Top + .pixelHeight
+        SR.bottom = SR.Top + .pixelHeight
     End With
     
     DR.Left = 0
     DR.Top = 0
     DR.Right = 32
-    DR.Bottom = 32
+    DR.bottom = 32
     
     Call DrawGrhtoHdc(Pic.hdc, GrhIndex, SR, DR)
     Pic.Refresh

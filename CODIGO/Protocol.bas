@@ -43,9 +43,9 @@ Option Explicit
 Private Const SEPARATOR As String * 1 = vbNullChar
 
 Private Type tFont
-    red As Byte
-    green As Byte
-    blue As Byte
+    Red As Byte
+    Green As Byte
+    Blue As Byte
     bold As Boolean
     italic As Boolean
 End Type
@@ -329,127 +329,127 @@ Public Sub InitFonts()
 '
 '***************************************************
     With FontTypes(FontTypeNames.FONTTYPE_TALK)
-        .red = 255
-        .green = 255
-        .blue = 255
+        .Red = 255
+        .Green = 255
+        .Blue = 255
     End With
     
     With FontTypes(FontTypeNames.FONTTYPE_FIGHT)
-        .red = 255
+        .Red = 255
         .bold = 1
     End With
     
     With FontTypes(FontTypeNames.FONTTYPE_WARNING)
-        .red = 32
-        .green = 51
-        .blue = 223
+        .Red = 32
+        .Green = 51
+        .Blue = 223
         .bold = 1
         .italic = 1
     End With
     
     With FontTypes(FontTypeNames.FONTTYPE_INFO)
-        .red = 65
-        .green = 190
-        .blue = 156
+        .Red = 65
+        .Green = 190
+        .Blue = 156
     End With
     
     With FontTypes(FontTypeNames.FONTTYPE_INFOBOLD)
-        .red = 65
-        .green = 190
-        .blue = 156
+        .Red = 65
+        .Green = 190
+        .Blue = 156
         .bold = 1
     End With
     
     With FontTypes(FontTypeNames.FONTTYPE_EJECUCION)
-        .red = 130
-        .green = 130
-        .blue = 130
+        .Red = 130
+        .Green = 130
+        .Blue = 130
         .bold = 1
     End With
     
     With FontTypes(FontTypeNames.FONTTYPE_PARTY)
-        .red = 255
-        .green = 180
-        .blue = 250
+        .Red = 255
+        .Green = 180
+        .Blue = 250
     End With
     
-    FontTypes(FontTypeNames.FONTTYPE_VENENO).green = 255
+    FontTypes(FontTypeNames.FONTTYPE_VENENO).Green = 255
     
     With FontTypes(FontTypeNames.FONTTYPE_GUILD)
-        .red = 255
-        .green = 255
-        .blue = 255
+        .Red = 255
+        .Green = 255
+        .Blue = 255
         .bold = 1
     End With
     
-    FontTypes(FontTypeNames.FONTTYPE_SERVER).green = 185
+    FontTypes(FontTypeNames.FONTTYPE_SERVER).Green = 185
     
     With FontTypes(FontTypeNames.FONTTYPE_GUILDMSG)
-        .red = 228
-        .green = 199
-        .blue = 27
+        .Red = 228
+        .Green = 199
+        .Blue = 27
     End With
     
     With FontTypes(FontTypeNames.FONTTYPE_CONSEJO)
-        .red = 130
-        .green = 130
-        .blue = 255
+        .Red = 130
+        .Green = 130
+        .Blue = 255
         .bold = 1
     End With
     
     With FontTypes(FontTypeNames.FONTTYPE_CONSEJOCAOS)
-        .red = 255
-        .green = 60
+        .Red = 255
+        .Green = 60
         .bold = 1
     End With
     
     With FontTypes(FontTypeNames.FONTTYPE_CONSEJOVesA)
-        .green = 200
-        .blue = 255
+        .Green = 200
+        .Blue = 255
         .bold = 1
     End With
     
     With FontTypes(FontTypeNames.FONTTYPE_CONSEJOCAOSVesA)
-        .red = 255
-        .green = 50
+        .Red = 255
+        .Green = 50
         .bold = 1
     End With
     
     With FontTypes(FontTypeNames.FONTTYPE_CENTINELA)
-        .green = 255
+        .Green = 255
         .bold = 1
     End With
     
     With FontTypes(FontTypeNames.FONTTYPE_GMMSG)
-        .red = 255
-        .green = 255
-        .blue = 255
+        .Red = 255
+        .Green = 255
+        .Blue = 255
         .italic = 1
     End With
     
     With FontTypes(FontTypeNames.FONTTYPE_GM)
-        .red = 30
-        .green = 255
-        .blue = 30
+        .Red = 30
+        .Green = 255
+        .Blue = 30
         .bold = 1
     End With
     
     With FontTypes(FontTypeNames.FONTTYPE_CITIZEN)
-        .blue = 200
+        .Blue = 200
         .bold = 1
     End With
     
     With FontTypes(FontTypeNames.FONTTYPE_CONSE)
-        .red = 30
-        .green = 150
-        .blue = 30
+        .Red = 30
+        .Green = 150
+        .Blue = 30
         .bold = 1
     End With
     
     With FontTypes(FontTypeNames.FONTTYPE_DIOS)
-        .red = 250
-        .green = 250
-        .blue = 150
+        .Red = 250
+        .Green = 250
+        .Blue = 150
         .bold = 1
     End With
 End Sub
@@ -782,15 +782,9 @@ On Error Resume Next
             
         Case ServerPacketID.CancelOfferItem
             Call HandleCancelOfferItem
-            
-#If SeguridadAlkon Then
-        Case Else
-            Call HandleIncomingDataEx
-#Else
         Case Else
             'ERROR : Abort!
             Exit Sub
-#End If
     End Select
     
     'Done with this packet, move on to next one
@@ -1013,13 +1007,6 @@ Private Sub HandleLogged()
     
     If bShowTutorial Then frmTutorial.Show
     
-    'Show tip
-    If tipf = "1" And PrimeraVez Then
-        Call CargarTip
-        frmtip.Visible = True
-        PrimeraVez = False
-    End If
-    
     Inventario.DrawInv
 End Sub
 
@@ -1139,10 +1126,6 @@ Private Sub HandleDisconnect()
     For i = 1 To MAX_INVENTORY_SLOTS
         Call Inventario.SetItem(i, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "")
     Next i
-    
-#If SeguridadAlkon Then
-    Call MI(CualMI).Inicializar(RandomNumber(1, 1000), 10000)
-#End If
 
     Call Audio.PlayMIDI("2.mid")
 End Sub
@@ -1855,12 +1838,8 @@ Private Sub HandleChangeMap()
 'TODO: Once on-the-fly editor is implemented check for map version before loading....
 'For now we just drop it
     Call incomingData.ReadInteger
-        
-#If SeguridadAlkon Then
-    Call InitMI
-#End If
     
-    If FileExist(DirMapas & "Mapa" & UserMap & ".map", vbNormal) Then
+    If FileExist(Path(Mapas) & "Mapa" & UserMap & ".map", vbNormal) Then
         Call SwitchMap(UserMap)
         If bLluvia(UserMap) = 0 Then
             If bRain Then
@@ -2174,7 +2153,7 @@ On Error GoTo ErrHandler
         Call AddtoRichTextBox(frmMain.RecTxt, Left$(chat, InStr(1, chat, "~") - 1), r, g, b, Val(ReadField(5, chat, 126)) <> 0, Val(ReadField(6, chat, 126)) <> 0)
     Else
         With FontTypes(FontIndex)
-            Call AddtoRichTextBox(frmMain.RecTxt, chat, .red, .green, .blue, .bold, .italic)
+            Call AddtoRichTextBox(frmMain.RecTxt, chat, .Red, .Green, .Blue, .bold, .italic)
         End With
         
         ' Para no perder el foco cuando chatea por party
@@ -2257,7 +2236,7 @@ On Error GoTo ErrHandler
             Call AddtoRichTextBox(frmMain.RecTxt, Left$(chat, InStr(1, chat, "~") - 1), r, g, b, Val(ReadField(5, chat, 126)) <> 0, Val(ReadField(6, chat, 126)) <> 0)
         Else
             With FontTypes(FontTypeNames.FONTTYPE_GUILDMSG)
-                Call AddtoRichTextBox(frmMain.RecTxt, chat, .red, .green, .blue, .bold, .italic)
+                Call AddtoRichTextBox(frmMain.RecTxt, chat, .Red, .Green, .Blue, .bold, .italic)
             End With
         End If
     Else
@@ -2336,7 +2315,7 @@ On Error GoTo ErrHandler
         Call AddtoRichTextBox(frmComerciarUsu.CommerceConsole, Left$(chat, InStr(1, chat, "~") - 1), r, g, b, Val(ReadField(5, chat, 126)) <> 0, Val(ReadField(6, chat, 126)) <> 0)
     Else
         With FontTypes(FontIndex)
-            Call AddtoRichTextBox(frmComerciarUsu.CommerceConsole, chat, .red, .green, .blue, .bold, .italic)
+            Call AddtoRichTextBox(frmComerciarUsu.CommerceConsole, chat, .Red, .Green, .Blue, .bold, .italic)
         End With
     End If
     
@@ -3173,7 +3152,7 @@ On Error GoTo ErrHandler
     Dim MinHit As Integer
     Dim MaxDef As Integer
     Dim MinDef As Integer
-    Dim value As Single
+    Dim Value As Single
     
     slot = Buffer.ReadByte()
     OBJIndex = Buffer.ReadInteger()
@@ -3186,7 +3165,7 @@ On Error GoTo ErrHandler
     MinHit = Buffer.ReadInteger()
     MaxDef = Buffer.ReadInteger()
     MinDef = Buffer.ReadInteger
-    value = Buffer.ReadSingle()
+    Value = Buffer.ReadSingle()
     
     If Equipped Then
         Select Case OBJType
@@ -3220,7 +3199,7 @@ On Error GoTo ErrHandler
         End Select
     End If
     
-    Call Inventario.SetItem(slot, OBJIndex, Amount, Equipped, GrhIndex, OBJType, MaxHit, MinHit, MaxDef, MinDef, value, Name)
+    Call Inventario.SetItem(slot, OBJIndex, Amount, Equipped, GrhIndex, OBJType, MaxHit, MinHit, MaxDef, MinDef, Value, Name)
 
     'If we got here then packet is complete, copy data back to original queue
     Call incomingData.CopyBuffer(Buffer)
@@ -3261,7 +3240,7 @@ Private Sub HandleStopWorking()
     Call incomingData.ReadByte
     
     With FontTypes(FontTypeNames.FONTTYPE_INFO)
-        Call ShowConsoleMsg("¡Has terminado de trabajar!", .red, .green, .blue, .bold, .italic)
+        Call ShowConsoleMsg("¡Has terminado de trabajar!", .Red, .Green, .Blue, .bold, .italic)
     End With
     
     If frmMain.macrotrabajo.Enabled Then Call frmMain.DesactivarMacroTrabajo
@@ -4135,14 +4114,6 @@ Private Sub HandleSetInvisible()
     
     CharIndex = incomingData.ReadInteger()
     charlist(CharIndex).invisible = incomingData.ReadBoolean()
-    
-#If SeguridadAlkon Then
-    If charlist(CharIndex).invisible Then
-        Call MI(CualMI).SetInvisible(CharIndex)
-    Else
-        Call MI(CualMI).ResetInvisible(CharIndex)
-    End If
-#End If
 
 End Sub
 
@@ -5408,20 +5379,11 @@ Public Sub WriteLoginExistingChar()
         Call .WriteByte(ClientPacketID.LoginExistingChar)
         
         Call .WriteASCIIString(UserName)
-        
-#If SeguridadAlkon Then
-        Call .WriteASCIIStringFixed(UserPassword)
-#Else
         Call .WriteASCIIString(UserPassword)
-#End If
         
         Call .WriteByte(App.Major)
         Call .WriteByte(App.Minor)
         Call .WriteByte(App.Revision)
-        
-#If SeguridadAlkon Then
-        Call .WriteASCIIStringFixed(MD5HushYo)
-#End If
     End With
 End Sub
 
@@ -5456,20 +5418,11 @@ Public Sub WriteLoginNewChar()
         Call .WriteByte(ClientPacketID.LoginNewChar)
         
         Call .WriteASCIIString(UserName)
-        
-#If SeguridadAlkon Then
-        Call .WriteASCIIStringFixed(UserPassword)
-#Else
         Call .WriteASCIIString(UserPassword)
-#End If
         
         Call .WriteByte(App.Major)
         Call .WriteByte(App.Minor)
         Call .WriteByte(App.Revision)
-        
-#If SeguridadAlkon Then
-        Call .WriteASCIIStringFixed(MD5HushYo)
-#End If
         
         Call .WriteByte(UserRaza)
         Call .WriteByte(UserSexo)
@@ -5951,7 +5904,7 @@ End Sub
 ' @param    item Index of the item to craft in the list sent by the server.
 ' @remarks  The data is not actually sent until the buffer is properly flushed.
 
-Public Sub WriteCraftBlacksmith(ByVal Item As Integer)
+Public Sub WriteCraftBlacksmith(ByVal item As Integer)
 '***************************************************
 'Author: Juan Martín Sotuyo Dodero (Maraxus)
 'Last Modification: 05/17/06
@@ -5960,7 +5913,7 @@ Public Sub WriteCraftBlacksmith(ByVal Item As Integer)
     With outgoingData
         Call .WriteByte(ClientPacketID.CraftBlacksmith)
         
-        Call .WriteInteger(Item)
+        Call .WriteInteger(item)
     End With
 End Sub
 
@@ -5970,7 +5923,7 @@ End Sub
 ' @param    item Index of the item to craft in the list sent by the server.
 ' @remarks  The data is not actually sent until the buffer is properly flushed.
 
-Public Sub WriteCraftCarpenter(ByVal Item As Integer)
+Public Sub WriteCraftCarpenter(ByVal item As Integer)
 '***************************************************
 'Author: Juan Martín Sotuyo Dodero (Maraxus)
 'Last Modification: 05/17/06
@@ -5979,7 +5932,7 @@ Public Sub WriteCraftCarpenter(ByVal Item As Integer)
     With outgoingData
         Call .WriteByte(ClientPacketID.CraftCarpenter)
         
-        Call .WriteInteger(Item)
+        Call .WriteInteger(item)
     End With
 End Sub
 
@@ -7360,16 +7313,8 @@ Public Sub WriteChangePassword(ByRef oldPass As String, ByRef newPass As String)
 '***************************************************
     With outgoingData
         Call .WriteByte(ClientPacketID.ChangePassword)
-        
-#If SeguridadAlkon Then
-        Call .WriteASCIIStringFixed(md5.GetMD5String(oldPass))
-        Call md5.MD5Reset
-        Call .WriteASCIIStringFixed(md5.GetMD5String(newPass))
-        Call md5.MD5Reset
-#Else
         Call .WriteASCIIString(oldPass)
         Call .WriteASCIIString(newPass)
-#End If
     End With
 End Sub
 
@@ -10159,16 +10104,6 @@ Private Sub SendData(ByRef sdData As String)
     If Not frmMain.Socket1.Connected Then Exit Sub
 #Else
     If frmMain.Winsock1.State <> sckConnected Then Exit Sub
-#End If
-
-#If SeguridadAlkon Then
-    Dim data() As Byte
-    
-    data = StrConv(sdData, vbFromUnicode)
-    
-    Call DataSent(data)
-    
-    sdData = StrConv(data, vbUnicode)
 #End If
     
     'Send data!

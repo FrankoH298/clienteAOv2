@@ -295,7 +295,7 @@ Private Sub Form_Load()
 
     
     'Cargamos la interfase
-    Me.Picture = LoadPicture(DirGraficos & "ventanacomercio.jpg")
+    Me.Picture = LoadPicture(Path(Graficos) & "ventanacomercio.jpg")
     
     Call LoadButtons
     
@@ -304,7 +304,7 @@ End Sub
 Private Sub LoadButtons()
     Dim GrhPath As String
     
-    GrhPath = DirGraficos
+    GrhPath = Path(Graficos)
 
     Set cBotonVender = New clsGraphicalButton
     Set cBotonComprar = New clsGraphicalButton

@@ -1285,7 +1285,7 @@ Private currentGrh As Long
 Private Dir As E_Heading
 
 Private Sub Form_Load()
-    Me.Picture = LoadPicture(DirGraficos & "VentanaCrearPersonaje.jpg")
+    Me.Picture = LoadPicture(Path(Graficos) & "VentanaCrearPersonaje.jpg")
     
     Cargando = True
     Call LoadCharInfo
@@ -1309,10 +1309,6 @@ Private Sub Form_Load()
     UserHogar = 0
     UserEmail = ""
     UserHead = 0
-    
-#If SeguridadAlkon Then
-    Call ProtectForm(Me)
-#End If
 
 End Sub
 
@@ -1332,7 +1328,7 @@ End Sub
 Private Sub IniciarGraficos()
 
     Dim GrhPath As String
-    GrhPath = DirGraficos
+    GrhPath = Path(Graficos)
     
     Set cBotonPasswd = New clsGraphicalButton
     Set cBotonTirarDados = New clsGraphicalButton
@@ -1604,13 +1600,7 @@ Private Sub imgCrear_Click()
     UserHogar = lstHogar.ListIndex + 1
     
     If Not CheckData Then Exit Sub
-    
-#If SeguridadAlkon Then
-    UserPassword = md5.GetMD5String(txtPasswd.Text)
-    Call md5.MD5Reset
-#Else
     UserPassword = txtPasswd.Text
-#End If
     
     For i = 1 To Len(UserPassword)
         CharAscii = Asc(mid$(UserPassword, i, 1))
@@ -1768,7 +1758,7 @@ End Sub
 
 Private Sub lstProfesion_Click()
 On Error Resume Next
-'    Image1.Picture = LoadPicture(App.path & "\graficos\" & lstProfesion.Text & ".jpg")
+'    Image1.Picture = LoadPicture(Path(Graficos) & "" & lstProfesion.Text & ".jpg")
 '
     UserClase = lstProfesion.ListIndex + 1
     
@@ -1831,12 +1821,12 @@ Private Sub tAnimacion_Timer()
         SR.Left = .sX
         SR.Top = .sY
         SR.Right = SR.Left + .pixelWidth
-        SR.Bottom = SR.Top + .pixelHeight
+        SR.bottom = SR.Top + .pixelHeight
         
         DR.Left = (picPJ.Width - .pixelWidth) \ 2 - 2
         DR.Top = (picPJ.Height - .pixelHeight) \ 2 - 2
         DR.Right = DR.Left + .pixelWidth
-        DR.Bottom = DR.Top + .pixelHeight
+        DR.bottom = DR.Top + .pixelHeight
         
         picTemp.BackColor = picTemp.BackColor
         
@@ -1850,12 +1840,12 @@ Private Sub tAnimacion_Timer()
         SR.Left = .sX
         SR.Top = .sY
         SR.Right = SR.Left + .pixelWidth
-        SR.Bottom = SR.Top + .pixelHeight
+        SR.bottom = SR.Top + .pixelHeight
         
         DR.Left = (picPJ.Width - .pixelWidth) \ 2 - 2
-        DR.Top = DR.Bottom + BodyData(UserBody).HeadOffset.Y - .pixelHeight
+        DR.Top = DR.bottom + BodyData(UserBody).HeadOffset.Y - .pixelHeight
         DR.Right = DR.Left + .pixelWidth
-        DR.Bottom = DR.Top + .pixelHeight
+        DR.bottom = DR.Top + .pixelHeight
         
         picTemp.BackColor = picTemp.BackColor
         
@@ -1878,12 +1868,12 @@ Private Sub DrawHead(ByVal Head As Integer, ByVal PicIndex As Integer)
         SR.Left = .sX
         SR.Top = .sY
         SR.Right = SR.Left + .pixelWidth
-        SR.Bottom = SR.Top + .pixelHeight
+        SR.bottom = SR.Top + .pixelHeight
         
         DR.Left = (picHead(0).Width - .pixelWidth) \ 2 + 1
         DR.Top = 0
         DR.Right = DR.Left + .pixelWidth
-        DR.Bottom = DR.Top + .pixelHeight
+        DR.bottom = DR.Top + .pixelHeight
         
         picTemp.BackColor = picTemp.BackColor
         
@@ -2286,6 +2276,9 @@ End Sub
 Private Sub LoadCharInfo()
     Dim SearchVar As String
     Dim i As Integer
+    Dim Lector As clsIniManager
+    Set Lector = New clsIniManager
+    Call Lector.Initialize(Path(INIT) & "CharInfo.dat")
     
     NroRazas = UBound(ListaRazas())
     NroClases = UBound(ListaClases())
@@ -2298,15 +2291,15 @@ Private Sub LoadCharInfo()
         With ModClase(i)
             SearchVar = ListaClases(i)
             
-            .Evasion = Val(GetVar(IniPath & "CharInfo.dat", "MODEVASION", SearchVar))
-            .AtaqueArmas = Val(GetVar(IniPath & "CharInfo.dat", "MODATAQUEARMAS", SearchVar))
-            .AtaqueProyectiles = Val(GetVar(IniPath & "CharInfo.dat", "MODATAQUEPROYECTILES", SearchVar))
-            .DañoArmas = Val(GetVar(IniPath & "CharInfo.dat", "MODDAÑOARMAS", SearchVar))
-            .DañoProyectiles = Val(GetVar(IniPath & "CharInfo.dat", "MODDAÑOPROYECTILES", SearchVar))
-            .Escudo = Val(GetVar(IniPath & "CharInfo.dat", "MODESCUDO", SearchVar))
-            .Hit = Val(GetVar(IniPath & "CharInfo.dat", "HIT", SearchVar))
-            .Magia = Val(GetVar(IniPath & "CharInfo.dat", "MODMAGIA", SearchVar))
-            .Vida = Val(GetVar(IniPath & "CharInfo.dat", "MODVIDA", SearchVar))
+            .Evasion = Val(Lector.GetValue("MODEVASION", SearchVar))
+            .AtaqueArmas = Val(Lector.GetValue("MODATAQUEARMAS", SearchVar))
+            .AtaqueProyectiles = Val(Lector.GetValue("MODATAQUEPROYECTILES", SearchVar))
+            .DañoArmas = Val(Lector.GetValue("MODDAÑOARMAS", SearchVar))
+            .DañoProyectiles = Val(Lector.GetValue("MODDAÑOPROYECTILES", SearchVar))
+            .Escudo = Val(Lector.GetValue("MODESCUDO", SearchVar))
+            .Hit = Val(Lector.GetValue("HIT", SearchVar))
+            .Magia = Val(Lector.GetValue("MODMAGIA", SearchVar))
+            .Vida = Val(Lector.GetValue("MODVIDA", SearchVar))
         End With
     Next i
     
@@ -2315,12 +2308,12 @@ Private Sub LoadCharInfo()
         With ModRaza(i)
             SearchVar = Replace(ListaRazas(i), " ", "")
         
-            .Fuerza = Val(GetVar(IniPath & "CharInfo.dat", "MODRAZA", SearchVar + "Fuerza"))
-            .Agilidad = Val(GetVar(IniPath & "CharInfo.dat", "MODRAZA", SearchVar + "Agilidad"))
-            .Inteligencia = Val(GetVar(IniPath & "CharInfo.dat", "MODRAZA", SearchVar + "Inteligencia"))
-            .Carisma = Val(GetVar(IniPath & "CharInfo.dat", "MODRAZA", SearchVar + "Carisma"))
-            .Constitucion = Val(GetVar(IniPath & "CharInfo.dat", "MODRAZA", SearchVar + "Constitucion"))
+            .Fuerza = Val(Lector.GetValue("MODRAZA", SearchVar + "Fuerza"))
+            .Agilidad = Val(Lector.GetValue("MODRAZA", SearchVar + "Agilidad"))
+            .Inteligencia = Val(Lector.GetValue("MODRAZA", SearchVar + "Inteligencia"))
+            .Carisma = Val(Lector.GetValue("MODRAZA", SearchVar + "Carisma"))
+            .Constitucion = Val(Lector.GetValue("MODRAZA", SearchVar + "Constitucion"))
         End With
     Next i
-
+    
 End Sub

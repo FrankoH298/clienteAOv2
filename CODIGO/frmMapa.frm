@@ -164,8 +164,8 @@ On Error GoTo error
     clsFormulario.Initialize Me
         
     'Cargamos las imagenes de los mapas
-    Set picMaps(eMaps.ieGeneral) = LoadPicture(DirGraficos & "mapa1.jpg")
-    Set picMaps(eMaps.ieDungeon) = LoadPicture(DirGraficos & "mapa2.jpg")
+    Set picMaps(eMaps.ieGeneral) = LoadPicture(Path(Graficos) & "mapa1.jpg")
+    Set picMaps(eMaps.ieDungeon) = LoadPicture(Path(Graficos) & "mapa2.jpg")
     
     ' Imagen de fondo
     CurrentMap = eMaps.ieGeneral

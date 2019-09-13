@@ -134,7 +134,7 @@ End Sub
 Private Sub Form_Load()
     List1.Clear
     
-    Me.Picture = LoadPicture(App.path & "\graficos\VentanaShowSos.jpg")
+    Me.Picture = LoadPicture(path(Graficos) & "VentanaShowSos.jpg")
     
     Call LoadButtons
 End Sub
@@ -142,7 +142,7 @@ End Sub
 Private Sub LoadButtons()
     Dim GrhPath As String
     
-    GrhPath = DirGraficos
+    GrhPath = path(Graficos)
 
     Set cBotonCerrar = New clsGraphicalButton
     

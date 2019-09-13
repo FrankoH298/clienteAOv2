@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.ocx"
 Begin VB.Form frmComerciarUsu 
    BorderStyle     =   0  'None
    ClientHeight    =   8850
@@ -184,6 +184,7 @@ Begin VB.Form frmComerciarUsu
       _ExtentY        =   2858
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       DisableNoScroll =   -1  'True
@@ -454,7 +455,7 @@ Private Sub Form_Load()
     Set clsFormulario = New clsFormMovementManager
     clsFormulario.Initialize Me
 
-    Me.Picture = LoadPicture(DirGraficos & "VentanaComercioUsuario.jpg")
+    Me.Picture = LoadPicture(Path(Graficos) & "VentanaComercioUsuario.jpg")
     
     LoadButtons
     
@@ -468,7 +469,7 @@ End Sub
 Private Sub LoadButtons()
 
     Dim GrhPath As String
-    GrhPath = DirGraficos
+    GrhPath = Path(Graficos)
     
     Set cBotonAceptar = New clsGraphicalButton
     Set cBotonConfirmar = New clsGraphicalButton
@@ -665,7 +666,7 @@ End Sub
 Public Sub PrintCommerceMsg(ByRef msg As String, ByVal FontIndex As Integer)
     
     With FontTypes(FontIndex)
-        Call AddtoRichTextBox(frmComerciarUsu.CommerceConsole, msg, .red, .green, .blue, .bold, .italic)
+        Call AddtoRichTextBox(frmComerciarUsu.CommerceConsole, msg, .Red, .Green, .Blue, .bold, .italic)
     End With
     
 End Sub

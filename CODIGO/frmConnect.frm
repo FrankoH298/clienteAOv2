@@ -130,7 +130,7 @@ Begin VB.Form frmConnect
       NoFolders       =   0   'False
       Transparent     =   0   'False
       ViewID          =   "{0057D0E0-3573-11CF-AE69-08002B2E1262}"
-      Location        =   "http:///"
+      Location        =   ""
    End
    Begin VB.Image imgTeclas 
       Height          =   375
@@ -317,21 +317,13 @@ End If
 End Sub
 
 Private Sub Form_Load()
-    '[CODE 002]:MatuX
     EngineRun = False
-    '[END]
     
-    PortTxt.Text = Config_Inicio.Puerto
- 
-     '[CODE]:MatuX
-    '
-    '  El código para mostrar la versión se genera acá para
-    ' evitar que por X razones luego desaparezca, como suele
-    ' pasar a veces :)
-       version.Caption = "v" & App.Major & "." & App.Minor & " Build: " & App.Revision
-    '[END]'
+    PortTxt.Text = "7666"
+
+    version.Caption = "v" & App.Major & "." & App.Minor & " Build: " & App.Revision
     
-    Me.Picture = LoadPicture(App.path & "\graficos\VentanaConectar.jpg")
+    Me.Picture = LoadPicture(path(Graficos) & "VentanaConectar.jpg")
     
     Call LoadButtons
 
@@ -360,7 +352,7 @@ Private Sub LoadButtons()
     
     Dim GrhPath As String
     
-    GrhPath = DirGraficos
+    GrhPath = path(Graficos)
     
     Set cBotonCrearPj = New clsGraphicalButton
     Set cBotonRecuperarPass = New clsGraphicalButton
@@ -487,13 +479,7 @@ Private Sub imgConectarse_Click()
     
     Dim aux As String
     aux = txtPasswd.Text
-    
-#If SeguridadAlkon Then
-    UserPassword = md5.GetMD5String(aux)
-    Call md5.MD5Reset
-#Else
     UserPassword = aux
-#End If
     If CheckUserData(False) = True Then
         EstadoLogin = Normal
         
@@ -578,24 +564,4 @@ End Sub
 
 Private Sub txtPasswd_KeyPress(KeyAscii As Integer)
     If KeyAscii = vbKeyReturn Then imgConectarse_Click
-End Sub
-
-Private Sub WebAuxiliar_BeforeNavigate2(ByVal pDisp As Object, URL As Variant, flags As Variant, TargetFrameName As Variant, PostData As Variant, Headers As Variant, Cancel As Boolean)
-    
-    If InStr(1, URL, "alkon") <> 0 Then
-        Call ShellExecute(hWnd, "open", URL, vbNullString, vbNullString, SW_SHOWNORMAL)
-        Cancel = True
-    End If
-    
-End Sub
-
-Private Sub webNoticias_NavigateError(ByVal pDisp As Object, URL As Variant, Frame As Variant, StatusCode As Variant, Cancel As Boolean)
-    If StatusCode = 500 Then webNoticias.Visible = False
-End Sub
-
-Private Sub webNoticias_NewWindow2(ppDisp As Object, Cancel As Boolean)
-    
-    WebAuxiliar.RegisterAsBrowser = True
-    Set ppDisp = WebAuxiliar.Object
-    
 End Sub

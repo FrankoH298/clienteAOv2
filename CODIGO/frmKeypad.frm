@@ -428,10 +428,10 @@ Private Modo As e_modo_keypad
 
 Private Sub Form_Activate()
 Dim i As Integer
-Dim j As Integer
+Dim J As Integer
     i = RandomNumber(-2000, 2000)
-    j = RandomNumber(-350, 350)
-    Me.Top = Me.Top + j
+    J = RandomNumber(-350, 350)
+    Me.Top = Me.Top + J
     Me.Left = Me.Left + i
 
 End Sub
@@ -442,7 +442,7 @@ Private Sub Form_Load()
     clsFormulario.Initialize Me
     
     Dim GrhPath As String
-    GrhPath = DirGraficos
+    GrhPath = path(Graficos)
     Set MinMayBack(0) = LoadPicture(GrhPath & "TecladoMinuscula.jpg")
     Set MinMayBack(1) = LoadPicture(GrhPath & "TecladoMayuscula.jpg")
     
@@ -456,7 +456,7 @@ End Sub
 Private Sub LoadButtons()
     Dim GrhPath As String
     
-    GrhPath = DirGraficos
+    GrhPath = path(Graficos)
 
     Set cBotonMin = New clsGraphicalButton
     Set cBotonMay = New clsGraphicalButton
@@ -508,7 +508,7 @@ Private Sub imgMay_Click()
     If Modo = MAYUSCULA Then Exit Sub
     
     'Call Audio.PlayWave(SND_CLICK)
-    Me.Picture = MinMayBack(e_modo_keypad.MAYUSCULA)  'LoadPicture(App.path & "\graficos\KeyPadMay.bmp")
+    Me.Picture = MinMayBack(e_modo_keypad.MAYUSCULA)  'LoadPicture(Path(Graficos) & "KeyPadMay.bmp")
     Modo = MAYUSCULA
     Me.txtPassword.SetFocus
 End Sub
@@ -517,7 +517,7 @@ Private Sub imgMin_Click()
     If Modo = MINUSCULA Then Exit Sub
     
     'Call Audio.PlayWave(SND_CLICK)
-    Me.Picture = MinMayBack(e_modo_keypad.MINUSCULA) 'LoadPicture(App.path & "\graficos\KeyPadMin.bmp")
+    Me.Picture = MinMayBack(e_modo_keypad.MINUSCULA) 'LoadPicture(Path(Graficos) & "KeyPadMin.bmp")
     Modo = MINUSCULA
     Me.txtPassword.SetFocus
 End Sub

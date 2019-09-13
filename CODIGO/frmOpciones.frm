@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmOpciones 
    BackColor       =   &H8000000A&
    BorderStyle     =   0  'None
@@ -472,7 +472,7 @@ Private Sub Form_Load()
     Set clsFormulario = New clsFormMovementManager
     clsFormulario.Initialize Me
     
-    Me.Picture = LoadPicture(App.path & "\graficos\VentanaOpciones.jpg")
+    Me.Picture = LoadPicture(path(Graficos) & "VentanaOpciones.jpg")
     LoadButtons
     
     loading = True      'Prevent sounds when setting check's values
@@ -483,7 +483,7 @@ End Sub
 Private Sub LoadButtons()
     Dim GrhPath As String
     
-    GrhPath = DirGraficos
+    GrhPath = path(Graficos)
 
     Set cBotonConfigTeclas = New clsGraphicalButton
     Set cBotonMsgPersonalizado = New clsGraphicalButton
@@ -547,7 +547,6 @@ Private Sub LoadUserConfig()
         
         Slider1(0).value = Audio.MusicVolume
     End If
-    
     
     ' Load Sound config
     bSoundActivated = Audio.SoundActivated

@@ -187,7 +187,7 @@ Private Sub Form_Load()
     Set clsFormulario = New clsFormMovementManager
     clsFormulario.Initialize Me
     
-    Me.Picture = LoadPicture(DirGraficos & "VentanaTutorial.jpg")
+    Me.Picture = LoadPicture(Path(Graficos) & "VentanaTutorial.jpg")
     
     Call LoadButtons
     
@@ -200,7 +200,7 @@ End Sub
 Private Sub LoadButtons()
     Dim GrhPath As String
     
-    GrhPath = DirGraficos
+    GrhPath = Path(Graficos)
 
     Set cBotonSiguiente = New clsGraphicalButton
     Set cBotonAnterior = New clsGraphicalButton
@@ -281,29 +281,29 @@ End Sub
 
 Private Sub LoadTutorial()
     
-    Dim TutorialPath As String
     Dim lPage As Long
     Dim NumLines As Long
     Dim lLine As Long
     Dim sLine As String
-    
-    TutorialPath = DirExtras & "Tutorial.dat"
-    NumPages = Val(GetVar(TutorialPath, "INIT", "NumPags"))
+    Dim Lector As clsIniManager
+    Set Lector = New clsIniManager
+    Call Lector.Initialize(Path(EXTRAS) & "Tutorial.dat")
+    NumPages = Val(Lector.GetValue("INIT", "NumPags"))
     
     If NumPages > 0 Then
         ReDim Tutorial(1 To NumPages)
         
         ' Cargo paginas
         For lPage = 1 To NumPages
-            NumLines = Val(GetVar(TutorialPath, "PAG" & lPage, "NumLines"))
+            NumLines = Val(Lector.GetValue("PAG" & lPage, "NumLines"))
             
             With Tutorial(lPage)
                 
-                .sTitle = GetVar(TutorialPath, "PAG" & lPage, "Title")
+                .sTitle = Lector.GetValue("PAG" & lPage, "Title")
                 
                 ' Cargo cada linea de la pagina
                 For lLine = 1 To NumLines
-                    sLine = GetVar(TutorialPath, "PAG" & lPage, "Line" & lLine)
+                    sLine = Lector.GetValue("PAG" & lPage, "Line" & lLine)
                     .sPage = .sPage & sLine & vbCrLf
                 Next lLine
             End With
@@ -312,6 +312,7 @@ Private Sub LoadTutorial()
     End If
     
     lblPagTotal.Caption = NumPages
+    
 End Sub
 
 Private Sub SelectPage(ByVal lPage As Long)

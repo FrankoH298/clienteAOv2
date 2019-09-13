@@ -924,7 +924,7 @@ Private Sub Form_Load()
     
     Call ValidarSkills
     
-    Me.Picture = LoadPicture(DirGraficos & "VentanaSkills.jpg")
+    Me.Picture = LoadPicture(Path(Graficos) & "VentanaSkills.jpg")
     Call LoadButtons
     
     Call LoadHelp
@@ -934,7 +934,7 @@ Private Sub LoadButtons()
     Dim GrhPath As String
     Dim i As Long
     
-    GrhPath = DirGraficos
+    GrhPath = Path(Graficos)
 
 
     For i = 1 To NUMSKILLS

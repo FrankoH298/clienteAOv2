@@ -1,38 +1,4 @@
 Attribute VB_Name = "GameIni"
-'Argentum Online 0.11.6
-'
-'Copyright (C) 2002 Márquez Pablo Ignacio
-'Copyright (C) 2002 Otto Perez
-'Copyright (C) 2002 Aaron Perkins
-'Copyright (C) 2002 Matías Fernando Pequeño
-'
-'This program is free software; you can redistribute it and/or modify
-'it under the terms of the Affero General Public License;
-'either version 1 of the License, or any later version.
-'
-'This program is distributed in the hope that it will be useful,
-'but WITHOUT ANY WARRANTY; without even the implied warranty of
-'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'Affero General Public License for more details.
-'
-'You should have received a copy of the Affero General Public License
-'along with this program; if not, you can find it at http://www.affero.org/oagpl.html
-'
-'Argentum Online is based on Baronsoft's VB6 Online RPG
-'You can contact the original creator of ORE at aaron@baronsoft.com
-'for more information about ORE please visit http://www.baronsoft.com/
-'
-'
-'You can contact me at:
-'morgolock@speedy.com.ar
-'www.geocities.com/gmorgolock
-'Calle 3 número 983 piso 7 dto A
-'La Plata - Pcia, Buenos Aires - Republica Argentina
-'Código Postal 1900
-'Pablo Ignacio Márquez
-
-
-
 Option Explicit
 
 Public Type tCabecera 'Cabecera de los con
@@ -41,30 +7,23 @@ Public Type tCabecera 'Cabecera de los con
     MagicWord As Long
 End Type
 
-Public Type tGameIni
-    Puerto As Long
-    Musica As Byte
-    fX As Byte
-    tip As Byte
-    Password As String
-    Name As String
-    DirGraficos As String
-    DirSonidos As String
-    DirMusica As String
-    DirMapas As String
-    NumeroDeBMPs As Long
-    NumeroMapas As Integer
-End Type
+Public Enum ePath
+    INIT
+    Graficos
+    MIDI
+    WAV
+    Mapas
+    EXTRAS
+End Enum
 
 Public Type tSetupMods
     bDinamic    As Boolean
     byMemory    As Byte
     bUseVideo   As Boolean
-    bNoMusic    As Boolean
-    bNoSound    As Boolean
+    bMusic    As Boolean
+    bSound    As Boolean
     bNoRes      As Boolean ' 24/06/2006 - ^[GS]^
-    bNoSoundEffects As Boolean
-    sGraficos   As String * 13
+    bSoundEffects As Boolean
     bGuildNews  As Boolean ' 11/19/09
     bDie        As Boolean ' 11/23/09 - FragShooter
     bKill       As Boolean ' 11/23/09 - FragShooter
@@ -77,35 +36,112 @@ End Type
 Public ClientSetup As tSetupMods
 
 Public MiCabecera As tCabecera
-Public Config_Inicio As tGameIni
+Private Lector As clsIniManager
+Private Const CLIENT_FILE As String = "Config.ini"
 
-Public Sub IniciarCabecera(ByRef Cabecera As tCabecera)
-    Cabecera.Desc = "Argentum Online by Noland Studios. Copyright Noland-Studios 2001, pablomarquez@noland-studios.com.ar"
-    Cabecera.CRC = Rnd * 100
-    Cabecera.MagicWord = Rnd * 10
+Public Sub IniciarCabecera()
+    With MiCabecera
+        .Desc = "Argentum Online by Noland Studios. Copyright Noland-Studios 2001, pablomarquez@noland-studios.com.ar"
+        .CRC = Rnd * 100
+        .MagicWord = Rnd * 10
+    End With
 End Sub
 
-Public Function LeerGameIni() As tGameIni
-    Dim N As Integer
-    Dim GameIni As tGameIni
-    N = FreeFile
-    Open App.path & "\init\Inicio.con" For Binary As #N
-    Get #N, , MiCabecera
+Public Function Path(ByVal PathType As ePath) As String
+
+    Select Case PathType
+        
+        Case ePath.INIT
+            Path = App.Path & "\INIT\"
+        
+        Case ePath.Graficos
+            Path = App.Path & "\GRAFICOS\"
+            
+        Case ePath.Mapas
+            Path = App.Path & "\MAPAS\"
+            
+        Case ePath.MIDI
+            Path = App.Path & "\MIDI\"
+            
+        Case ePath.WAV
+            Path = App.Path & "\WAV\"
+            
+        Case ePath.EXTRAS
+            Path = App.Path & "\Extras\"
     
-    Get #N, , GameIni
-    
-    Close #N
-    LeerGameIni = GameIni
+    End Select
+
 End Function
 
-Public Sub EscribirGameIni(ByRef GameIniConfiguration As tGameIni)
-On Local Error Resume Next
+Public Sub LeerConfiguracion()
+    
+    Call IniciarCabecera
+    
+    Set Lector = New clsIniManager
+    Call Lector.Initialize(Path(INIT) & CLIENT_FILE)
+    
+    With ClientSetup
+        
+        ' VIDEO
+        .byMemory = Lector.GetValue("VIDEO", "DINAMIC_MEMORY")
+        .bNoRes = CBool(Lector.GetValue("VIDEO", "DISABLE_RESOLUTION_CHANGE"))
+        
+        ' AUDIO
+        .bMusic = CBool(Lector.GetValue("AUDIO", "MIDI"))
+        .bSound = CBool(Lector.GetValue("AUDIO", "WAV"))
+        .bSoundEffects = CBool(Lector.GetValue("AUDIO", "SOUND_EFFECTS"))
+        
+        ' GUILD
+        .bGuildNews = CBool(Lector.GetValue("GUILD", "NEWS"))
+        .bGldMsgConsole = CBool(Lector.GetValue("GUILD", "MESSAGES"))
+        .bCantMsgs = CByte(Lector.GetValue("GUILD", "MAX_MESSAGES"))
+        
+        ' FRAGSHOOTER
+        .bDie = CBool(Lector.GetValue("FRAGSHOOTER", "DIE"))
+        .bKill = CBool(Lector.GetValue("FRAGSHOOTER", "KILL"))
+        .byMurderedLevel = CBool(Lector.GetValue("FRAGSHOOTER", "MURDERED_LEVEL"))
+        .bActive = CBool(Lector.GetValue("FRAGSHOOTER", "ACTIVE"))
+        
+    End With
+End Sub
 
-Dim N As Integer
-N = FreeFile
-Open App.path & "\init\Inicio.con" For Binary As #N
-Put #N, , MiCabecera
-Put #N, , GameIniConfiguration
-Close #N
+Public Sub GuardarConfiguracion()
+    On Local Error GoTo fileErr:
+    
+    Set Lector = New clsIniManager
+    Call Lector.Initialize(Path(INIT) & CLIENT_FILE)
+    
+    With ClientSetup
+        
+        ' VIDEO
+        Call Lector.ChangeValue("VIDEO", "DINAMIC_MEMORY", .byMemory)
+        Call Lector.ChangeValue("VIDEO", "DISABLE_RESOLUTION_CHANGE", CInt(.bNoRes))
+        
+        ' AUDIO
+        Call Lector.ChangeValue("AUDIO", "MIDI", CInt(.bMusic))
+        Call Lector.ChangeValue("AUDIO", "WAV", CInt(.bSound))
+        Call Lector.ChangeValue("AUDIO", "SOUND_EFFECTS", CInt(.bSoundEffects))
+        
+        ' GUILD
+        Call Lector.ChangeValue("GUILD", "NEWS", CInt(.bGuildNews))
+        Call Lector.ChangeValue("GUILD", "MESSAGES", CInt(.bGldMsgConsole))
+        Call Lector.ChangeValue("GUILD", "MAX_MESSAGES", CInt(.bCantMsgs))
+        
+        ' FRAGSHOOTER
+        Call Lector.ChangeValue("FRAGSHOOTER", "DIE", CInt(.bDie))
+        Call Lector.ChangeValue("FRAGSHOOTER", "KILL", CInt(.bKill))
+        Call Lector.ChangeValue("FRAGSHOOTER", "MURDERED_LEVEL", CInt(.byMurderedLevel))
+        Call Lector.ChangeValue("FRAGSHOOTER", "ACTIVE", CInt(.bActive))
+
+    End With
+    
+    Call Lector.DumpFile(Path(INIT) & CLIENT_FILE)
+    
+fileErr:
+    
+    If Err.number <> 0 Then
+        MsgBox ("Ha ocurrido un error al cargar la configuracion del cliente. Error " & Err.number & " : " & Err.Description)
+        End 'Usar "End" en vez del Sub CloseClient() ya que todavia no se inicializa nada.
+    End If
 End Sub
 

@@ -106,7 +106,7 @@ Private Sub Form_Load()
     ' Handles Form movement (drag and drop).
     clsFormulario.Initialize Me
     
-    Me.Picture = LoadPicture(App.path & "\graficos\VentanaPeticion.jpg")
+    Me.Picture = LoadPicture(path(Graficos) & "VentanaPeticion.jpg")
     
     Call LoadButtons
 End Sub
@@ -114,7 +114,7 @@ End Sub
 Private Sub LoadButtons()
     Dim GrhPath As String
     
-    GrhPath = DirGraficos
+    GrhPath = path(Graficos)
 
     Set cBotonCerrar = New clsGraphicalButton
     
