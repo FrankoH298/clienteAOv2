@@ -71,22 +71,22 @@ Public Sub Draw(ByVal X As Single, _
                 Optional ByVal Ty2 As Single = 1, _
                 Optional ByVal Alpha As Boolean = False, _
                 Optional ByVal angle As Single = 0)
-    Dim x_center As Single
-    Dim y_center As Single
-    Dim radius As Single
-    Dim x_Cor As Single
-    Dim y_Cor As Single
-    Dim left_point As Single
-    Dim right_point As Single
-    Dim temp As Single
-    Dim dest As rect
-    dest.left = X
+    Dim dest As RECT
+    dest.Left = X
     dest.Right = X + Width
     dest.Top = Y + Height
     dest.bottom = Y
     
     If angle > 0 Then
-        x_center = dest.left + (dest.Right - dest.left) / 2
+        Dim x_center As Single
+        Dim y_center As Single
+        Dim radius As Single
+        Dim x_Cor As Single
+        Dim y_Cor As Single
+        Dim left_point As Single
+        Dim right_point As Single
+        Dim temp As Single
+        x_center = dest.Left + (dest.Right - dest.Left) / 2
         y_center = dest.Top + (dest.bottom - dest.Top) / 2
         
         radius = Sqr((dest.Right - x_center) ^ 2 + (dest.bottom - y_center) ^ 2)
@@ -94,76 +94,95 @@ Public Sub Draw(ByVal X As Single, _
         temp = (dest.Right - x_center) / radius
         right_point = Atn(temp / Sqr(-temp * temp + 1))
         left_point = 3.1459 - right_point
+
         x_Cor = x_center + Cos(-left_point - angle) * radius
         y_Cor = y_center - Sin(-left_point - angle) * radius
-    ElseIf angle = 0 Then
-        x_Cor = dest.left
-        y_Cor = dest.bottom
-    End If
-    
-    m_Data(m_Position).X = x_Cor
-    m_Data(m_Position).Y = y_Cor
-    m_Data(m_Position).Z = 0
-    m_Data(m_Position).Colour = Color(0)
-    m_Data(m_Position).TX = Tx1
-    m_Data(m_Position).TY = Ty1
-    m_DataAlpha(m_Position) = Alpha
-    
-    m_Position = m_Position + 1
-    
-    If angle = 0 Then
-        x_Cor = dest.left
-        y_Cor = dest.Top
-    Else
+        m_Data(m_Position).X = x_Cor
+        m_Data(m_Position).Y = y_Cor
+        m_Data(m_Position).Z = 0
+        m_Data(m_Position).Colour = Color(0)
+        m_Data(m_Position).TX = Tx1
+        m_Data(m_Position).TY = Ty1
+        m_DataAlpha(m_Position) = Alpha
+        
+        m_Position = m_Position + 1
+
         x_Cor = x_center + Cos(left_point - angle) * radius
         y_Cor = y_center - Sin(left_point - angle) * radius
-    End If
-    
-    m_Data(m_Position).X = x_Cor
-    m_Data(m_Position).Y = y_Cor
-    m_Data(m_Position).Z = 0
-    m_Data(m_Position).Colour = Color(1)
-    m_Data(m_Position).TX = Tx1
-    m_Data(m_Position).TY = Ty2
-    m_DataAlpha(m_Position) = Alpha
-    
-    m_Position = m_Position + 1
-    
-    If angle = 0 Then
-        x_Cor = dest.Right
-        y_Cor = dest.Top
-    Else
+        m_Data(m_Position).X = x_Cor
+        m_Data(m_Position).Y = y_Cor
+        m_Data(m_Position).Z = 0
+        m_Data(m_Position).Colour = Color(1)
+        m_Data(m_Position).TX = Tx1
+        m_Data(m_Position).TY = Ty2
+        m_DataAlpha(m_Position) = Alpha
+        
+        m_Position = m_Position + 1
+
         x_Cor = x_center + Cos(right_point - angle) * radius
         y_Cor = y_center - Sin(right_point - angle) * radius
-    End If
-    
-    m_Data(m_Position).X = x_Cor
-    m_Data(m_Position).Y = y_Cor
-    m_Data(m_Position).Z = 0
-    m_Data(m_Position).Colour = Color(2)
-    m_Data(m_Position).TX = Tx2
-    m_Data(m_Position).TY = Ty2
-    m_DataAlpha(m_Position) = Alpha
-    
-    m_Position = m_Position + 1
-    
-    If angle = 0 Then
-        x_Cor = dest.Right
-        y_Cor = dest.bottom
-    Else
+        m_Data(m_Position).X = x_Cor
+        m_Data(m_Position).Y = y_Cor
+        m_Data(m_Position).Z = 0
+        m_Data(m_Position).Colour = Color(2)
+        m_Data(m_Position).TX = Tx2
+        m_Data(m_Position).TY = Ty2
+        m_DataAlpha(m_Position) = Alpha
+        
+        m_Position = m_Position + 1
+        
         x_Cor = x_center + Cos(-right_point - angle) * radius
         y_Cor = y_center - Sin(-right_point - angle) * radius
+        m_Data(m_Position).X = x_Cor
+        m_Data(m_Position).Y = y_Cor
+        m_Data(m_Position).Z = 0
+        m_Data(m_Position).Colour = Color(3)
+        m_Data(m_Position).TX = Tx2
+        m_Data(m_Position).TY = Ty1
+        m_DataAlpha(m_Position) = Alpha
+        
+        m_Position = m_Position + 1
+    Else
+        m_Data(m_Position).X = dest.Left
+        m_Data(m_Position).Y = dest.bottom
+        m_Data(m_Position).Z = 0
+        m_Data(m_Position).Colour = Color(0)
+        m_Data(m_Position).TX = Tx1
+        m_Data(m_Position).TY = Ty1
+        m_DataAlpha(m_Position) = Alpha
+        
+        m_Position = m_Position + 1
+
+        m_Data(m_Position).X = dest.Left
+        m_Data(m_Position).Y = dest.Top
+        m_Data(m_Position).Z = 0
+        m_Data(m_Position).Colour = Color(1)
+        m_Data(m_Position).TX = Tx1
+        m_Data(m_Position).TY = Ty2
+        m_DataAlpha(m_Position) = Alpha
+        
+        m_Position = m_Position + 1
+
+        m_Data(m_Position).X = dest.Right
+        m_Data(m_Position).Y = dest.Top
+        m_Data(m_Position).Z = 0
+        m_Data(m_Position).Colour = Color(2)
+        m_Data(m_Position).TX = Tx2
+        m_Data(m_Position).TY = Ty2
+        m_DataAlpha(m_Position) = Alpha
+        
+        m_Position = m_Position + 1
+
+        m_Data(m_Position).X = dest.Right
+        m_Data(m_Position).Y = dest.bottom
+        m_Data(m_Position).Z = 0
+        m_Data(m_Position).Colour = Color(3)
+        m_Data(m_Position).TX = Tx2
+        m_Data(m_Position).TY = Ty1
+        m_DataAlpha(m_Position) = Alpha
+        
+        m_Position = m_Position + 1
     End If
-    
-    m_Data(m_Position).X = x_Cor
-    m_Data(m_Position).Y = y_Cor
-    m_Data(m_Position).Z = 0
-    m_Data(m_Position).Colour = Color(3)
-    m_Data(m_Position).TX = Tx2
-    m_Data(m_Position).TY = Ty1
-    m_DataAlpha(m_Position) = Alpha
-    
-    m_Position = m_Position + 1
     
     If (m_Position = UBound(m_Data) + 1) Then
         Call Flush
