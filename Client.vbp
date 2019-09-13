@@ -83,6 +83,7 @@ Class=clsByteBuffer; CODIGO\clsByteBuffer.cls
 Class=clsBatch; CODIGO\clsBatch.cls
 Class=clsTextureManager; CODIGO\clsTextureManager.cls
 Class=clsIniManager; CODIGO\clsIniManager.cls
+Module=modParticlesORE; CODIGO\modParticlesORE.bas
 IconForm="frmMain"
 Startup="Sub Main"
 HelpFile=""

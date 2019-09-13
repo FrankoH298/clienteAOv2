@@ -41,6 +41,7 @@ Public bLluvia() As Byte ' Array para determinar si
 'debemos mostrar la animacion de la lluvia
 
 Private lFrameTimer As Long
+Private timerFlush As Long
 
 Public Function RandomNumber(ByVal LowerBound As Long, ByVal UpperBound As Long) As Long
     'Initialize randomizer
@@ -73,21 +74,21 @@ End Function
 Sub CargarAnimArmas()
 On Error Resume Next
 
-    Dim loopC As Long
+    Dim loopc As Long
     Dim Lector As clsIniManager
     Set Lector = New clsIniManager
-    Call Lector.Initialize(Path(INIT) & "" & "armas.dat")
+    Call Lector.Initialize(path(INIT) & "" & "armas.dat")
     
     NumWeaponAnims = Val(Lector.GetValue("INIT", "NumArmas"))
     
     ReDim WeaponAnimData(1 To NumWeaponAnims) As WeaponAnimData
     
-    For loopC = 1 To NumWeaponAnims
-        InitGrh WeaponAnimData(loopC).WeaponWalk(1), Val(Lector.GetValue("ARMA" & loopC, "Dir1")), 0
-        InitGrh WeaponAnimData(loopC).WeaponWalk(2), Val(Lector.GetValue("ARMA" & loopC, "Dir2")), 0
-        InitGrh WeaponAnimData(loopC).WeaponWalk(3), Val(Lector.GetValue("ARMA" & loopC, "Dir3")), 0
-        InitGrh WeaponAnimData(loopC).WeaponWalk(4), Val(Lector.GetValue("ARMA" & loopC, "Dir4")), 0
-    Next loopC
+    For loopc = 1 To NumWeaponAnims
+        InitGrh WeaponAnimData(loopc).WeaponWalk(1), Val(Lector.GetValue("ARMA" & loopc, "Dir1")), 0
+        InitGrh WeaponAnimData(loopc).WeaponWalk(2), Val(Lector.GetValue("ARMA" & loopc, "Dir2")), 0
+        InitGrh WeaponAnimData(loopc).WeaponWalk(3), Val(Lector.GetValue("ARMA" & loopc, "Dir3")), 0
+        InitGrh WeaponAnimData(loopc).WeaponWalk(4), Val(Lector.GetValue("ARMA" & loopc, "Dir4")), 0
+    Next loopc
     
 End Sub
 
@@ -95,9 +96,9 @@ Sub CargarColores()
 On Error Resume Next
     Dim Lector As clsIniManager
     Set Lector = New clsIniManager
-    Call Lector.Initialize(Path(INIT) & "colores.dat")
+    Call Lector.Initialize(path(INIT) & "colores.dat")
     
-    If Not FileExist(Path(INIT) & "colores.dat", vbArchive) Then
+    If Not FileExist(path(INIT) & "colores.dat", vbArchive) Then
 'TODO : Si hay que reinstalar, porque no cierra???
         Call MsgBox("ERROR: no se ha podido cargar los colores. Falta el archivo colores.dat, reinstale el juego", vbCritical + vbOKOnly)
         Exit Sub
@@ -131,21 +132,21 @@ End Sub
 Sub CargarAnimEscudos()
 On Error Resume Next
 
-    Dim loopC As Long
+    Dim loopc As Long
     Dim Lector As clsIniManager
     Set Lector = New clsIniManager
-    Call Lector.Initialize(Path(INIT) & "" & "escudos.dat")
+    Call Lector.Initialize(path(INIT) & "" & "escudos.dat")
     
     NumEscudosAnims = Val(Lector.GetValue("INIT", "NumEscudos"))
     
     ReDim ShieldAnimData(1 To NumEscudosAnims) As ShieldAnimData
     
-    For loopC = 1 To NumEscudosAnims
-        InitGrh ShieldAnimData(loopC).ShieldWalk(1), Val(Lector.GetValue("ESC" & loopC, "Dir1")), 0
-        InitGrh ShieldAnimData(loopC).ShieldWalk(2), Val(Lector.GetValue("ESC" & loopC, "Dir2")), 0
-        InitGrh ShieldAnimData(loopC).ShieldWalk(3), Val(Lector.GetValue("ESC" & loopC, "Dir3")), 0
-        InitGrh ShieldAnimData(loopC).ShieldWalk(4), Val(Lector.GetValue("ESC" & loopC, "Dir4")), 0
-    Next loopC
+    For loopc = 1 To NumEscudosAnims
+        InitGrh ShieldAnimData(loopc).ShieldWalk(1), Val(Lector.GetValue("ESC" & loopc, "Dir1")), 0
+        InitGrh ShieldAnimData(loopc).ShieldWalk(2), Val(Lector.GetValue("ESC" & loopc, "Dir2")), 0
+        InitGrh ShieldAnimData(loopc).ShieldWalk(3), Val(Lector.GetValue("ESC" & loopc, "Dir3")), 0
+        InitGrh ShieldAnimData(loopc).ShieldWalk(4), Val(Lector.GetValue("ESC" & loopc, "Dir4")), 0
+    Next loopc
     
 End Sub
 
@@ -187,13 +188,13 @@ Public Sub RefreshAllChars()
 'Goes through the charlist and replots all the characters on the map
 'Used to make sure everyone is visible
 '*****************************************************************
-    Dim loopC As Long
+    Dim loopc As Long
     
-    For loopC = 1 To LastChar
-        If charlist(loopC).Active = 1 Then
-            MapData(charlist(loopC).Pos.X, charlist(loopC).Pos.Y).CharIndex = loopC
+    For loopc = 1 To LastChar
+        If charlist(loopc).active = 1 Then
+            MapData(charlist(loopc).Pos.x, charlist(loopc).Pos.y).CharIndex = loopc
         End If
-    Next loopC
+    Next loopc
 End Sub
 
 Function AsciiValidos(ByVal cad As String) As Boolean
@@ -215,7 +216,7 @@ End Function
 
 Function CheckUserData(ByVal checkemail As Boolean) As Boolean
     'Validamos los datos del user
-    Dim loopC As Long
+    Dim loopc As Long
     Dim CharAscii As Integer
     
     If checkemail And UserEmail = "" Then
@@ -228,13 +229,13 @@ Function CheckUserData(ByVal checkemail As Boolean) As Boolean
         Exit Function
     End If
     
-    For loopC = 1 To Len(UserPassword)
-        CharAscii = Asc(mid$(UserPassword, loopC, 1))
+    For loopc = 1 To Len(UserPassword)
+        CharAscii = Asc(mid$(UserPassword, loopc, 1))
         If Not LegalCharacter(CharAscii) Then
             MsgBox ("Password inválido. El caractér " & Chr$(CharAscii) & " no está permitido.")
             Exit Function
         End If
-    Next loopC
+    Next loopc
     
     If UserName = "" Then
         MsgBox ("Ingrese un nombre de personaje.")
@@ -246,13 +247,13 @@ Function CheckUserData(ByVal checkemail As Boolean) As Boolean
         Exit Function
     End If
     
-    For loopC = 1 To Len(UserName)
-        CharAscii = Asc(mid$(UserName, loopC, 1))
+    For loopc = 1 To Len(UserName)
+        CharAscii = Asc(mid$(UserName, loopc, 1))
         If Not LegalCharacter(CharAscii) Then
             MsgBox ("Nombre inválido. El caractér " & Chr$(CharAscii) & " no está permitido.")
             Exit Function
         End If
-    Next loopC
+    Next loopc
     
     CheckUserData = True
 End Function
@@ -330,13 +331,13 @@ Sub MoveTo(ByVal Direccion As E_Heading)
     
     Select Case Direccion
         Case E_Heading.NORTH
-            LegalOk = MoveToLegalPos(UserPos.X, UserPos.Y - 1)
+            LegalOk = MoveToLegalPos(UserPos.x, UserPos.y - 1)
         Case E_Heading.EAST
-            LegalOk = MoveToLegalPos(UserPos.X + 1, UserPos.Y)
+            LegalOk = MoveToLegalPos(UserPos.x + 1, UserPos.y)
         Case E_Heading.SOUTH
-            LegalOk = MoveToLegalPos(UserPos.X, UserPos.Y + 1)
+            LegalOk = MoveToLegalPos(UserPos.x, UserPos.y + 1)
         Case E_Heading.WEST
-            LegalOk = MoveToLegalPos(UserPos.X - 1, UserPos.Y)
+            LegalOk = MoveToLegalPos(UserPos.x - 1, UserPos.y)
     End Select
     
     If LegalOk And Not UserParalizado Then
@@ -355,10 +356,10 @@ Sub MoveTo(ByVal Direccion As E_Heading)
     If frmMain.TrainingMacro.Enabled Then frmMain.DesactivarMacroHechizos
     If frmMain.macrotrabajo.Enabled Then Call frmMain.DesactivarMacroTrabajo
     
-    frmMain.Coord.Caption = UserMap & " X: " & UserPos.X & " Y: " & UserPos.Y
+    frmMain.Coord.Caption = UserMap & " X: " & UserPos.x & " Y: " & UserPos.y
     
     ' Update 3D sounds!
-    Call Audio.MoveListener(UserPos.X, UserPos.Y)
+    Call Audio.MoveListener(UserPos.x, UserPos.y)
 End Sub
 
 Sub RandomMove()
@@ -450,12 +451,12 @@ Private Sub CheckKeys()
                 Call RandomMove
             Else
                 ' We haven't moved - Update 3D sounds!
-                Call Audio.MoveListener(UserPos.X, UserPos.Y)
+                Call Audio.MoveListener(UserPos.x, UserPos.y)
             End If
             
             If frmMain.TrainingMacro.Enabled Then frmMain.DesactivarMacroHechizos
             'frmMain.Coord.Caption = "(" & UserPos.x & "," & UserPos.y & ")"
-            frmMain.Coord.Caption = "X: " & UserPos.X & " Y: " & UserPos.Y
+            frmMain.Coord.Caption = "X: " & UserPos.x & " Y: " & UserPos.y
         End If
     End If
 End Sub
@@ -471,23 +472,25 @@ Sub SwitchMap(ByVal Map As Integer)
       ' @@ 06/11/2014
       ' @@ Facu cabe aporte (?)
 
-      Dim Y         As Long
-      Dim X         As Long
+      Dim y         As Long
+      Dim x         As Long
       Dim ByFlags   As Byte
       Dim handle    As Integer
       Dim fileBuff  As clsByteBuffer
    
       Dim dData()   As Byte
       Dim dLen      As Long
-   
+      
+      Call Particle_Group_Remove_All
+        
       Set fileBuff = New clsByteBuffer
    
-      dLen = FileLen(Path(Mapas) & "Mapa" & Map & ".map")
+      dLen = FileLen(path(Mapas) & "Mapa" & Map & ".map")
       ReDim dData(dLen - 1)
       
       handle = FreeFile()
    
-      Open Path(Mapas) & "Mapa" & Map & ".map" For Binary As handle
+      Open path(Mapas) & "Mapa" & Map & ".map" For Binary As handle
       'Seek handle, 1
       Get handle, , dData
       Close handle
@@ -504,76 +507,77 @@ Sub SwitchMap(ByVal Map As Integer)
    
       'Load arrays
 
-      For Y = YMinMapSize To YMaxMapSize
-            For X = XMinMapSize To XMaxMapSize
+      For y = YMinMapSize To YMaxMapSize
+            For x = XMinMapSize To XMaxMapSize
                   'Get handle, , ByFlags
                   ByFlags = fileBuff.getByte()
            
-                  MapData(X, Y).Blocked = (ByFlags And 1)
+                  MapData(x, y).Blocked = (ByFlags And 1)
            
                   'Get handle, , MapData(X, Y).Graphic(1).GrhIndex
-                  MapData(X, Y).Graphic(1).GrhIndex = fileBuff.getInteger()
-                  InitGrh MapData(X, Y).Graphic(1), MapData(X, Y).Graphic(1).GrhIndex
+                  MapData(x, y).Graphic(1).GrhIndex = fileBuff.getInteger()
+                  InitGrh MapData(x, y).Graphic(1), MapData(x, y).Graphic(1).GrhIndex
            
                   'Layer 2 used?
 
                   If ByFlags And 2 Then
                         'Get handle, , MapData(X, Y).Graphic(2).GrhIndex
-                        MapData(X, Y).Graphic(2).GrhIndex = fileBuff.getInteger()
-                        InitGrh MapData(X, Y).Graphic(2), MapData(X, Y).Graphic(2).GrhIndex
+                        MapData(x, y).Graphic(2).GrhIndex = fileBuff.getInteger()
+                        InitGrh MapData(x, y).Graphic(2), MapData(x, y).Graphic(2).GrhIndex
                   Else
-                        MapData(X, Y).Graphic(2).GrhIndex = 0
+                        MapData(x, y).Graphic(2).GrhIndex = 0
                   End If
                
                   'Layer 3 used?
 
                   If ByFlags And 4 Then
                         'Get handle, , MapData(X, Y).Graphic(3).GrhIndex
-                        MapData(X, Y).Graphic(3).GrhIndex = fileBuff.getInteger()
-                        InitGrh MapData(X, Y).Graphic(3), MapData(X, Y).Graphic(3).GrhIndex
+                        MapData(x, y).Graphic(3).GrhIndex = fileBuff.getInteger()
+                        InitGrh MapData(x, y).Graphic(3), MapData(x, y).Graphic(3).GrhIndex
                   Else
-                        MapData(X, Y).Graphic(3).GrhIndex = 0
+                        MapData(x, y).Graphic(3).GrhIndex = 0
                   End If
                
                   'Layer 4 used?
 
                   If ByFlags And 8 Then
                         'Get handle, , MapData(X, Y).Graphic(4).GrhIndex
-                        MapData(X, Y).Graphic(4).GrhIndex = fileBuff.getInteger()
-                        InitGrh MapData(X, Y).Graphic(4), MapData(X, Y).Graphic(4).GrhIndex
+                        MapData(x, y).Graphic(4).GrhIndex = fileBuff.getInteger()
+                        InitGrh MapData(x, y).Graphic(4), MapData(x, y).Graphic(4).GrhIndex
                   Else
-                        MapData(X, Y).Graphic(4).GrhIndex = 0
+                        MapData(x, y).Graphic(4).GrhIndex = 0
                   End If
            
                   'Trigger used?
 
                   If ByFlags And 16 Then
                         'Get handle, , MapData(X, Y).Trigger
-                        MapData(X, Y).Trigger = fileBuff.getInteger()
+                        MapData(x, y).Trigger = fileBuff.getInteger()
                   Else
-                        MapData(X, Y).Trigger = 0
+                        MapData(x, y).Trigger = 0
                   End If
            
                   'Erase NPCs
 
-                  If MapData(X, Y).CharIndex > 0 Then
-                        Call EraseChar(MapData(X, Y).CharIndex)
+                  If MapData(x, y).CharIndex > 0 Then
+                        Call EraseChar(MapData(x, y).CharIndex)
                   End If
            
                   'Erase OBJs
-                  MapData(X, Y).ObjGrh.GrhIndex = 0
+                  MapData(x, y).ObjGrh.GrhIndex = 0
 
-            Next X
-      Next Y
+            Next x
+      Next y
 
       'Close handle
      
       Set fileBuff = Nothing ' @@ Tanto te costaba Destruir el buff una ves que se termino de usar?
       
-      MapInfo.Name = vbNullString
+      MapInfo.name = vbNullString
       MapInfo.Music = vbNullString
    
       CurMap = Map
+      Call General_Particle_Create(1, 45, 45)
 End Sub
 
 Function ReadField(ByVal Pos As Integer, ByRef Text As String, ByVal SepASCII As Byte) As String
@@ -625,15 +629,15 @@ Function FieldCount(ByRef Text As String, ByVal SepASCII As Byte) As Long
     FieldCount = Count
 End Function
 
-Function FileExist(ByVal file As String, ByVal FileType As VbFileAttribute) As Boolean
-    FileExist = (Dir$(file, FileType) <> "")
+Function FileExist(ByVal File As String, ByVal FileType As VbFileAttribute) As Boolean
+    FileExist = (Dir$(File, FileType) <> "")
 End Function
 
 Sub WriteClientVer()
     Dim hFile As Integer
         
     hFile = FreeFile()
-    Open Path(INIT) & "Ver.bin" For Binary Access Write Lock Read As #hFile
+    Open path(INIT) & "Ver.bin" For Binary Access Write Lock Read As #hFile
     Put #hFile, , CLng(777)
     Put #hFile, , CLng(777)
     Put #hFile, , CLng(777)
@@ -668,7 +672,7 @@ On Error GoTo errorH
     Dim i As Long
     Dim Lector As clsIniManager
     Set Lector = New clsIniManager
-    Call Lector.Initialize(Path(INIT) & "sinfo.dat")
+    Call Lector.Initialize(path(INIT) & "sinfo.dat")
     
     c = Val(Lector.GetValue("INIT", "Cant"))
     
@@ -758,17 +762,17 @@ Sub Main()
     End If
     
     'usaremos esto para ayudar en los parches
-    Call SaveSetting("ArgentumOnlineCliente", "Init", "Path", App.Path & "\")
+    Call SaveSetting("ArgentumOnlineCliente", "Init", "Path", App.path & "\")
     
-    ChDrive App.Path
-    ChDir App.Path
+    ChDrive App.path
+    ChDir App.path
     
     'Set resolution BEFORE the loading form is displayed, therefore it will be centered.
     Call Resolution.SetResolution
     
     ' Mouse Pointer (Loaded before opening any form with buttons in it)
-    If FileExist(Path(EXTRAS) & "Hand.ico", vbArchive) Then _
-        Set picMouseIcon = LoadPicture(Path(EXTRAS) & "Hand.ico")
+    If FileExist(path(EXTRAS) & "Hand.ico", vbArchive) Then _
+        Set picMouseIcon = LoadPicture(path(EXTRAS) & "Hand.ico")
     
     frmCargando.Show
     frmCargando.Refresh
@@ -819,7 +823,7 @@ UserMap = 1
     Call AddtoRichTextBox(frmCargando.status, "Iniciando DirectSound... ", 255, 255, 255, True, False, True)
     
     'Inicializamos el sonido
-    Call Audio.Initialize(DirectX, frmMain.hWnd, Path(WAV), Path(MIDI))
+    Call Audio.Initialize(DirectX, frmMain.hWnd, path(WAV), path(MIDI))
     'Enable / Disable audio
     Audio.MusicActivated = ClientSetup.bMusic
     Audio.SoundActivated = ClientSetup.bSound
@@ -827,7 +831,7 @@ UserMap = 1
     'Inicializamos el inventario gráfico
     Call Inventario.Initialize(DirectD3D8, frmMain.picInv, MAX_INVENTORY_SLOTS)
     
-    Call Audio.MusicMP3Play(App.Path & "\MP3\" & MP3_Inicio & ".mp3")
+    Call Audio.MusicMP3Play(App.path & "\MP3\" & MP3_Inicio & ".mp3")
     
     Call AddtoRichTextBox(frmCargando.status, "Hecho", 255, 0, 0, True, False, False)
     
@@ -875,8 +879,6 @@ UserMap = 1
     Dialogos.Font = frmMain.Font
     DialogosClanes.Font = frmMain.Font
     
-    lFrameTimer = timeGetTime
-    
     ' Load the form for screenshots
     Call Load(frmScreenshots)
         
@@ -894,7 +896,7 @@ UserMap = 1
                 GetKeyState(CustomKeys.BindedKey(eKeyType.mKeyRight)) < 0 Then
                 Call CheckKeys
             Else
-                Call Audio.MoveListener(UserPos.X, UserPos.Y)
+                Call Audio.MoveListener(UserPos.x, UserPos.y)
             End If
         End If
         'FPS Counter - mostramos las FPS
@@ -904,22 +906,24 @@ UserMap = 1
         End If
         
         ' If there is anything to be sent, we send it
-        Call FlushBuffer
-        
+        If timeGetTime >= timerFlush Then
+            Call FlushBuffer
+            timerFlush = timeGetTime + 12
+        End If
         DoEvents
     Loop
     
     Call CloseClient
 End Sub
 
-Sub WriteVar(ByVal file As String, ByVal Main As String, ByVal Var As String, ByVal value As String)
+Sub WriteVar(ByVal File As String, ByVal Main As String, ByVal Var As String, ByVal value As String)
 '*****************************************************************
 'Writes a var to a text file
 '*****************************************************************
-    writeprivateprofilestring Main, Var, value, file
+    writeprivateprofilestring Main, Var, value, File
 End Sub
 
-Function GetVar(ByVal file As String, ByVal Main As String, ByVal Var As String) As String
+Function GetVar(ByVal File As String, ByVal Main As String, ByVal Var As String) As String
 '*****************************************************************
 'Gets a Var from a text file
 '*****************************************************************
@@ -927,7 +931,7 @@ Function GetVar(ByVal file As String, ByVal Main As String, ByVal Var As String)
     
     sSpaces = Space$(500) ' This tells the computer how long the longest string can be. If you want, you can change the number 100 to any number you wish
     
-    getprivateprofilestring Main, Var, vbNullString, sSpaces, Len(sSpaces), file
+    getprivateprofilestring Main, Var, vbNullString, sSpaces, Len(sSpaces), File
     
     GetVar = RTrim$(sSpaces)
     GetVar = Left$(GetVar, Len(GetVar) - 1)
@@ -975,11 +979,11 @@ Private Function CMSValidateChar_(ByVal iAsc As Integer) As Boolean
 End Function
 
 'TODO : como todo lo relativo a mapas, no tiene nada que hacer acá....
-Function HayAgua(ByVal X As Integer, ByVal Y As Integer) As Boolean
-    HayAgua = ((MapData(X, Y).Graphic(1).GrhIndex >= 1505 And MapData(X, Y).Graphic(1).GrhIndex <= 1520) Or _
-            (MapData(X, Y).Graphic(1).GrhIndex >= 5665 And MapData(X, Y).Graphic(1).GrhIndex <= 5680) Or _
-            (MapData(X, Y).Graphic(1).GrhIndex >= 13547 And MapData(X, Y).Graphic(1).GrhIndex <= 13562)) And _
-                MapData(X, Y).Graphic(2).GrhIndex = 0
+Function HayAgua(ByVal x As Integer, ByVal y As Integer) As Boolean
+    HayAgua = ((MapData(x, y).Graphic(1).GrhIndex >= 1505 And MapData(x, y).Graphic(1).GrhIndex <= 1520) Or _
+            (MapData(x, y).Graphic(1).GrhIndex >= 5665 And MapData(x, y).Graphic(1).GrhIndex <= 5680) Or _
+            (MapData(x, y).Graphic(1).GrhIndex >= 13547 And MapData(x, y).Graphic(1).GrhIndex <= 13562)) And _
+                MapData(x, y).Graphic(2).GrhIndex = 0
                 
 End Function
 
@@ -1161,10 +1165,10 @@ M = 255 / MAXATRIBUTOS
 getDexterityColor = RGB(255, M * UserAgilidad, 0)
 End Function
 
-Public Function getCharIndexByName(ByVal Name As String) As Integer
+Public Function getCharIndexByName(ByVal name As String) As Integer
 Dim i As Long
 For i = 1 To LastChar
-    If charlist(i).Nombre = Name Then
+    If charlist(i).Nombre = name Then
         getCharIndexByName = i
         Exit Function
     End If
