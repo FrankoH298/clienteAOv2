@@ -423,12 +423,12 @@ Public Sub Particle_Group_Render(ByVal Particle_Group_Index As Long, ByVal scree
     Dim loopc As Long
     Dim temp_rgb(0 To 3) As Long
     Dim no_move As Boolean
-    Dim detroy As Byte
+    Dim destroy As Byte
     
     If Particle_Group_Index > UBound(particle_group_list) Then Exit Sub
     
-    If GetTickCount - particle_group_list(Particle_Group_Index).live > (particle_group_list(Particle_Group_Index).liv1 * 25) And Not particle_group_list(Particle_Group_Index).liv1 = -1 Then detroy = 1
-    If detroy = 1 Then
+    If GetTickCount - particle_group_list(Particle_Group_Index).live > (particle_group_list(Particle_Group_Index).liv1 * 25) And Not particle_group_list(Particle_Group_Index).liv1 = -1 Then destroy = 1
+    If destroy = 1 Then
         Particle_Group_Destroy Particle_Group_Index
         Exit Sub
     End If

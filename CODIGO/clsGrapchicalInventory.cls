@@ -55,10 +55,6 @@ Private Inventory() As Inventory    'User's inventory
 Private WithEvents InventoryWindow As PictureBox    'Placeholder where to render the inventory
 Attribute InventoryWindow.VB_VarHelpID = -1
 
-#If ConMenuesConextuales = 1 Then
-    Dim ItemMenu As Menu    'Menu to be shown as pop up
-#End If
-
 Private Sub Class_Initialize()
 '***************************************************
 'Author: Juan Martín Sotuyo Dodero (Maraxus)
@@ -261,7 +257,7 @@ Public Property Get ItemName(ByVal slot As Byte) As String
 'Last Modify Date: 27/07/04
 'Retrieves the selected item's name
 '***************************************************
-    ItemName = Inventory(slot).Name
+    ItemName = Inventory(slot).name
 End Property
 
 Public Property Get Equipped(ByVal slot As Byte) As Boolean
@@ -326,7 +322,7 @@ Public Sub SetItem(ByVal slot As Byte, ByVal eOBJIndex As Integer, ByVal eAmount
         .GrhIndex = eGrhIndex
         .MaxHit = eMaxHit
         .MinHit = eMinHit
-        .Name = eName
+        .name = eName
         .OBJIndex = eOBJIndex
         .OBJType = eObjType
         .Valor = eValor
@@ -370,7 +366,7 @@ Private Sub DrawInventory()
 'Last Modify Date: 27/07/04
 'Renders the inventory to the given PictureBox
 '***************************************************
-    Dim loopC As Long
+    Dim loopc As Long
     Dim TempRect As RECT
     
     With TempRect
@@ -380,30 +376,33 @@ Private Sub DrawInventory()
     
     'Clear the inventory window
         Call Engine_BeginScene
-        For loopC = InventoryOffset * (InventoryWindow.ScaleWidth \ ownTilePixelWidth) + 1 To UBound(Inventory)
+        For loopc = InventoryOffset * (InventoryWindow.ScaleWidth \ ownTilePixelWidth) + 1 To UBound(Inventory)
             
-            startdX = ((loopC - 1) Mod (frmMain.PicInv.Width / 32)) * 32
-            startdY = ((loopC - 1) \ (frmMain.PicInv.Width / 32)) * 32
+            startdX = ((loopc - 1) Mod (frmMain.PicInv.Width / 32)) * 32
+            startdY = ((loopc - 1) \ (frmMain.PicInv.Width / 32)) * 32
             
-            If Inventory(loopC).GrhIndex Then
+            Call Draw_GrhIndex(23979, startdX, startdY, 1, Normal_RGBList)
+            
+            If Inventory(loopc).GrhIndex Then
                 
                 'Render a box around the selected item
-                If InvSelectedItem = loopC Then
+                If InvSelectedItem = loopc Then
                     If ImgContainer Then
-                        Call Draw_GrhIndex(2, startdX, startdY, 1, Normal_RGBList)
+                        Call Draw_GrhIndex(23980, startdX, startdY, 1, Normal_RGBList)
                     End If
                 End If
-                Call Draw_GrhIndex(Inventory(loopC).GrhIndex, startdX, startdY, 1, Normal_RGBList)
+                Call Draw_GrhIndex(Inventory(loopc).GrhIndex, startdX, startdY, 1, Normal_RGBList)
                 'If equipped we render "E"
-                If Inventory(loopC).Equipped Then
-                    DrawText startdX + 20, startdY + 20, "E", -256
+                
+                If Inventory(loopc).Equipped Then
+                    DrawText startdX + 20, startdY + 18, "E", -256
                 End If
                 
                 'Render the item grh and the amount
-                DrawText startdX, startdY, Inventory(loopC).Amount, -1
+                DrawText startdX + 1, startdY, Inventory(loopc).Amount, -1
                 
             End If
-        Next loopC
+        Next loopc
         Call Engine_EndScene(TempRect, InventoryWindow.hWnd)
     
 End Sub
@@ -413,17 +412,11 @@ Public Sub DrawInv()
     Call DrawInventory
     DoEvents
 End Sub
-#If ConMenuesConextuales = 1 Then   'Argument list varies!!!
-    Public Sub Initialize(ByRef DirectD3D As DirectD3D7, ByRef InvPic As PictureBox, ByVal MaxObjs As Byte, _
-    ByRef PopUpMenu As Menu)
-
-#Else   'Argument list varies!!!
-    Public Sub Initialize(ByRef DirectD3D As D3DX8, ByRef InvPic As PictureBox, ByVal MaxObjs As Byte, _
-                            Optional ByVal FontSize As Integer = 7, Optional ByVal TileWidth As Integer = 32, _
-                            Optional ByVal TileHeight As Integer = 32, Optional ByVal startX As Integer = 0, _
-                            Optional ByVal startY As Integer = 0, Optional ByVal bImgContainer As Boolean = True, _
-                            Optional ByVal bShowText As Boolean = True)
-#End If
+Public Sub Initialize(ByRef DirectD3D As D3DX8, ByRef InvPic As PictureBox, ByVal MaxObjs As Byte, _
+                        Optional ByVal FontSize As Integer = 7, Optional ByVal TileWidth As Integer = 32, _
+                        Optional ByVal TileHeight As Integer = 32, Optional ByVal startX As Integer = 0, _
+                        Optional ByVal startY As Integer = 0, Optional ByVal bImgContainer As Boolean = True, _
+                        Optional ByVal bShowText As Boolean = True)
 '***************************************************
 'Author: Juan Martín Sotuyo Dodero (Maraxus)
 'Last Modify Date: 03/12/09
@@ -458,7 +451,7 @@ End Sub
     Dim Font As New StdFont
     Dim Ifnt As IFont
     
-    Font.Name = "Verdana"
+    Font.name = "Verdana"
     Font.bold = True
     Font.italic = False
     Font.Size = FontSize
@@ -471,10 +464,7 @@ End Sub
     
     If ImgContainer Then _
         InvSelectedItem = ClickItem(1, 1)   'If there is anything there we select the top left item
-    
-#If ConMenuesConextuales = 1 Then
-    Set ItemMenu = PopUpMenu
-#End If
+
 End Sub
 
 Private Sub InventoryWindow_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
@@ -498,7 +488,7 @@ Private Sub InventoryWindow_MouseMove(Button As Integer, Shift As Integer, X As 
     TempItem = temp_x + (temp_y + InventoryOffset) * (InventoryWindow.ScaleWidth \ ownTilePixelWidth) + 1
     
     If TempItem <= UBound(Inventory) Then
-        InventoryWindow.ToolTipText = Inventory(TempItem).Name
+        InventoryWindow.ToolTipText = Inventory(TempItem).name
     End If
 End Sub
 
@@ -525,12 +515,5 @@ Private Sub InventoryWindow_MouseUp(Button As Integer, Shift As Integer, X As Si
     If prevSelItem <> InvSelectedItem Then
         If prevSelItem <> 0 And prevSelItem <> FLAGORO Or InvSelectedItem Then Call DrawInventory
     End If
-    
-#If ConMenuesConextuales = 1 Then
-    'If it was a right click on the same item we had selected before, show popup menu
-    If Button = vbRightButton And prevSelItem = InvSelectedItem Then
-        'Show the provided menu as a popup
-        Call InventoryWindow.Parent.PopUpMenu(ItemMenu, , X, Y)
-    End If
-#End If
+
 End Sub

@@ -342,7 +342,7 @@ Sub MoveTo(ByVal Direccion As E_Heading)
     
     If LegalOk And Not UserParalizado Then
         Call WriteWalk(Direccion)
-        If Not UserDescansar And Not UserMeditar Then
+        If Not UserDescansar Then
             MoveCharbyHead UserCharIndex, Direccion
             MoveScreen Direccion
         End If
@@ -391,8 +391,6 @@ Private Sub CheckKeys()
     'TODO: Debería informarle por consola?
     If Traveling Then Exit Sub
     'Don't allow any these keys during movement..
-    If UserMoving = 0 Then
-        If Not UserEstupido Then
             If GetKeyState(CustomKeys.BindedKey(eKeyType.mKeyUp)) < 0 Then
                 If lastKeys.itemExist(CustomKeys.BindedKey(eKeyType.mKeyUp)) = False Then lastKeys.Add (CustomKeys.BindedKey(eKeyType.mKeyUp)) ' Agrega la tecla al arraylist
             Else
@@ -416,7 +414,8 @@ Private Sub CheckKeys()
             Else
                 If lastKeys.itemExist(CustomKeys.BindedKey(eKeyType.mKeyRight)) Then lastKeys.Remove (CustomKeys.BindedKey(eKeyType.mKeyRight)) ' Remueve la tecla que teniamos presionada
             End If
-            
+        If UserMoving = 0 Then
+            If Not UserEstupido Then
             'Move Up
             If lastKeys.Count() = 38 Then
                 Call MoveTo(NORTH)
@@ -577,7 +576,7 @@ Sub SwitchMap(ByVal Map As Integer)
       MapInfo.Music = vbNullString
    
       CurMap = Map
-      Call General_Particle_Create(97, 60, 45)
+      Call General_Particle_Create(6, 58, 45)
 End Sub
 
 Function ReadField(ByVal Pos As Integer, ByRef Text As String, ByVal SepASCII As Byte) As String
@@ -829,7 +828,7 @@ UserMap = 1
     Audio.SoundActivated = ClientSetup.bSound
     Audio.SoundEffectsActivated = ClientSetup.bSoundEffects
     'Inicializamos el inventario gráfico
-    Call Inventario.Initialize(DirectD3D8, frmMain.PicInv, MAX_INVENTORY_SLOTS)
+    Call Inventario.Initialize(DirectD3D8, frmMain.picInv, MAX_INVENTORY_SLOTS)
     
     Call Audio.MusicMP3Play(App.path & "\MP3\" & MP3_Inicio & ".mp3")
     

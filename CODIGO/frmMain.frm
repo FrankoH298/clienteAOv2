@@ -238,11 +238,6 @@ Begin VB.Form frmMain
       Visible         =   0   'False
       Width           =   8250
    End
-   Begin VB.Timer Macro 
-      Interval        =   750
-      Left            =   5760
-      Top             =   2520
-   End
    Begin VB.Timer Second 
       Enabled         =   0   'False
       Interval        =   1050
@@ -267,6 +262,7 @@ Begin VB.Form frmMain
       _ExtentY        =   2619
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       DisableNoScroll =   -1  'True
@@ -1001,8 +997,6 @@ Public LastPressed As clsGraphicalButton
 
 Public picSkillStar As Picture
 
-Dim PuedeMacrear As Boolean
-
 Private Sub Form_Load()
     
     If NoRes Then
@@ -1318,13 +1312,7 @@ Private Sub Form_KeyUp(KeyCode As Integer, Shift As Integer)
                 End With
                 Exit Sub
             End If
-                
-            If Not PuedeMacrear Then
-                AddtoRichTextBox frmMain.RecTxt, "No tan rápido..!", 255, 255, 255, False, False, True
-            Else
-                Call WriteMeditate
-                PuedeMacrear = False
-            End If
+            Call WriteMeditate
         
         Case CustomKeys.BindedKey(eKeyType.mKeyCastSpellMacro)
             If UserEstado = 1 Then
@@ -1482,10 +1470,6 @@ End Sub
 
 Private Sub lblMinimizar_Click()
     Me.WindowState = 1
-End Sub
-
-Private Sub Macro_Timer()
-    PuedeMacrear = True
 End Sub
 
 Private Sub macrotrabajo_Timer()
@@ -2142,7 +2126,7 @@ Private Sub Socket1_Disconnect()
     Do While i < Forms.Count - 1
         i = i + 1
         
-        If Forms(i).Name <> Me.Name And Forms(i).Name <> frmConnect.Name And Forms(i).Name <> frmCrearPersonaje.Name Then
+        If Forms(i).name <> Me.name And Forms(i).name <> frmConnect.name And Forms(i).name <> frmCrearPersonaje.name Then
             Unload Forms(i)
         End If
     Loop
@@ -2276,7 +2260,7 @@ Private Sub Winsock1_Close()
     Do While i < Forms.Count - 1
         i = i + 1
         
-        If Forms(i).Name <> Me.Name And Forms(i).Name <> frmConnect.Name And Forms(i).Name <> frmCrearPersonaje.Name Then
+        If Forms(i).name <> Me.name And Forms(i).name <> frmConnect.name And Forms(i).name <> frmCrearPersonaje.name Then
             Unload Forms(i)
         End If
     Loop
