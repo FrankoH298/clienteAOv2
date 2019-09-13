@@ -394,8 +394,6 @@ On Error Resume Next
                 End If
             Next i
         End If
-    ElseIf Particle_Group_Index = meteo_particle Then
-        meteo_particle = 0
     End If
     
     particle_group_list(Particle_Group_Index) = temp
