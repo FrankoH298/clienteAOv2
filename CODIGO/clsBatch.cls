@@ -87,16 +87,23 @@ Public Sub Draw(ByVal X As Single, _
         Dim right_point As Single
         Dim temp As Single
         x_center = dest.Left + (dest.Right - dest.Left) / 2
-        y_center = dest.Top + (dest.bottom - dest.Top) / 2
+        y_center = dest.bottom + (dest.Top - dest.bottom) / 2
         
-        radius = Sqr((dest.Right - x_center) ^ 2 + (dest.bottom - y_center) ^ 2)
+        'Calculate radius
+        radius = Sqr((dest.Right - x_center) ^ 2 + (dest.Top - y_center) ^ 2)
         
+        'Calculate left and right points
         temp = (dest.Right - x_center) / radius
         right_point = Atn(temp / Sqr(-temp * temp + 1))
-        left_point = 3.1459 - right_point
+        left_point = PI - right_point
 
-        x_Cor = x_center + Cos(-left_point - angle) * radius
-        y_Cor = y_center - Sin(-left_point - angle) * radius
+'***********************************************************************************************'
+'***********************************************************************************************'
+'***********************************************************************************************'
+'***********************************************************************************************'
+
+        x_Cor = x_center + Cos(left_point - angle) * radius
+        y_Cor = y_center - Sin(left_point - angle) * radius
         m_Data(m_Position).X = x_Cor
         m_Data(m_Position).Y = y_Cor
         m_Data(m_Position).Z = 0
@@ -107,8 +114,8 @@ Public Sub Draw(ByVal X As Single, _
         
         m_Position = m_Position + 1
 
-        x_Cor = x_center + Cos(left_point - angle) * radius
-        y_Cor = y_center - Sin(left_point - angle) * radius
+        x_Cor = x_center + Cos(-left_point - angle) * radius
+        y_Cor = y_center - Sin(-left_point - angle) * radius
         m_Data(m_Position).X = x_Cor
         m_Data(m_Position).Y = y_Cor
         m_Data(m_Position).Z = 0
@@ -119,8 +126,8 @@ Public Sub Draw(ByVal X As Single, _
         
         m_Position = m_Position + 1
 
-        x_Cor = x_center + Cos(right_point - angle) * radius
-        y_Cor = y_center - Sin(right_point - angle) * radius
+        x_Cor = x_center + Cos(-right_point - angle) * radius
+        y_Cor = y_center - Sin(-right_point - angle) * radius
         m_Data(m_Position).X = x_Cor
         m_Data(m_Position).Y = y_Cor
         m_Data(m_Position).Z = 0
@@ -131,8 +138,8 @@ Public Sub Draw(ByVal X As Single, _
         
         m_Position = m_Position + 1
         
-        x_Cor = x_center + Cos(-right_point - angle) * radius
-        y_Cor = y_center - Sin(-right_point - angle) * radius
+        x_Cor = x_center + Cos(right_point - angle) * radius
+        y_Cor = y_center - Sin(right_point - angle) * radius
         m_Data(m_Position).X = x_Cor
         m_Data(m_Position).Y = y_Cor
         m_Data(m_Position).Z = 0
@@ -142,6 +149,11 @@ Public Sub Draw(ByVal X As Single, _
         m_DataAlpha(m_Position) = Alpha
         
         m_Position = m_Position + 1
+'***********************************************************************************************'
+'***********************************************************************************************'
+'***********************************************************************************************'
+'***********************************************************************************************'
+'***********************************************************************************************'
     Else
         m_Data(m_Position).X = dest.Left
         m_Data(m_Position).Y = dest.bottom

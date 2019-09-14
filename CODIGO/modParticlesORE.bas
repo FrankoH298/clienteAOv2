@@ -423,12 +423,10 @@ Public Sub Particle_Group_Render(ByVal Particle_Group_Index As Long, ByVal scree
     Dim loopc As Long
     Dim temp_rgb(0 To 3) As Long
     Dim no_move As Boolean
-    Dim destroy As Byte
     
     If Particle_Group_Index > UBound(particle_group_list) Then Exit Sub
     
-    If GetTickCount - particle_group_list(Particle_Group_Index).live > (particle_group_list(Particle_Group_Index).liv1 * 25) And Not particle_group_list(Particle_Group_Index).liv1 = -1 Then destroy = 1
-    If destroy = 1 Then
+    If GetTickCount - particle_group_list(Particle_Group_Index).live > (particle_group_list(Particle_Group_Index).liv1 * 25) And Not particle_group_list(Particle_Group_Index).liv1 = -1 Then
         Particle_Group_Destroy Particle_Group_Index
         Exit Sub
     End If
@@ -439,7 +437,7 @@ Public Sub Particle_Group_Render(ByVal Particle_Group_Index As Long, ByVal scree
         temp_rgb(1) = .rgb_list(1)
         temp_rgb(2) = .rgb_list(2)
         temp_rgb(3) = .rgb_list(3)
-        
+
         'See if it is time to move a particle
         .frame_counter = .frame_counter + timerTicksPerFrame
         If .frame_counter > .frame_speed Then
@@ -472,14 +470,12 @@ Public Sub Particle_Group_Render(ByVal Particle_Group_Index As Long, ByVal scree
                         .spin
         Next loopc
                 
-    If no_move = False Then
-        'Update the group alive counter
-        If .never_die = False Then
-            .alive_counter = .alive_counter - 1
+        If no_move = False Then
+            'Update the group alive counter
+            If .never_die = False Then
+                .alive_counter = .alive_counter - 1
+            End If
         End If
-    End If
-    
-        
     End With
 End Sub
 
@@ -502,15 +498,16 @@ Private Sub Particle_Render(ByRef temp_particle As Particle, ByVal screen_x As I
 'Modified by: Juan Martín Sotuyo Dodero
 'Last Modify Date: 5/15/2003
 '**************************************************************
+    
     If no_move = False Then
         If temp_particle.alive_counter = 0 Then
             'Start new particle
-            InitGrh temp_particle.Grh, grh_index, alphaBlend
+            InitGrh temp_particle.Grh, grh_index
             temp_particle.X = RandomNumber(x1, x2) - 16
             temp_particle.Y = RandomNumber(y1, y2) - 16
             temp_particle.vector_x = RandomNumber(vecx1, vecx2)
             temp_particle.vector_y = RandomNumber(vecy1, vecy2)
-            temp_particle.angle = angle
+            'temp_particle.angle = angle
             temp_particle.alive_counter = RandomNumber(life1, life2)
             temp_particle.friction = fric
         Else
@@ -524,7 +521,7 @@ Private Sub Particle_Render(ByRef temp_particle As Particle, ByVal screen_x As I
                 End If
             End If
             'Do rotation
-            If spin = True Then temp_particle.angle = temp_particle.angle + (RandomNumber(spin_speedL, spin_speedH) / 100)
+            If spin Then temp_particle.angle = temp_particle.angle + (RandomNumber(spin_speedL, spin_speedH) / 100)
             If temp_particle.angle >= 360 Then
                 temp_particle.angle = 0
             End If
@@ -544,7 +541,7 @@ Private Sub Particle_Render(ByRef temp_particle As Particle, ByVal screen_x As I
     'Draw it
     
     If temp_particle.Grh.GrhIndex Then
-        Draw_Grh temp_particle.Grh, temp_particle.X + screen_x, temp_particle.Y + screen_y, 1, rgb_list(), 1, alphaBlend, temp_particle.angle
+        Draw_Grh temp_particle.Grh, temp_particle.X + screen_x, temp_particle.Y + screen_y, 1, rgb_list(), 1, True, temp_particle.angle
     End If
 End Sub
 Private Sub Particle_Group_Make(ByVal Particle_Group_Index As Long, ByVal map_x As Integer, ByVal map_y As Integer, _

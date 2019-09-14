@@ -109,7 +109,7 @@ Public Sub SetResolution()
     oldDepth = MidevM.dmBitsPerPel
     
     
-    If MsgBox("¿Desea setear la resolucion en 800x600?", vbYesNo, "Cambio de resolucion") = vbNo Then CambiarResolucion = False
+    CambiarResolucion = False
     
     CambiarResolucion = (oldResWidth < 800 Or oldResHeight < 600)
     
