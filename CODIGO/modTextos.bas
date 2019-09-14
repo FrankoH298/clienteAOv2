@@ -207,7 +207,7 @@ On Error GoTo eDebug:
     '*** Default font ***
     For i = 1 To UBound(cfonts)
     'Set the texture
-    Set cfonts(i).Texture = DirectD3D8.CreateTextureFromFileEx(DirectDevice, Path(Graficos) & "font" & i & ".bmp", D3DX_DEFAULT, D3DX_DEFAULT, 0, 0, D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_FILTER_POINT, D3DX_FILTER_POINT, _
+    Set cfonts(i).Texture = DirectD3D8.CreateTextureFromFileEx(DirectDevice, path(Graficos) & "font" & i & ".bmp", D3DX_DEFAULT, D3DX_DEFAULT, 0, 0, D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_FILTER_POINT, D3DX_FILTER_POINT, _
             &HFF000000, ByVal 0, ByVal 0)
     'Store the size of the texture
     cfonts(i).TextureSize.X = TexInfo.Width
@@ -216,7 +216,7 @@ On Error GoTo eDebug:
     Exit Sub
 eDebug:
     If Err.number = "-2005529767" Then
-        MsgBox "Error en la textura de fuente utilizada " & Path(Graficos) & "Font" & i & ".bmp.", vbCritical
+        MsgBox "Error en la textura de fuente utilizada " & path(Graficos) & "Font" & i & ".bmp.", vbCritical
         End
     End If
     End
@@ -239,7 +239,7 @@ Sub Engine_Init_FontSettings()
     'Load the header information
     FileNum = FreeFile
     For i = 1 To UBound(cfonts)
-        Open Path(Graficos) & "Font" & i & ".dat" For Binary As #FileNum
+        Open path(Graficos) & "Font" & i & ".dat" For Binary As #FileNum
         Get #FileNum, , cfonts(i).HeaderInfo
         Close #FileNum
         

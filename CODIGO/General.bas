@@ -576,7 +576,8 @@ Sub SwitchMap(ByVal Map As Integer)
       MapInfo.Music = vbNullString
    
       CurMap = Map
-      Call General_Particle_Create(97, 58, 45)
+      Call General_Particle_Create(1, 45, 45)
+      Call General_Particle_Create(1, 50, 45)
 End Sub
 
 Function ReadField(ByVal Pos As Integer, ByRef Text As String, ByVal SepASCII As Byte) As String
@@ -828,7 +829,7 @@ UserMap = 1
     Audio.SoundActivated = ClientSetup.bSound
     Audio.SoundEffectsActivated = ClientSetup.bSoundEffects
     'Inicializamos el inventario gráfico
-    Call Inventario.Initialize(DirectD3D8, frmMain.PicInv, MAX_INVENTORY_SLOTS)
+    Call Inventario.Initialize(DirectD3D8, frmMain.picInv, MAX_INVENTORY_SLOTS)
     
     Call Audio.MusicMP3Play(App.path & "\MP3\" & MP3_Inicio & ".mp3")
     
@@ -915,11 +916,11 @@ UserMap = 1
     Call CloseClient
 End Sub
 
-Sub WriteVar(ByVal File As String, ByVal Main As String, ByVal Var As String, ByVal value As String)
+Sub WriteVar(ByVal File As String, ByVal Main As String, ByVal Var As String, ByVal Value As String)
 '*****************************************************************
 'Writes a var to a text file
 '*****************************************************************
-    writeprivateprofilestring Main, Var, value, File
+    writeprivateprofilestring Main, Var, Value, File
 End Sub
 
 Function GetVar(ByVal File As String, ByVal Main As String, ByVal Var As String) As String

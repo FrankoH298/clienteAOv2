@@ -852,14 +852,14 @@ Sub MoveScreen(ByVal nHeading As E_Heading)
 End Sub
 
 Private Function HayFogata(ByRef location As Position) As Boolean
-    Dim J As Long
+    Dim j As Long
     Dim k As Long
     
-    For J = UserPos.X - 8 To UserPos.X + 8
+    For j = UserPos.X - 8 To UserPos.X + 8
         For k = UserPos.Y - 6 To UserPos.Y + 6
-            If InMapBounds(J, k) Then
-                If MapData(J, k).ObjGrh.GrhIndex = GrhFogata Then
-                    location.X = J
+            If InMapBounds(j, k) Then
+                If MapData(j, k).ObjGrh.GrhIndex = GrhFogata Then
+                    location.X = j
                     location.Y = k
                     
                     HayFogata = True
@@ -867,7 +867,7 @@ Private Function HayFogata(ByRef location As Position) As Boolean
                 End If
             End If
         Next k
-    Next J
+    Next j
 End Function
 
 Function NextOpenChar() As Integer
@@ -1434,36 +1434,10 @@ Sub RenderScreen(ByVal tilex As Integer, ByVal tiley As Integer, ByVal PixelOffs
             ScreenY = ScreenY + 1
         Next Y
     End If
-
 End Sub
 
 Public Function RenderSounds()
-'**************************************************************
-'Author: Juan Martín Sotuyo Dodero
-'Last Modify Date: 3/30/2008
-'Actualiza todos los sonidos del mapa.
-'**************************************************************
-    If bLluvia(UserMap) = 1 Then
-        If bRain Then
-            If bTecho Then
-                If frmMain.IsPlaying <> PlayLoop.plLluviain Then
-                    If RainBufferIndex Then _
-                        Call Audio.StopWave(RainBufferIndex)
-                    RainBufferIndex = Audio.PlayWave("lluviain.wav", 0, 0, LoopStyle.Enabled)
-                    frmMain.IsPlaying = PlayLoop.plLluviain
-                End If
-            Else
-                If frmMain.IsPlaying <> PlayLoop.plLluviaout Then
-                    If RainBufferIndex Then _
-                        Call Audio.StopWave(RainBufferIndex)
-                    RainBufferIndex = Audio.PlayWave("lluviaout.wav", 0, 0, LoopStyle.Enabled)
-                    frmMain.IsPlaying = PlayLoop.plLluviaout
-                End If
-            End If
-        End If
-    End If
-    
-    DoFogataFx
+DoFogataFx
 End Function
 
 Function HayUserAbajo(ByVal X As Integer, ByVal Y As Integer, ByVal GrhIndex As Integer) As Boolean
