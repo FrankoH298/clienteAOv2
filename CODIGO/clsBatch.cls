@@ -107,7 +107,7 @@ Public Sub Draw(ByVal X As Single, _
         m_Data(m_Position).X = x_Cor
         m_Data(m_Position).Y = y_Cor
         m_Data(m_Position).Z = 0
-        m_Data(m_Position).Colour = Color(0)
+        m_Data(m_Position).Colour = Color(1)
         m_Data(m_Position).TX = Tx1
         m_Data(m_Position).TY = Ty1
         m_DataAlpha(m_Position) = Alpha
@@ -119,7 +119,7 @@ Public Sub Draw(ByVal X As Single, _
         m_Data(m_Position).X = x_Cor
         m_Data(m_Position).Y = y_Cor
         m_Data(m_Position).Z = 0
-        m_Data(m_Position).Colour = Color(1)
+        m_Data(m_Position).Colour = Color(0)
         m_Data(m_Position).TX = Tx1
         m_Data(m_Position).TY = Ty2
         m_DataAlpha(m_Position) = Alpha
@@ -158,7 +158,7 @@ Public Sub Draw(ByVal X As Single, _
         m_Data(m_Position).X = dest.Left
         m_Data(m_Position).Y = dest.bottom
         m_Data(m_Position).Z = 0
-        m_Data(m_Position).Colour = Color(0)
+        m_Data(m_Position).Colour = Color(1)
         m_Data(m_Position).TX = Tx1
         m_Data(m_Position).TY = Ty1
         m_DataAlpha(m_Position) = Alpha
@@ -168,7 +168,7 @@ Public Sub Draw(ByVal X As Single, _
         m_Data(m_Position).X = dest.Left
         m_Data(m_Position).Y = dest.Top
         m_Data(m_Position).Z = 0
-        m_Data(m_Position).Colour = Color(1)
+        m_Data(m_Position).Colour = Color(0)
         m_Data(m_Position).TX = Tx1
         m_Data(m_Position).TY = Ty2
         m_DataAlpha(m_Position) = Alpha
