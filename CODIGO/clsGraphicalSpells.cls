@@ -14,9 +14,17 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private listOffset As Long             'Number of lines we scrolled down from topmost
-Private SpellSelected As Long             'Currently selected item
+Public SpellSelected As Long             'Currently selected item
 
 Private Pressed As Boolean
+
+Private Type Spell
+    name As String
+    GrhIndex As Long
+    Index As Integer
+End Type
+
+Private Const MAXHECHI As Byte = 35
 
 Private ownTilePixelWidth As Integer
 Private ownTilePixelHeight As Integer
@@ -33,6 +41,18 @@ Private inventorySpells() As Spell
 
 Private WithEvents spellWindow As PictureBox    'Placeholder where to render the inventory
 Attribute spellWindow.VB_VarHelpID = -1
+
+Public Property Get Size() As Byte
+    Size = MAXHECHI
+End Property
+
+Public Property Get getName(slot As Byte) As String
+    getName = inventorySpells(slot).name
+End Property
+
+Public Property Get getGrhIndex(slot As Byte) As Long
+    getGrhIndex = inventorySpells(slot).GrhIndex
+End Property
 
 Public Sub SetSpell(ByVal slot As Byte, _
                     ByVal eGrhIndex As Integer, _
@@ -220,7 +240,7 @@ Public Sub Update()
             If mouseY < 0 Then
                 If listOffset > 0 Then listOffset = listOffset - 1
             ElseIf mouseY >= spellWindow.Height Then
-                If listOffset < MAXHECHI - maxList Then listOffset = listOffset + 1
+                If listOffset < InvHechizos.Size() - maxList Then listOffset = listOffset + 1
             End If
             Call spellWindow_MouseMove(1, 0, mouseX, mouseY)
             lastMovement = timeGetTime + 32
