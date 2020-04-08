@@ -189,6 +189,8 @@ Public Type Char
     Particle_Count As Integer
     Particle_Group() As Long
     
+    messageUp As textUp
+    
 End Type
 
 'Info de un objeto
@@ -1863,6 +1865,7 @@ Private Sub CharRender(ByVal CharIndex As Long, ByVal PixelOffsetX As Integer, B
                             'Clan
                             line = mid$(.Nombre, Pos)
                             Call DrawText(PixelOffsetX - (Len(line) * 6 / 2) + 28, PixelOffsetY + 45, line, Color)
+                            
                         End If
                     End If
                 End If
@@ -1876,6 +1879,7 @@ Private Sub CharRender(ByVal CharIndex As Long, ByVal PixelOffsetX As Integer, B
         
         'Update dialogs
         Call Dialogos.UpdateDialogPos(PixelOffsetX + .Body.HeadOffset.X, PixelOffsetY + .Body.HeadOffset.Y + OFFSET_HEAD, CharIndex)   '34 son los pixeles del grh de la cabeza que quedan superpuestos al cuerpo
+        Call renderMessageUp(CharIndex, PixelOffsetX, PixelOffsetY)
         Movement_Speed = 1
         Dim ij As Long
         If charlist(CharIndex).Particle_Count > 0 Then
@@ -1920,7 +1924,7 @@ Private Sub CleanViewPort()
 'Last Modify Date: 12/03/04
 'Fills the viewport with black.
 '***************************************************
-    Dim r As RECT
+    Dim R As RECT
     'Call BackBufferSurface.BltColorFill(r, vbBlack)
 End Sub
 

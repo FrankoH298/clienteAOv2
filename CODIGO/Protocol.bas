@@ -1248,7 +1248,7 @@ Private Sub HandleBankInit()
     BankGold = incomingData.ReadLong
     
     Call InvBanco(0).Initialize(DirectD3D8, frmBancoObj.PicBancoInv, MAX_BANCOINVENTORY_SLOTS)
-    Call InvBanco(1).Initialize(DirectD3D8, frmBancoObj.PicInv, Inventario.MaxObjs)
+    Call InvBanco(1).Initialize(DirectD3D8, frmBancoObj.picInv, Inventario.MaxObjs)
     
     For i = 1 To Inventario.MaxObjs
         With Inventario
@@ -1706,7 +1706,7 @@ Private Sub HandleUpdateGold()
         'Changes color
         frmMain.GldLbl.ForeColor = &HFFFF& 'Yellow
     End If
-    
+    Call Mod_MessagesUp.createMessageUp(UserGLD - frmMain.GldLbl.Caption, 2, UserCharIndex)
     frmMain.GldLbl.Caption = UserGLD
 End Sub
 
@@ -2075,20 +2075,20 @@ On Error GoTo ErrHandler
     
     Dim chat As String
     Dim CharIndex As Integer
-    Dim r As Byte
-    Dim g As Byte
-    Dim b As Byte
+    Dim R As Byte
+    Dim G As Byte
+    Dim B As Byte
     
     chat = Buffer.ReadASCIIString()
     CharIndex = Buffer.ReadInteger()
     
-    r = Buffer.ReadByte()
-    g = Buffer.ReadByte()
-    b = Buffer.ReadByte()
+    R = Buffer.ReadByte()
+    G = Buffer.ReadByte()
+    B = Buffer.ReadByte()
 
     'Only add the chat if the character exists (a CharacterRemove may have been sent to the PC / NPC area before the buffer was flushed)
     If charlist(CharIndex).active Then _
-        Call Dialogos.CreateDialog(Trim$(chat), CharIndex, RGB(r, g, b))
+        Call Dialogos.CreateDialog(Trim$(chat), CharIndex, RGB(R, G, B))
     
     'If we got here then packet is complete, copy data back to original queue
     Call incomingData.CopyBuffer(Buffer)
@@ -2130,9 +2130,9 @@ On Error GoTo ErrHandler
     Dim chat As String
     Dim FontIndex As Integer
     Dim str As String
-    Dim r As Byte
-    Dim g As Byte
-    Dim b As Byte
+    Dim R As Byte
+    Dim G As Byte
+    Dim B As Byte
     
     chat = Buffer.ReadASCIIString()
     FontIndex = Buffer.ReadByte()
@@ -2140,26 +2140,26 @@ On Error GoTo ErrHandler
     If InStr(1, chat, "~") Then
         str = ReadField(2, chat, 126)
             If Val(str) > 255 Then
-                r = 255
+                R = 255
             Else
-                r = Val(str)
+                R = Val(str)
             End If
             
             str = ReadField(3, chat, 126)
             If Val(str) > 255 Then
-                g = 255
+                G = 255
             Else
-                g = Val(str)
+                G = Val(str)
             End If
             
             str = ReadField(4, chat, 126)
             If Val(str) > 255 Then
-                b = 255
+                B = 255
             Else
-                b = Val(str)
+                B = Val(str)
             End If
             
-        Call AddtoRichTextBox(frmMain.RecTxt, Left$(chat, InStr(1, chat, "~") - 1), r, g, b, Val(ReadField(5, chat, 126)) <> 0, Val(ReadField(6, chat, 126)) <> 0)
+        Call AddtoRichTextBox(frmMain.RecTxt, Left$(chat, InStr(1, chat, "~") - 1), R, G, B, Val(ReadField(5, chat, 126)) <> 0, Val(ReadField(6, chat, 126)) <> 0)
     Else
         With FontTypes(FontIndex)
             Call AddtoRichTextBox(frmMain.RecTxt, chat, .Red, .Green, .Blue, .bold, .italic)
@@ -2210,9 +2210,9 @@ On Error GoTo ErrHandler
     
     Dim chat As String
     Dim str As String
-    Dim r As Byte
-    Dim g As Byte
-    Dim b As Byte
+    Dim R As Byte
+    Dim G As Byte
+    Dim B As Byte
     Dim tmp As Integer
     Dim Cont As Integer
     
@@ -2223,26 +2223,26 @@ On Error GoTo ErrHandler
         If InStr(1, chat, "~") Then
             str = ReadField(2, chat, 126)
             If Val(str) > 255 Then
-                r = 255
+                R = 255
             Else
-                r = Val(str)
+                R = Val(str)
             End If
             
             str = ReadField(3, chat, 126)
             If Val(str) > 255 Then
-                g = 255
+                G = 255
             Else
-                g = Val(str)
+                G = Val(str)
             End If
             
             str = ReadField(4, chat, 126)
             If Val(str) > 255 Then
-                b = 255
+                B = 255
             Else
-                b = Val(str)
+                B = Val(str)
             End If
             
-            Call AddtoRichTextBox(frmMain.RecTxt, Left$(chat, InStr(1, chat, "~") - 1), r, g, b, Val(ReadField(5, chat, 126)) <> 0, Val(ReadField(6, chat, 126)) <> 0)
+            Call AddtoRichTextBox(frmMain.RecTxt, Left$(chat, InStr(1, chat, "~") - 1), R, G, B, Val(ReadField(5, chat, 126)) <> 0, Val(ReadField(6, chat, 126)) <> 0)
         Else
             With FontTypes(FontTypeNames.FONTTYPE_GUILDMSG)
                 Call AddtoRichTextBox(frmMain.RecTxt, chat, .Red, .Green, .Blue, .bold, .italic)
@@ -2292,9 +2292,9 @@ On Error GoTo ErrHandler
     Dim chat As String
     Dim FontIndex As Integer
     Dim str As String
-    Dim r As Byte
-    Dim g As Byte
-    Dim b As Byte
+    Dim R As Byte
+    Dim G As Byte
+    Dim B As Byte
     
     chat = Buffer.ReadASCIIString()
     FontIndex = Buffer.ReadByte()
@@ -2302,26 +2302,26 @@ On Error GoTo ErrHandler
     If InStr(1, chat, "~") Then
         str = ReadField(2, chat, 126)
             If Val(str) > 255 Then
-                r = 255
+                R = 255
             Else
-                r = Val(str)
+                R = Val(str)
             End If
             
             str = ReadField(3, chat, 126)
             If Val(str) > 255 Then
-                g = 255
+                G = 255
             Else
-                g = Val(str)
+                G = Val(str)
             End If
             
             str = ReadField(4, chat, 126)
             If Val(str) > 255 Then
-                b = 255
+                B = 255
             Else
-                b = Val(str)
+                B = Val(str)
             End If
             
-        Call AddtoRichTextBox(frmComerciarUsu.CommerceConsole, Left$(chat, InStr(1, chat, "~") - 1), r, g, b, Val(ReadField(5, chat, 126)) <> 0, Val(ReadField(6, chat, 126)) <> 0)
+        Call AddtoRichTextBox(frmComerciarUsu.CommerceConsole, Left$(chat, InStr(1, chat, "~") - 1), R, G, B, Val(ReadField(5, chat, 126)) <> 0, Val(ReadField(6, chat, 126)) <> 0)
     Else
         With FontTypes(FontIndex)
             Call AddtoRichTextBox(frmComerciarUsu.CommerceConsole, chat, .Red, .Green, .Blue, .bold, .italic)
@@ -9974,7 +9974,7 @@ End Sub
 ' @param    b The blue component of the new chat color.
 ' @remarks  The data is not actually sent until the buffer is properly flushed.
 
-Public Sub WriteChatColor(ByVal r As Byte, ByVal g As Byte, ByVal b As Byte)
+Public Sub WriteChatColor(ByVal R As Byte, ByVal G As Byte, ByVal B As Byte)
 '***************************************************
 'Author: Juan Martín Sotuyo Dodero (Maraxus)
 'Last Modification: 05/17/06
@@ -9984,9 +9984,9 @@ Public Sub WriteChatColor(ByVal r As Byte, ByVal g As Byte, ByVal b As Byte)
         Call .WriteByte(ClientPacketID.GMCommands)
         Call .WriteByte(eGMCommands.ChatColor)
         
-        Call .WriteByte(r)
-        Call .WriteByte(g)
-        Call .WriteByte(b)
+        Call .WriteByte(R)
+        Call .WriteByte(G)
+        Call .WriteByte(B)
     End With
 End Sub
 
