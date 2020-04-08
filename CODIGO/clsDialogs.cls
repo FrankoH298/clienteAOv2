@@ -67,7 +67,6 @@ Private Const MS_ADD_EXTRA As Integer = 5000
 ' @param    x           X coord for rendering.
 ' @param    y           Y coord for rendering.
 ' @param    startTime   The time (in ms) at which the dialog was created.
-' @param    lifeTime    Time (in ms) this dialog should last.
 ' @param    charIndex   The charIndex that created this dialog.
 ' @param    color       The color to be used when rendering the text.
 ' @param    renderable  Set to True if the chat should be rendered this frame, False otherwise
@@ -77,10 +76,11 @@ Private Type dialog
     X           As Integer
     Y           As Integer
     startTime   As Long
-    lifeTime    As Long
     CharIndex   As Integer
-    color       As Long
+    Color       As Long
     renderable  As Boolean
+    Sube        As Integer
+    startTickCount As Long
 End Type
 
 ''
@@ -165,7 +165,7 @@ End Function
 ' @remarks  If there are no more free slots, and the char didn't have a previous dialog,
 '           the chat is ignored.
 
-Public Sub CreateDialog(ByRef chat As String, ByVal CharIndex As Integer, ByVal color As Long)
+Public Sub CreateDialog(ByRef chat As String, ByVal CharIndex As Integer, ByVal Color As Long)
 '**************************************************************
 'Author: Juan Martín Sotuyo Dodero
 'Last Modification: 08/29/07 by Rapsodius
@@ -192,11 +192,12 @@ Public Sub CreateDialog(ByRef chat As String, ByVal CharIndex As Integer, ByVal 
     
     With dialogs(slot)
         .CharIndex = CharIndex
-        .color = ColorToDX8(color)
+        .Color = ColorToDX8(Color)
         .renderable = False
-        .startTime = timeGetTime()
+        .startTime = timeGetTime() + MS_ADD_EXTRA + (MS_PER_CHAR * Len(chat))
         .textLine = FormatChat(chat)
-        .lifeTime = MS_ADD_EXTRA + (MS_PER_CHAR * Len(chat))
+        .Sube = 12
+        .startTickCount = timeGetTime()
     End With
 End Sub
 
@@ -321,16 +322,23 @@ Public Sub Render()
         'Decrease index to prevent jumping over a dialog
         'Crappy VB will cache the limit of the For loop, so even if it changed, it won't matter
         With dialogs(i - removedDialogs)
-            If (timeGetTime() - .startTime) >= .lifeTime Then
+            If (timeGetTime() >= .startTime) Then
                 Call RemoveDialog(.CharIndex)
                 
                 removedDialogs = removedDialogs + 1
             ElseIf .renderable Then
                 offset = -(usedFont.Size + 2) * UBound(.textLine())
                 
+                'Letras suben desde la cabeza.
+                If timeGetTime > .startTickCount Then
+                    .Sube = .Sube - 1
+                    .startTickCount = timeGetTime + 12
+                End If
+                If .Sube > 0 Then .Y = .Y + .Sube
+                
                 'Render it
                 For j = 0 To UBound(.textLine())
-                    Call DrawText(.X, .Y + offset, .textLine(j), .color)
+                    Call DrawText(.X, .Y + offset, .textLine(j), .Color)
                     offset = offset + usedFont.Size + 5
                 Next j
                 

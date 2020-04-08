@@ -390,29 +390,30 @@ Private Sub CheckKeys()
     
     'TODO: Debería informarle por consola?
     If Traveling Then Exit Sub
+
     'Don't allow any these keys during movement..
             If GetKeyState(CustomKeys.BindedKey(eKeyType.mKeyUp)) < 0 Then
-                If lastKeys.itemExist(CustomKeys.BindedKey(eKeyType.mKeyUp)) = False Then lastKeys.Add (CustomKeys.BindedKey(eKeyType.mKeyUp)) ' Agrega la tecla al arraylist
+                If lastKeys.itemExist(CustomKeys.BindedKey(eKeyType.mKeyUp)) = 0 Then Call lastKeys.Add(CustomKeys.BindedKey(eKeyType.mKeyUp))   ' Agrega la tecla al arraylist
             Else
-                If lastKeys.itemExist(CustomKeys.BindedKey(eKeyType.mKeyUp)) Then lastKeys.Remove (CustomKeys.BindedKey(eKeyType.mKeyUp)) ' Remueve la tecla que teniamos presionada
+                If lastKeys.itemExist(CustomKeys.BindedKey(eKeyType.mKeyUp)) <> 0 Then Call lastKeys.Remove(CustomKeys.BindedKey(eKeyType.mKeyUp)) ' Remueve la tecla que teniamos presionada
             End If
             
             If GetKeyState(CustomKeys.BindedKey(eKeyType.mKeyDown)) < 0 Then
-                If lastKeys.itemExist(CustomKeys.BindedKey(eKeyType.mKeyDown)) = False Then lastKeys.Add (CustomKeys.BindedKey(eKeyType.mKeyDown)) ' Agrega la tecla al arraylist
+                If lastKeys.itemExist(CustomKeys.BindedKey(eKeyType.mKeyDown)) = False Then Call lastKeys.Add(CustomKeys.BindedKey(eKeyType.mKeyDown))  ' Agrega la tecla al arraylist
             Else
-                If lastKeys.itemExist(CustomKeys.BindedKey(eKeyType.mKeyDown)) Then lastKeys.Remove (CustomKeys.BindedKey(eKeyType.mKeyDown)) ' Remueve la tecla que teniamos presionada
+                If lastKeys.itemExist(CustomKeys.BindedKey(eKeyType.mKeyDown)) Then Call lastKeys.Remove(CustomKeys.BindedKey(eKeyType.mKeyDown))  ' Remueve la tecla que teniamos presionada
             End If
             
             If GetKeyState(CustomKeys.BindedKey(eKeyType.mKeyLeft)) < 0 Then
-                If lastKeys.itemExist(CustomKeys.BindedKey(eKeyType.mKeyLeft)) = False Then lastKeys.Add (CustomKeys.BindedKey(eKeyType.mKeyLeft)) ' Agrega la tecla al arraylist
+                If lastKeys.itemExist(CustomKeys.BindedKey(eKeyType.mKeyLeft)) = False Then Call lastKeys.Add(CustomKeys.BindedKey(eKeyType.mKeyLeft))  ' Agrega la tecla al arraylist
             Else
-                If lastKeys.itemExist(CustomKeys.BindedKey(eKeyType.mKeyLeft)) Then lastKeys.Remove (CustomKeys.BindedKey(eKeyType.mKeyLeft)) ' Remueve la tecla que teniamos presionada
+                If lastKeys.itemExist(CustomKeys.BindedKey(eKeyType.mKeyLeft)) Then Call lastKeys.Remove(CustomKeys.BindedKey(eKeyType.mKeyLeft))  ' Remueve la tecla que teniamos presionada
             End If
             
             If GetKeyState(CustomKeys.BindedKey(eKeyType.mKeyRight)) < 0 Then
-                If lastKeys.itemExist(CustomKeys.BindedKey(eKeyType.mKeyRight)) = False Then lastKeys.Add (CustomKeys.BindedKey(eKeyType.mKeyRight)) ' Agrega la tecla al arraylist
+                If lastKeys.itemExist(CustomKeys.BindedKey(eKeyType.mKeyRight)) = False Then Call lastKeys.Add(CustomKeys.BindedKey(eKeyType.mKeyRight))  ' Agrega la tecla al arraylist
             Else
-                If lastKeys.itemExist(CustomKeys.BindedKey(eKeyType.mKeyRight)) Then lastKeys.Remove (CustomKeys.BindedKey(eKeyType.mKeyRight)) ' Remueve la tecla que teniamos presionada
+                If lastKeys.itemExist(CustomKeys.BindedKey(eKeyType.mKeyRight)) Then Call lastKeys.Remove(CustomKeys.BindedKey(eKeyType.mKeyRight))  ' Remueve la tecla que teniamos presionada
             End If
         If UserMoving = 0 Then
             If Not UserEstupido Then
@@ -799,7 +800,7 @@ Sub Main()
     
     Call AddtoRichTextBox(frmCargando.status, "Iniciando motor gráfico... ", 255, 255, 255, True, False, True)
     
-    If Not InitTileEngine(frmMain.hWnd, 149, 13, 32, 32, 13, 17, 9, 8, 8, 0.018) Then
+    If Not InitTileEngine(frmMain.hWnd, 32, 32, 13, 17, 9, 8, 8, 0.018) Then
         Call CloseClient
     End If
     
@@ -807,7 +808,7 @@ Sub Main()
     
     Call AddtoRichTextBox(frmCargando.status, "Creando animaciones extra... ", 255, 255, 255, True, False, True)
     
-UserMap = 1
+    UserMap = 1
     
     Call CargarArrayLluvia
     Call CargarAnimArmas
@@ -826,7 +827,7 @@ UserMap = 1
     Audio.SoundActivated = ClientSetup.bSound
     Audio.SoundEffectsActivated = ClientSetup.bSoundEffects
     'Inicializamos el inventario gráfico
-    Call Inventario.Initialize(DirectD3D8, frmMain.PicInv, MAX_INVENTORY_SLOTS)
+    Call Inventario.Initialize(DirectD3D8, frmMain.picInv, MAX_INVENTORY_SLOTS)
     
     Call Audio.MusicMP3Play(App.path & "\MP3\" & MP3_Inicio & ".mp3")
     

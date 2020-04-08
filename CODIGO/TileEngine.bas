@@ -275,17 +275,10 @@ Private WindowTileHeight As Integer
 Private HalfWindowTileWidth As Integer
 Private HalfWindowTileHeight As Integer
 
-'Offset del desde 0,0 del main view
-Private MainViewTop As Integer
-Private MainViewLeft As Integer
-
 'Cuantos tiles el engine mete en el BUFFER cuando
 'dibuja el mapa. Ojo un tamaño muy grande puede
 'volver el engine muy lento
 Public TileBufferSize As Integer
-
-Private TileBufferPixelOffsetX As Integer
-Private TileBufferPixelOffsetY As Integer
 
 'Tamaño de los tiles en pixels
 Public TilePixelHeight As Integer
@@ -308,11 +301,6 @@ Public NumChars As Integer
 Public LastChar As Integer
 Public NumWeaponAnims As Integer
 Public NumShieldAnims As Integer
-
-
-Private MainDestRect   As RECT
-Private MainViewRect   As RECT
-Private BackBufferRect As RECT
 
 Private MainViewWidth As Integer
 Private MainViewHeight As Integer
@@ -852,14 +840,14 @@ Sub MoveScreen(ByVal nHeading As E_Heading)
 End Sub
 
 Private Function HayFogata(ByRef location As Position) As Boolean
-    Dim J As Long
+    Dim j As Long
     Dim k As Long
     
-    For J = UserPos.X - 8 To UserPos.X + 8
+    For j = UserPos.X - 8 To UserPos.X + 8
         For k = UserPos.Y - 6 To UserPos.Y + 6
-            If InMapBounds(J, k) Then
-                If MapData(J, k).ObjGrh.GrhIndex = GrhFogata Then
-                    location.X = J
+            If InMapBounds(j, k) Then
+                If MapData(j, k).ObjGrh.GrhIndex = GrhFogata Then
+                    location.X = j
                     location.Y = k
                     
                     HayFogata = True
@@ -867,7 +855,7 @@ Private Function HayFogata(ByRef location As Position) As Boolean
                 End If
             End If
         Next k
-    Next J
+    Next j
 End Function
 
 Function NextOpenChar() As Integer
@@ -1460,7 +1448,7 @@ Sub LoadGraphics()
     Call SurfaceDB.Initialize(DirectD3D8, ClientSetup.byMemory)
 End Sub
 
-Public Function InitTileEngine(ByVal setDisplayFormhWnd As Long, ByVal setMainViewTop As Integer, ByVal setMainViewLeft As Integer, ByVal setTilePixelHeight As Integer, ByVal setTilePixelWidth As Integer, ByVal setWindowTileHeight As Integer, ByVal setWindowTileWidth As Integer, ByVal setTileBufferSize As Integer, ByVal pixelsToScrollPerFrameX As Integer, pixelsToScrollPerFrameY As Integer, ByVal engineSpeed As Single) As Boolean
+Public Function InitTileEngine(ByVal setDisplayFormhWnd As Long, ByVal setTilePixelHeight As Integer, ByVal setTilePixelWidth As Integer, ByVal setWindowTileHeight As Integer, ByVal setWindowTileWidth As Integer, ByVal setTileBufferSize As Integer, ByVal pixelsToScrollPerFrameX As Integer, pixelsToScrollPerFrameY As Integer, ByVal engineSpeed As Single) As Boolean
 '***************************************************
 'Author: Aaron Perkins
 'Last Modification: 08/14/07
@@ -1473,8 +1461,6 @@ Public Function InitTileEngine(ByVal setDisplayFormhWnd As Long, ByVal setMainVi
     Movement_Speed = 1
     
     'Fill startup variables
-    MainViewTop = setMainViewTop
-    MainViewLeft = setMainViewLeft
     TilePixelWidth = setTilePixelWidth
     TilePixelHeight = setTilePixelHeight
     WindowTileHeight = setWindowTileHeight
@@ -1483,11 +1469,6 @@ Public Function InitTileEngine(ByVal setDisplayFormhWnd As Long, ByVal setMainVi
     
     HalfWindowTileHeight = setWindowTileHeight \ 2
     HalfWindowTileWidth = setWindowTileWidth \ 2
-    
-    'Compute offset in pixels when rendering tile buffer.
-    'We diminish by one to get the top-left corner of the tile for rendering.
-    TileBufferPixelOffsetX = ((TileBufferSize - 1) * TilePixelWidth)
-    TileBufferPixelOffsetY = ((TileBufferSize - 1) * TilePixelHeight)
     
     engineBaseSpeed = engineSpeed
     
@@ -1513,14 +1494,6 @@ Public Function InitTileEngine(ByVal setDisplayFormhWnd As Long, ByVal setMainVi
     'Set scroll pixels per frame
     ScrollPixelsPerFrameX = pixelsToScrollPerFrameX
     ScrollPixelsPerFrameY = pixelsToScrollPerFrameY
-    
-    'Set the dest rect
-    With MainDestRect
-        .Left = TilePixelWidth * TileBufferSize - TilePixelWidth
-        .Top = TilePixelHeight * TileBufferSize - TilePixelHeight
-        .Right = .Left + MainViewWidth
-        .bottom = .Top + MainViewHeight
-    End With
     
 On Error GoTo 0
     
@@ -1673,12 +1646,6 @@ Sub ShowNextFrame(ByVal DisplayFormTop As Integer, ByVal DisplayFormLeft As Inte
 '***************************************************
     Static OffsetCounterX As Single
     Static OffsetCounterY As Single
-    
-    '****** Set main view rectangle ******
-    MainViewRect.Left = (DisplayFormLeft / Screen.TwipsPerPixelX) + MainViewLeft
-    MainViewRect.Top = (DisplayFormTop / Screen.TwipsPerPixelY) + MainViewTop
-    MainViewRect.Right = MainViewRect.Left + MainViewWidth
-    MainViewRect.bottom = MainViewRect.Top + MainViewHeight
     
     If EngineRun Then
         Call Engine_BeginScene

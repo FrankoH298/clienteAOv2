@@ -200,7 +200,7 @@ Begin VB.Form frmMain
       TabIndex        =   2
       TabStop         =   0   'False
       ToolTipText     =   "Chat"
-      Top             =   1839
+      Top             =   1920
       Visible         =   0   'False
       Width           =   8190
    End
@@ -1003,12 +1003,14 @@ Private Sub Form_Load()
         Set clsFormulario = New clsFormMovementManager
         clsFormulario.Initialize Me, 120
     End If
-
+    
     Me.Picture = LoadPicture(path(Graficos) & "VentanaPrincipal.JPG")
     
     InvEqu.Picture = LoadPicture(path(Graficos) & "CentroInventario.jpg")
     
     Call LoadButtons
+    
+    SendTxt.Visible = False
     
     Me.Left = 0
     Me.Top = 0
@@ -1402,7 +1404,7 @@ Private Sub imgAsignarSkill_Click()
     LlegaronSkills = False
     
     For i = 1 To NUMSKILLS
-        frmSkills3.Text1(i).Caption = UserSkills(i)
+        frmSkills3.text1(i).Caption = UserSkills(i)
     Next i
     
     Alocados = SkillPoints
@@ -1923,7 +1925,7 @@ Private Sub Label4_Click()
 
     ' Desactivo controles de hechizo
     hlst.Visible = False
-    cmdINFO.Visible = False
+    cmdInfo.Visible = False
     CmdLanzar.Visible = False
     
     cmdMoverHechi(0).Visible = False
@@ -1940,7 +1942,7 @@ Private Sub Label7_Click()
     
     ' Activo controles de hechizos
     hlst.Visible = True
-    cmdINFO.Visible = True
+    cmdInfo.Visible = True
     CmdLanzar.Visible = True
     
     cmdMoverHechi(0).Visible = True

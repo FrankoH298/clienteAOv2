@@ -2085,10 +2085,7 @@ On Error GoTo ErrHandler
     r = Buffer.ReadByte()
     g = Buffer.ReadByte()
     b = Buffer.ReadByte()
-    
-    Dim codigo— As String
-    codigo— = " ÔøΩ" ' Esto es la Ò despues de ser transcrita por el github
-    chat = Replace(chat, codigo—, "Ò")
+
     'Only add the chat if the character exists (a CharacterRemove may have been sent to the PC / NPC area before the buffer was flushed)
     If charlist(CharIndex).active Then _
         Call Dialogos.CreateDialog(Trim$(chat), CharIndex, RGB(r, g, b))

@@ -48,7 +48,7 @@ Private ImgContainer As Boolean
 
 Private LastRender As Long  ' GSZAO
 
-'Private InvSurface As DirectD3DSurface7            'DD Surface used to render everything
+Private DrawBuffer As cDIBSection
 
 Private Inventory() As Inventory    'User's inventory
 
@@ -56,19 +56,7 @@ Private WithEvents InventoryWindow As PictureBox    'Placeholder where to render
 Attribute InventoryWindow.VB_VarHelpID = -1
 
 Private Sub Class_Initialize()
-'***************************************************
-'Author: Juan Martín Sotuyo Dodero (Maraxus)
-'Last Modify Date: 27/07/04
-'
-'***************************************************
-End Sub
-
-Private Sub Class_Terminate()
-'***************************************************
-'Author: Juan Martín Sotuyo Dodero (Maraxus)
-'Last Modify Date: 27/07/04
-'
-'***************************************************
+    Set DrawBuffer = Nothing
 End Sub
 
 Public Sub ScrollInventory(ByVal Up As Boolean)
@@ -403,8 +391,19 @@ Private Sub DrawInventory()
                 
             End If
         Next loopc
+        
+        InventoryWindow.AutoRedraw = False
+
         Call Engine_EndScene(TempRect, InventoryWindow.hWnd)
-    
+
+        Call DrawBuffer.LoadPictureBlt(InventoryWindow.hdc)
+
+        InventoryWindow.AutoRedraw = True
+
+        Call DrawBuffer.PaintPicture(InventoryWindow.hdc, 0, 0, InventoryWindow.Width, InventoryWindow.Height, 0, 0, vbSrcCopy)
+
+        InventoryWindow.Picture = InventoryWindow.Image
+        
 End Sub
 Public Sub DrawInv()
     Call DrawInventory
@@ -432,6 +431,10 @@ Public Sub Initialize(ByRef DirectD3D As D3DX8, ByRef InvPic As PictureBox, ByVa
     InventoryWindow.ScaleMode = 3
     
     ReDim Inventory(1 To MaxObjs) As Inventory
+    
+    ' Inicializar buffer
+    Set DrawBuffer = New cDIBSection
+    Call DrawBuffer.Create(InvPic.Width, InvPic.Height)
     
     'initialize DX stuff
     'Dim SurfaceDesc As DDSURFACEDESC2

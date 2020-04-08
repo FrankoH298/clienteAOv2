@@ -616,7 +616,7 @@ End Enum
 'Inventario
 Type Inventory
     OBJIndex As Integer
-    Name As String
+    name As String
     GrhIndex As Integer
     '[Alejo]: tipo de datos ahora es Long
     Amount As Long
@@ -632,7 +632,7 @@ End Type
 
 Type NpCinV
     OBJIndex As Integer
-    Name As String
+    name As String
     GrhIndex As Integer
     Amount As Integer
     Valor As Single
@@ -671,7 +671,7 @@ Type tEstadisticasUsu
 End Type
 
 Type tItemsConstruibles
-    Name As String
+    name As String
     OBJIndex As Integer
     GrhIndex As Integer
     LinH As Integer

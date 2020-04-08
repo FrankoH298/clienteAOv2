@@ -214,15 +214,6 @@ Public Sub Draw(ByVal X As Long, _
    
 End Sub
  
-Public Sub Finish()
-
-    '
-    ' Flush the batch since we're finished
-    '
-    Call Flush
- 
-End Sub
- 
 Public Sub Flush()
  
     '
@@ -264,17 +255,17 @@ Public Sub Initialise(ByVal Capacity As Long)
    
     ReDim lpIndices(0 To Capacity * 6 - 1) As Integer
    
-    Dim i As Long, J As Integer
+    Dim i As Long, j As Integer
    
     For i = 0 To UBound(lpIndices) Step 6
-        lpIndices(i) = J
-        lpIndices(i + 1) = J + 1
-        lpIndices(i + 2) = J + 2
-        lpIndices(i + 3) = J + 2
-        lpIndices(i + 4) = J + 3
-        lpIndices(i + 5) = J
+        lpIndices(i) = j
+        lpIndices(i + 1) = j + 1
+        lpIndices(i + 2) = j + 2
+        lpIndices(i + 3) = j + 2
+        lpIndices(i + 4) = j + 3
+        lpIndices(i + 5) = j
        
-        J = J + 4
+        j = j + 4
     Next
    
     Call D3DIndexBuffer8SetData(m_IBuffer, 0, UBound(lpIndices), 0, lpIndices(0))
