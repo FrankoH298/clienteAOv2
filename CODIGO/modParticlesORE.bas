@@ -1,5 +1,4 @@
 Attribute VB_Name = "mod_Particulas"
-'ImperiumAO 1.4.6
 'Modulo Particles
 
 Option Explicit
