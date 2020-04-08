@@ -156,6 +156,7 @@ Public Type tColor
     r As Byte
     g As Byte
     b As Byte
+    l As Long
 End Type
 
 Public ColoresPJ(0 To 50) As tColor
@@ -684,7 +685,7 @@ Type tItemsConstruibles
     UpgradeGrhIndex As Integer
 End Type
 
-Public Nombres As Boolean
+Public Nombres As Integer
 
 'User status vars
 Global OtroInventario(1 To MAX_INVENTORY_SLOTS) As Inventory

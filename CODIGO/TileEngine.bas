@@ -1837,23 +1837,23 @@ Private Sub CharRender(ByVal CharIndex As Long, ByVal PixelOffsetX As Integer, B
                 
                     'Draw name over head
                     If LenB(.Nombre) > 0 Then
-                        If Nombres And (esGM(UserCharIndex) Or Abs(MouseTileX - .Pos.X) < 2 And (Abs(MouseTileY - .Pos.Y)) < 2) Then
+                        If ((Nombres = 1) And (esGM(UserCharIndex) Or Abs(MouseTileX - .Pos.X) < 2 And (Abs(MouseTileY - .Pos.Y)) < 2) Or Nombres = 2) Then
                             Pos = getTagPosition(.Nombre)
                             'Pos = InStr(.Nombre, "<")
                             'If Pos = 0 Then Pos = Len(.Nombre) + 2
                             
                             If .priv = 0 Then
                                 If .Atacable Then
-                                    Color = D3DColorXRGB(ColoresPJ(48).r, ColoresPJ(48).g, ColoresPJ(48).b)
+                                    Color = ColoresPJ(48).l
                                 Else
                                     If .Criminal Then
-                                        Color = D3DColorXRGB(ColoresPJ(50).r, ColoresPJ(50).g, ColoresPJ(50).b)
+                                        Color = ColoresPJ(50).l
                                     Else
-                                        Color = D3DColorXRGB(ColoresPJ(49).r, ColoresPJ(49).g, ColoresPJ(49).b)
+                                        Color = ColoresPJ(49).l
                                     End If
                                 End If
                             Else
-                                Color = D3DColorXRGB(ColoresPJ(.priv).r, ColoresPJ(.priv).g, ColoresPJ(.priv).b)
+                                Color = ColoresPJ(.priv).l
                             End If
                             
                             'Nick

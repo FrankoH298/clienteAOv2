@@ -110,22 +110,26 @@ On Error Resume Next
         ColoresPJ(i).r = CByte(Lector.GetValue(CStr(i), "R"))
         ColoresPJ(i).g = CByte(Lector.GetValue(CStr(i), "G"))
         ColoresPJ(i).b = CByte(Lector.GetValue(CStr(i), "B"))
+        ColoresPJ(i).l = D3DColorXRGB(ColoresPJ(i).r, ColoresPJ(i).g, ColoresPJ(i).b)
     Next i
     
     ' Crimi
     ColoresPJ(50).r = CByte(Lector.GetValue("CR", "R"))
     ColoresPJ(50).g = CByte(Lector.GetValue("CR", "G"))
     ColoresPJ(50).b = CByte(Lector.GetValue("CR", "B"))
+    ColoresPJ(50).l = D3DColorXRGB(ColoresPJ(50).r, ColoresPJ(50).g, ColoresPJ(50).b)
     
     ' Ciuda
     ColoresPJ(49).r = CByte(Lector.GetValue("CI", "R"))
     ColoresPJ(49).g = CByte(Lector.GetValue("CI", "G"))
     ColoresPJ(49).b = CByte(Lector.GetValue("CI", "B"))
+    ColoresPJ(49).l = D3DColorXRGB(ColoresPJ(49).r, ColoresPJ(49).g, ColoresPJ(49).b)
     
     ' Atacable
     ColoresPJ(48).r = CByte(Lector.GetValue("AT", "R"))
     ColoresPJ(48).g = CByte(Lector.GetValue("AT", "G"))
     ColoresPJ(48).b = CByte(Lector.GetValue("AT", "B"))
+    ColoresPJ(48).l = D3DColorXRGB(ColoresPJ(48).r, ColoresPJ(48).g, ColoresPJ(48).b)
     
 End Sub
 
@@ -827,7 +831,7 @@ Sub Main()
     Audio.SoundActivated = ClientSetup.bSound
     Audio.SoundEffectsActivated = ClientSetup.bSoundEffects
     'Inicializamos el inventario gráfico
-    Call Inventario.Initialize(DirectD3D8, frmMain.picInv, MAX_INVENTORY_SLOTS)
+    Call Inventario.Initialize(DirectD3D8, frmMain.PicInv, MAX_INVENTORY_SLOTS)
     
     Call Audio.MusicMP3Play(App.path & "\MP3\" & MP3_Inicio & ".mp3")
     

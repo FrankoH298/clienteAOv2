@@ -460,7 +460,7 @@ End Sub
 
 Private Sub imgConectarse_Click()
     Call CheckServers
-    
+
 #If UsarWrench = 1 Then
     If frmMain.Socket1.Connected Then
         frmMain.Socket1.Disconnect
@@ -562,6 +562,6 @@ Private Sub imgVerForo_Click()
     Call ShellExecute(0, "Open", "http://www.alkon.com.ar/foro/argentum-online.53/", "", App.path, SW_SHOWNORMAL)
 End Sub
 
-Private Sub txtPasswd_KeyPress(KeyAscii As Integer)
-    If KeyAscii = vbKeyReturn Then imgConectarse_Click
+Private Sub txtPasswd_KeyUp(KeyCode As Integer, Shift As Integer)
+    If KeyCode = vbKeyReturn Then imgConectarse_Click
 End Sub

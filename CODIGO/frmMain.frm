@@ -1218,7 +1218,8 @@ Private Sub Form_KeyUp(KeyCode As Integer, Shift As Integer)
                     Call EquiparItem
                 
                 Case CustomKeys.BindedKey(eKeyType.mKeyToggleNames)
-                    Nombres = Not Nombres
+                    Nombres = Nombres + 1
+                    If Nombres > 2 Then Nombres = 0
                 
                 Case CustomKeys.BindedKey(eKeyType.mKeyTamAnimal)
                     If UserEstado = 1 Then
@@ -1404,7 +1405,7 @@ Private Sub imgAsignarSkill_Click()
     LlegaronSkills = False
     
     For i = 1 To NUMSKILLS
-        frmSkills3.text1(i).Caption = UserSkills(i)
+        frmSkills3.Text1(i).Caption = UserSkills(i)
     Next i
     
     Alocados = SkillPoints
@@ -1925,7 +1926,7 @@ Private Sub Label4_Click()
 
     ' Desactivo controles de hechizo
     hlst.Visible = False
-    cmdInfo.Visible = False
+    cmdINFO.Visible = False
     CmdLanzar.Visible = False
     
     cmdMoverHechi(0).Visible = False
@@ -1942,7 +1943,7 @@ Private Sub Label7_Click()
     
     ' Activo controles de hechizos
     hlst.Visible = True
-    cmdInfo.Visible = True
+    cmdINFO.Visible = True
     CmdLanzar.Visible = True
     
     cmdMoverHechi(0).Visible = True
