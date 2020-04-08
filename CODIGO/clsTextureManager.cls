@@ -153,7 +153,7 @@ Private Function CrearGrafico(ByVal Archivo As Integer, _
             .FileName = Archivo
             
                 'Obtenemos el .bmp del archivo en Graphics.AO
-                Call modCompression.Get_Image(path(Graficos) & "", CStr(Archivo), Buffer())
+                Call mod_Compression.Get_Image(path(Graficos) & "", CStr(Archivo), Buffer())
                 
                 'Seteamos la textura.
                 Set .Texture = DirectD3D.CreateTextureFromFileInMemoryEx(DirectDevice, Buffer(0), UBound(Buffer()) + 1, D3DX_DEFAULT, D3DX_DEFAULT, 0, 0, D3DFMT_A8R8G8B8, _

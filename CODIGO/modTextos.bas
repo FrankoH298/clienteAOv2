@@ -1,4 +1,4 @@
-Attribute VB_Name = "modTextos"
+Attribute VB_Name = "mod_Textos"
 Option Explicit
 
 Private Declare Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" _
@@ -89,7 +89,7 @@ Private Sub Engine_Render_Text(ByRef Batch As clsBatch, _
     Dim Count As Integer
     Dim ascii() As Byte
     Dim i As Long
-    Dim j As Long
+    Dim J As Long
     Dim yOffset As Single
     Dim TempColor As Long
     Dim ResetColor As Byte
@@ -120,19 +120,19 @@ Private Sub Engine_Render_Text(ByRef Batch As clsBatch, _
             ascii() = StrConv(tempstr(i), vbFromUnicode)
         
             'Loop through the characters
-            For j = 1 To Len(tempstr(i))
+            For J = 1 To Len(tempstr(i))
 
-                Call CopyMemory(TempVA, UseFont.HeaderInfo.CharVA(ascii(j - 1)), 24) 'this number represents the size of "CharVA" struct
+                Call CopyMemory(TempVA, UseFont.HeaderInfo.CharVA(ascii(J - 1)), 24) 'this number represents the size of "CharVA" struct
                 
                 TempVA.X = X + Count
                 TempVA.Y = Y + yOffset
-            
+                Call Batch.SetAlpha(False)
                 Call Batch.Draw(TempVA.X, TempVA.Y, TempVA.W, TempVA.H, Color, TempVA.Tx1, TempVA.Ty1, TempVA.Tx2, TempVA.Ty2)
 
                 'Shift over the the position to render the next character
-                Count = Count + UseFont.HeaderInfo.CharWidth(ascii(j - 1))
+                Count = Count + UseFont.HeaderInfo.CharWidth(ascii(J - 1))
                 
-            Next j
+            Next J
             
         End If
     Next i

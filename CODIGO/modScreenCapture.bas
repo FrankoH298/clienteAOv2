@@ -1,4 +1,4 @@
-Attribute VB_Name = "modScreenCapture"
+Attribute VB_Name = "mod_ScreenCapture"
 Option Explicit
 
 ' ==================================================================================
@@ -509,7 +509,7 @@ Public Sub ScreenCapture(Optional ByVal Autofragshooter As Boolean = False)
 'Medio desprolijo donde pongo la pic, pero es lo que hay por ahora
 On Error GoTo Err:
     Dim hWnd As Long
-    Dim file As String
+    Dim File As String
     Dim sI As String
     Dim c As New cDIBSection
     Dim i As Long
@@ -532,14 +532,14 @@ On Error GoTo Err:
     
     If Not FileExist(App.path & dirFile, vbDirectory) Then MkDir (App.path & dirFile)
     
-    file = App.path & dirFile & "\" & Format(Now, "DD-MM-YYYY hh-mm-ss") & ".jpg"
+    File = App.path & dirFile & "\" & Format(Now, "DD-MM-YYYY hh-mm-ss") & ".jpg"
     
     frmScreenshots.Picture1.Refresh
     frmScreenshots.Picture1.Picture = frmScreenshots.Picture1.Image
     
     c.CreateFromPicture frmScreenshots.Picture1.Picture
     
-    SaveJPG c, file
+    SaveJPG c, File
     
     AddtoRichTextBox frmMain.RecTxt, "Screen Capturada!", 200, 200, 200, False, False, True
 Exit Sub
@@ -551,7 +551,7 @@ Err:
         Call ReleaseDC(frmMain.hWnd, hdcc)
 End Sub
 
-Public Function FullScreenCapture(ByVal file As String) As Boolean
+Public Function FullScreenCapture(ByVal File As String) As Boolean
 'Medio desprolijo donde pongo la pic, pero es lo que hay por ahora
     Dim c As New cDIBSection
     Dim hdcc As Long
@@ -584,7 +584,7 @@ Public Function FullScreenCapture(ByVal file As String) As Boolean
     
     c.CreateFromPicture frmScreenshots.Picture1.Picture
     
-    SaveJPG c, file
+    SaveJPG c, File
     
     FullScreenCapture = True
 End Function

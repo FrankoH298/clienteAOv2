@@ -670,18 +670,15 @@ Public Sub CargarServidores()
 On Error GoTo errorH
     Dim c As Integer
     Dim i As Long
-    Dim Lector As clsIniManager
-    Set Lector = New clsIniManager
-    Call Lector.Initialize(path(INIT) & "sinfo.dat")
     
-    c = Val(Lector.GetValue("INIT", "Cant"))
+    c = Val(GetVar(path(INIT) & "sinfo.dat", "INIT", "Cant"))
     
     ReDim ServersLst(1 To c) As tServerInfo
     For i = 1 To c
-        ServersLst(i).Desc = Lector.GetValue("S" & i, "Desc")
-        ServersLst(i).Ip = Trim$(Lector.GetValue("S" & i, "Ip"))
-        ServersLst(i).PassRecPort = CInt(Lector.GetValue("S" & i, "P2"))
-        ServersLst(i).Puerto = CInt(Lector.GetValue("S" & i, "PJ"))
+        ServersLst(i).Desc = GetVar(path(INIT) & "sinfo.dat", "S" & i, "Desc")
+        ServersLst(i).Ip = Trim$(GetVar(path(INIT) & "sinfo.dat", "S" & i, "Ip"))
+        ServersLst(i).PassRecPort = CInt(GetVar(path(INIT) & "sinfo.dat", "S" & i, "P2"))
+        ServersLst(i).Puerto = CInt(GetVar(path(INIT) & "sinfo.dat", "S" & i, "PJ"))
     Next i
     CurServer = 1
     
@@ -752,7 +749,7 @@ Sub Main()
     Call LeerConfiguracion
     
     ' Contraseña del archivo Graphics.AO
-    Call modCompression.GenerateContra("", 0) ' 0 = Graficos.AO
+    Call mod_Compression.GenerateContra("", 0) ' 0 = Graficos.AO
     
     DirectXInit
     
@@ -829,7 +826,7 @@ UserMap = 1
     Audio.SoundActivated = ClientSetup.bSound
     Audio.SoundEffectsActivated = ClientSetup.bSoundEffects
     'Inicializamos el inventario gráfico
-    Call Inventario.Initialize(DirectD3D8, frmMain.picInv, MAX_INVENTORY_SLOTS)
+    Call Inventario.Initialize(DirectD3D8, frmMain.PicInv, MAX_INVENTORY_SLOTS)
     
     Call Audio.MusicMP3Play(App.path & "\MP3\" & MP3_Inicio & ".mp3")
     

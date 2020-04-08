@@ -1,4 +1,4 @@
-Attribute VB_Name = "modCompression"
+Attribute VB_Name = "mod_Compression"
 Option Explicit
 
 Public Const PNG_SOURCE_FILE_EXT As String = ".png"
@@ -94,7 +94,7 @@ Public Sub GenerateContra(ByVal Contra As String, Optional Modo As Byte = 0)
 
 On Error Resume Next
 
-    Dim loopC As Byte
+    Dim loopc As Byte
     If Modo = 0 Then
         Erase GrhDatContra
     ElseIf Modo = 1 Then
@@ -104,15 +104,15 @@ On Error Resume Next
     If LenB(Contra) <> 0 Then
         If Modo = 0 Then
             ReDim GrhDatContra(Len(Contra) - 1)
-            For loopC = 0 To UBound(GrhDatContra)
-                GrhDatContra(loopC) = Asc(mid(Contra, loopC + 1, 1))
-            Next loopC
+            For loopc = 0 To UBound(GrhDatContra)
+                GrhDatContra(loopc) = Asc(mid(Contra, loopc + 1, 1))
+            Next loopc
             GrhUsaContra = True
         ElseIf Modo = 1 Then
             ReDim MapsDatContra(Len(Contra) - 1)
-            For loopC = 0 To UBound(MapsDatContra)
-                MapsDatContra(loopC) = Asc(mid(Contra, loopC + 1, 1))
-            Next loopC
+            For loopc = 0 To UBound(MapsDatContra)
+                MapsDatContra(loopc) = Asc(mid(Contra, loopc + 1, 1))
+            Next loopc
             MapsUsaContra = True
         End If
     Else
@@ -148,40 +148,40 @@ End Function
 ' @param    first The first index in the list.
 ' @param    last The last index in the list.
 
-Private Sub Sort_Info_Headers(ByRef InfoHead() As INFOHEADER, ByVal first As Long, ByVal last As Long)
+Private Sub Sort_Info_Headers(ByRef InfoHead() As INFOHEADER, ByVal First As Long, ByVal Last As Long)
 '*****************************************************************
 'Author: Nicolas Matias Gonzalez (NIGO)
 'Last Modify Date: 08/20/2007
 'Sorts the info headers by their file name using QuickSort.
 '*****************************************************************
     Dim aux As INFOHEADER
-    Dim Min As Long
-    Dim Max As Long
+    Dim min As Long
+    Dim max As Long
     Dim comp As String
     
-    Min = first
-    Max = last
+    min = First
+    max = Last
     
-    comp = InfoHead((Min + Max) \ 2).strFileName
+    comp = InfoHead((min + max) \ 2).strFileName
     
-    Do While Min <= Max
-        Do While InfoHead(Min).strFileName < comp And Min < last
-            Min = Min + 1
+    Do While min <= max
+        Do While InfoHead(min).strFileName < comp And min < Last
+            min = min + 1
         Loop
-        Do While InfoHead(Max).strFileName > comp And Max > first
-            Max = Max - 1
+        Do While InfoHead(max).strFileName > comp And max > First
+            max = max - 1
         Loop
-        If Min <= Max Then
-            aux = InfoHead(Min)
-            InfoHead(Min) = InfoHead(Max)
-            InfoHead(Max) = aux
-            Min = Min + 1
-            Max = Max - 1
+        If min <= max Then
+            aux = InfoHead(min)
+            InfoHead(min) = InfoHead(max)
+            InfoHead(max) = aux
+            min = min + 1
+            max = max - 1
         End If
     Loop
     
-    If first < Max Then Call Sort_Info_Headers(InfoHead, first, Max)
-    If Min < last Then Call Sort_Info_Headers(InfoHead, Min, last)
+    If First < max Then Call Sort_Info_Headers(InfoHead, First, max)
+    If min < Last Then Call Sort_Info_Headers(InfoHead, min, Last)
 End Sub
 
 ''
@@ -298,7 +298,7 @@ Private Sub Compress_Data(ByRef data() As Byte, Optional Modo As Byte = 0)
     Dim Dimensions As Long
     Dim DimBuffer As Long
     Dim BufTemp() As Byte
-    Dim loopC As Long
+    Dim loopc As Long
     
     Dimensions = UBound(data) + 1
     
@@ -321,15 +321,15 @@ Private Sub Compress_Data(ByRef data() As Byte, Optional Modo As Byte = 0)
     ' GSZAO - Seguridad
     If Modo = 0 And GrhUsaContra = True Then
         If UBound(GrhDatContra) <= UBound(data) And UBound(GrhDatContra) <> 0 Then
-            For loopC = 0 To UBound(GrhDatContra)
-                data(loopC) = data(loopC) Xor GrhDatContra(loopC)
-            Next loopC
+            For loopc = 0 To UBound(GrhDatContra)
+                data(loopc) = data(loopc) Xor GrhDatContra(loopc)
+            Next loopc
         End If
     ElseIf Modo = 1 And MapsUsaContra = True Then
         If UBound(MapsDatContra) <= UBound(data) And UBound(MapsDatContra) <> 0 Then
-            For loopC = 0 To UBound(MapsDatContra)
-                data(loopC) = data(loopC) Xor MapsDatContra(loopC)
-            Next loopC
+            For loopc = 0 To UBound(MapsDatContra)
+                data(loopc) = data(loopc) Xor MapsDatContra(loopc)
+            Next loopc
         End If
     End If
     ' GSZAO - Seguridad
@@ -349,22 +349,22 @@ Private Sub Decompress_Data(ByRef data() As Byte, ByVal OrigSize As Long, Option
 'Decompresses binary data
 '*****************************************************************
     Dim BufTemp() As Byte
-    Dim loopC As Integer
+    Dim loopc As Integer
     
     ReDim BufTemp(OrigSize - 1)
     
     ' GSZAO - Seguridad
     If Modo = 0 And GrhUsaContra = True Then
         If UBound(GrhDatContra) <= UBound(data) And UBound(GrhDatContra) <> 0 Then
-            For loopC = 0 To UBound(GrhDatContra)
-                data(loopC) = data(loopC) Xor GrhDatContra(loopC)
-            Next loopC
+            For loopc = 0 To UBound(GrhDatContra)
+                data(loopc) = data(loopc) Xor GrhDatContra(loopc)
+            Next loopc
         End If
     ElseIf Modo = 1 And MapsUsaContra = True Then
         If UBound(MapsDatContra) <= UBound(data) And UBound(MapsDatContra) <> 0 Then
-            For loopC = 0 To UBound(MapsDatContra)
-                data(loopC) = data(loopC) Xor MapsDatContra(loopC)
-            Next loopC
+            For loopc = 0 To UBound(MapsDatContra)
+                data(loopc) = data(loopc) Xor MapsDatContra(loopc)
+            Next loopc
         End If
     End If
     ' GSZAO - Seguridad
@@ -401,7 +401,7 @@ Public Function Compress_Files(ByRef SourcePath As String, ByRef OutputPath As S
     Dim SourceData() As Byte
     Dim FileHead As FILEHEADER
     Dim InfoHead() As INFOHEADER
-    Dim loopC As Long
+    Dim loopc As Long
 
 On Local Error GoTo ErrHandler
     If Modo = 0 Then
@@ -465,8 +465,8 @@ On Local Error GoTo ErrHandler
     End If
     
     If Not prgBar Is Nothing Then
-        prgBar.value = 0
-        prgBar.Max = FileHead.lngNumFiles + 1
+        prgBar.Value = 0
+        prgBar.max = FileHead.lngNumFiles + 1
     End If
     
     'Destroy file if it previuosly existed
@@ -488,13 +488,13 @@ On Local Error GoTo ErrHandler
         Seek OutputFile, FileHead.lngFileSize + 1
         
         ' Process every file!
-        For loopC = 0 To FileHead.lngNumFiles - 1
+        For loopc = 0 To FileHead.lngNumFiles - 1
               
             SourceFile = FreeFile()
-            Open SourcePath & InfoHead(loopC).strFileName For Binary Access Read Lock Write As SourceFile
+            Open SourcePath & InfoHead(loopc).strFileName For Binary Access Read Lock Write As SourceFile
                 
                 'Find out how large the file is and resize the data array appropriately
-                InfoHead(loopC).lngFileSizeUncompressed = LOF(SourceFile)
+                InfoHead(loopc).lngFileSizeUncompressed = LOF(SourceFile)
                 ReDim SourceData(LOF(SourceFile) - 1)
                 
                 'Get the data from the file
@@ -506,7 +506,7 @@ On Local Error GoTo ErrHandler
                 'Store it in the resource file
                 Put OutputFile, , SourceData
                 
-                With InfoHead(loopC)
+                With InfoHead(loopc)
                     'Set up the info headers
                     .lngFileSize = UBound(SourceData) + 1
                     .lngFileStart = FileHead.lngFileSize + 1
@@ -520,9 +520,9 @@ On Local Error GoTo ErrHandler
             Close SourceFile
         
             'Update progress bar
-            If Not prgBar Is Nothing Then prgBar.value = prgBar.value + 1
+            If Not prgBar Is Nothing Then prgBar.Value = prgBar.Value + 1
             DoEvents
-        Next loopC
+        Next loopc
         
         'Store the headers in the file
         Seek OutputFile, 1
@@ -640,7 +640,7 @@ Public Function Extract_Files(ByRef ResourcePath As String, ByRef OutputPath As 
 'Last Modify Date: 17/07/2012 - ^[GS]^
 'Extracts all files from a resource file
 '*****************************************************************
-    Dim loopC As Long
+    Dim loopc As Long
     Dim ResourceFile As Integer
     Dim ResourceFilePath As String
     Dim OutputFile As Integer
@@ -676,10 +676,10 @@ On Local Error GoTo ErrHandler
         Get ResourceFile, , InfoHead
         
         'Check if there is enough hard drive space to extract all files
-        For loopC = 0 To UBound(InfoHead)
+        For loopc = 0 To UBound(InfoHead)
             
-            RequiredSpace = RequiredSpace + InfoHead(loopC).lngFileSizeUncompressed
-        Next loopC
+            RequiredSpace = RequiredSpace + InfoHead(loopc).lngFileSizeUncompressed
+        Next loopc
         
         If RequiredSpace >= General_Drive_Get_Free_Bytes(Left$(App.path, 3)) Then
             Erase InfoHead
@@ -691,22 +691,22 @@ On Local Error GoTo ErrHandler
     
     'Update progress bar
     If Not prgBar Is Nothing Then
-        prgBar.value = 0
-        prgBar.Max = FileHead.lngNumFiles + 1
+        prgBar.Value = 0
+        prgBar.max = FileHead.lngNumFiles + 1
     End If
     
     'Extract all of the files from the binary file
-    For loopC = 0 To UBound(InfoHead)
+    For loopc = 0 To UBound(InfoHead)
         'Extract this file
-        If Extract_File(ResourcePath, InfoHead(loopC), SourceData) Then
+        If Extract_File(ResourcePath, InfoHead(loopc), SourceData) Then
             'Destroy file if it previuosly existed
-            If FileExist(OutputPath & InfoHead(loopC).strFileName, vbNormal) Then
-                Call Kill(OutputPath & InfoHead(loopC).strFileName)
+            If FileExist(OutputPath & InfoHead(loopc).strFileName, vbNormal) Then
+                Call Kill(OutputPath & InfoHead(loopc).strFileName)
             End If
             
             'Save it!
             OutputFile = FreeFile()
-            Open OutputPath & InfoHead(loopC).strFileName For Binary As OutputFile
+            Open OutputPath & InfoHead(loopc).strFileName For Binary As OutputFile
                 Put OutputFile, , SourceData
             Close OutputFile
             
@@ -715,14 +715,14 @@ On Local Error GoTo ErrHandler
             Erase SourceData
             Erase InfoHead
             
-            Call MsgBox("No se pudo extraer el archivo " & InfoHead(loopC).strFileName, vbOKOnly, "Error")
+            Call MsgBox("No se pudo extraer el archivo " & InfoHead(loopc).strFileName, vbOKOnly, "Error")
             Exit Function
         End If
             
         'Update progress bar
-        If Not prgBar Is Nothing Then prgBar.value = prgBar.value + 1
+        If Not prgBar Is Nothing Then prgBar.Value = prgBar.Value + 1
         DoEvents
-    Next loopC
+    Next loopc
     
     Erase InfoHead
     Extract_Files = True
@@ -994,8 +994,8 @@ On Local Error GoTo ErrHandler
             Open OutputFilePath For Binary Access Read Write As OutputFile
                 
                 If Not prgBar Is Nothing Then
-                    prgBar.value = 0
-                    prgBar.Max = (OldFileHead.lngNumFiles + NewFileHead.lngNumFiles) + 1
+                    prgBar.Value = 0
+                    prgBar.max = (OldFileHead.lngNumFiles + NewFileHead.lngNumFiles) + 1
                 End If
                 
                 'put previous file version (unencrypted)
@@ -1008,7 +1008,7 @@ On Local Error GoTo ErrHandler
                   And ReadNext_InfoHead(NewResourceFile, NewFileHead, NewInfoHead, NewReadFiles) Then
                     
                     'Update
-                    prgBar.value = prgBar.value + 2
+                    prgBar.Value = prgBar.Value + 2
                     
                     Do 'Main loop
                         'Comparisons are between encrypted names, for ordering issues
@@ -1045,7 +1045,7 @@ On Local Error GoTo ErrHandler
                             End If
                             
                             'Update
-                            If Not prgBar Is Nothing Then prgBar.value = prgBar.value + 2
+                            If Not prgBar Is Nothing Then prgBar.Value = prgBar.Value + 2
                         
                         ElseIf OldInfoHead.strFileName < NewInfoHead.strFileName Then
                             
@@ -1062,7 +1062,7 @@ On Local Error GoTo ErrHandler
                             End If
                             
                             'Update
-                            If Not prgBar Is Nothing Then prgBar.value = prgBar.value + 1
+                            If Not prgBar Is Nothing Then prgBar.Value = prgBar.Value + 1
                         
                         Else
                             
@@ -1085,7 +1085,7 @@ On Local Error GoTo ErrHandler
                             End If
                             
                             'Update
-                            If Not prgBar Is Nothing Then prgBar.value = prgBar.value + 1
+                            If Not prgBar Is Nothing Then prgBar.Value = prgBar.Value + 1
                         End If
                         
                         DoEvents
@@ -1105,7 +1105,7 @@ On Local Error GoTo ErrHandler
                     Put OutputFile, , OldInfoHead
                     
                     'Update
-                    If Not prgBar Is Nothing Then prgBar.value = prgBar.value + 1
+                    If Not prgBar Is Nothing Then prgBar.Value = prgBar.Value + 1
                     DoEvents
                 Wend
                 
@@ -1122,7 +1122,7 @@ On Local Error GoTo ErrHandler
                     Put OutputFile, , data
                     
                     'Update
-                    If Not prgBar Is Nothing Then prgBar.value = prgBar.value + 1
+                    If Not prgBar Is Nothing Then prgBar.Value = prgBar.Value + 1
                     DoEvents
                 Wend
             
@@ -1234,8 +1234,8 @@ On Local Error GoTo ErrHandler
                 Put OutputFile, , PatchFileHead
   
                 If Not prgBar Is Nothing Then
-                    prgBar.value = 0
-                    prgBar.Max = PatchFileHead.lngNumFiles + 1
+                    prgBar.Value = 0
+                    prgBar.max = PatchFileHead.lngNumFiles + 1
                 End If
                 
                 'Update
@@ -1266,7 +1266,7 @@ On Local Error GoTo ErrHandler
                             'Update
                             DataOutputPos = DataOutputPos + UBound(data) + 1
                             WrittenFiles = WrittenFiles + 1
-                            If Not prgBar Is Nothing Then prgBar.value = WrittenFiles
+                            If Not prgBar Is Nothing Then prgBar.Value = WrittenFiles
                         Else
                             Exit Do
                         End If
@@ -1299,7 +1299,7 @@ On Local Error GoTo ErrHandler
                                 'Update
                                 DataOutputPos = DataOutputPos + UBound(data) + 1
                                 WrittenFiles = WrittenFiles + 1
-                                If Not prgBar Is Nothing Then prgBar.value = WrittenFiles
+                                If Not prgBar Is Nothing Then prgBar.Value = WrittenFiles
                             Else
                                 Err.Description = "Incongruencia en archivos de recurso"
                                 GoTo ErrHandler
@@ -1321,7 +1321,7 @@ On Local Error GoTo ErrHandler
                                 'Update
                                 DataOutputPos = DataOutputPos + UBound(data) + 1
                                 WrittenFiles = WrittenFiles + 1
-                                If Not prgBar Is Nothing Then prgBar.value = WrittenFiles
+                                If Not prgBar Is Nothing Then prgBar.Value = WrittenFiles
                             Else
                                 Err.Description = "Incongruencia en archivos de recurso"
                                 GoTo ErrHandler
@@ -1345,7 +1345,7 @@ On Local Error GoTo ErrHandler
                     'Update
                     DataOutputPos = DataOutputPos + UBound(data) + 1
                     WrittenFiles = WrittenFiles + 1
-                    If Not prgBar Is Nothing Then prgBar.value = WrittenFiles
+                    If Not prgBar Is Nothing Then prgBar.Value = WrittenFiles
                     DoEvents
                 Wend
             

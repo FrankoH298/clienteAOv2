@@ -852,14 +852,14 @@ Sub MoveScreen(ByVal nHeading As E_Heading)
 End Sub
 
 Private Function HayFogata(ByRef location As Position) As Boolean
-    Dim j As Long
+    Dim J As Long
     Dim k As Long
     
-    For j = UserPos.X - 8 To UserPos.X + 8
+    For J = UserPos.X - 8 To UserPos.X + 8
         For k = UserPos.Y - 6 To UserPos.Y + 6
-            If InMapBounds(j, k) Then
-                If MapData(j, k).ObjGrh.GrhIndex = GrhFogata Then
-                    location.X = j
+            If InMapBounds(J, k) Then
+                If MapData(J, k).ObjGrh.GrhIndex = GrhFogata Then
+                    location.X = J
                     location.Y = k
                     
                     HayFogata = True
@@ -867,7 +867,7 @@ Private Function HayFogata(ByRef location As Position) As Boolean
                 End If
             End If
         Next k
-    Next j
+    Next J
 End Function
 
 Function NextOpenChar() As Integer
@@ -1972,10 +1972,11 @@ Public Sub Device_Textured_Render(ByVal X As Single, ByVal Y As Single, _
     
     With SpriteBatch
         Call .SetTexture(Texture)
+        Call .SetAlpha(Alpha)
         If TextureWidth <> 0 And TextureHeight <> 0 Then
-            Call .Draw(X, Y, Width, Height, Color, sX / TextureWidth, sY / TextureHeight, (sX + Width) / TextureWidth, (sY + Height) / TextureHeight, Alpha, angle)
+            Call .Draw(X, Y, Width, Height, Color, sX / TextureWidth, sY / TextureHeight, (sX + Width) / TextureWidth, (sY + Height) / TextureHeight, angle)
         Else
-            Call .Draw(X, Y, TextureWidth, TextureHeight, Color, , , , , Alpha, angle)
+            Call .Draw(X, Y, TextureWidth, TextureHeight, Color, , , , , angle)
         End If
     End With
         

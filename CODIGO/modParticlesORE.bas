@@ -1,4 +1,4 @@
-Attribute VB_Name = "modParticlesORE"
+Attribute VB_Name = "mod_Particulas"
 'ImperiumAO 1.4.6
 'Modulo Particles
 
@@ -231,8 +231,8 @@ Public Function General_Char_Particle_Create(ByVal ParticulaInd As Long, ByVal c
 
 Dim rgb_list(0 To 3) As Long
 With StreamData(ParticulaInd)
-rgb_list(0) = D3DColorXRGB(.colortint(0).r, .colortint(0).g, .colortint(0).b)
-rgb_list(1) = D3DColorXRGB(.colortint(1).r, .colortint(1).g, .colortint(1).b)
+rgb_list(1) = D3DColorXRGB(.colortint(0).r, .colortint(0).g, .colortint(0).b)
+rgb_list(0) = D3DColorXRGB(.colortint(1).r, .colortint(1).g, .colortint(1).b)
 rgb_list(2) = D3DColorXRGB(.colortint(2).r, .colortint(2).g, .colortint(2).b)
 rgb_list(3) = D3DColorXRGB(.colortint(3).r, .colortint(3).g, .colortint(3).b)
 
@@ -251,10 +251,10 @@ Public Function General_Particle_Create(ByVal ParticulaInd As Long, ByVal X As I
 
 Dim rgb_list(0 To 3) As Long
 With StreamData(ParticulaInd)
-    rgb_list(0) = D3DColorXRGB(.colortint(0).r, .colortint(0).g, .colortint(0).b)
-    rgb_list(1) = D3DColorXRGB(.colortint(1).r, .colortint(1).g, .colortint(1).b)
-    rgb_list(2) = D3DColorXRGB(.colortint(2).r, .colortint(2).g, .colortint(2).b)
-    rgb_list(3) = D3DColorXRGB(.colortint(3).r, .colortint(3).g, .colortint(3).b)
+rgb_list(1) = D3DColorXRGB(.colortint(0).r, .colortint(0).g, .colortint(0).b)
+rgb_list(0) = D3DColorXRGB(.colortint(1).r, .colortint(1).g, .colortint(1).b)
+rgb_list(2) = D3DColorXRGB(.colortint(2).r, .colortint(2).g, .colortint(2).b)
+rgb_list(3) = D3DColorXRGB(.colortint(3).r, .colortint(3).g, .colortint(3).b)
     
     General_Particle_Create = Particle_Group_Create(X, Y, .grh_list, rgb_list(), .NumOfParticles, ParticulaInd, _
         .alphaBlend, IIf(particle_life = 0, .life_counter, particle_life), .speed, , .x1, .y1, .angle, _
