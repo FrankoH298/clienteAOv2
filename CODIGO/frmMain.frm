@@ -3,13 +3,14 @@ Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
 Object = "{33101C00-75C3-11CF-A8A0-444553540000}#1.0#0"; "cswsk32.ocx"
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "MSWINSCK.OCX"
 Begin VB.Form frmMain 
-   BorderStyle     =   0  'None
-   ClientHeight    =   8715
-   ClientLeft      =   360
-   ClientTop       =   300
+   BorderStyle     =   1  'Fixed Single
+   ClientHeight    =   9000
+   ClientLeft      =   15
+   ClientTop       =   15
    ClientWidth     =   12000
    ClipControls    =   0   'False
    ControlBox      =   0   'False
+   DrawStyle       =   6  'Inside Solid
    BeginProperty Font 
       Name            =   "Tahoma"
       Size            =   8.25
@@ -26,7 +27,8 @@ Begin VB.Form frmMain
    MaxButton       =   0   'False
    MinButton       =   0   'False
    PaletteMode     =   1  'UseZOrder
-   ScaleHeight     =   581
+   Picture         =   "frmMain.frx":030A
+   ScaleHeight     =   600
    ScaleMode       =   3  'Pixel
    ScaleWidth      =   800
    StartUpPosition =   2  'CenterScreen
@@ -266,7 +268,7 @@ Begin VB.Form frmMain
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       DisableNoScroll =   -1  'True
-      TextRTF         =   $"frmMain.frx":030A
+      TextRTF         =   $"frmMain.frx":3A3BB
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -365,7 +367,7 @@ Begin VB.Form frmMain
       EndProperty
       Height          =   450
       Left            =   10320
-      MouseIcon       =   "frmMain.frx":0387
+      MouseIcon       =   "frmMain.frx":3A438
       MousePointer    =   99  'Custom
       TabIndex        =   19
       Top             =   1920
@@ -398,7 +400,7 @@ Begin VB.Form frmMain
    Begin VB.Image cmdInfo 
       Height          =   405
       Left            =   10680
-      MouseIcon       =   "frmMain.frx":04D9
+      MouseIcon       =   "frmMain.frx":3A58A
       MousePointer    =   99  'Custom
       Top             =   5280
       Visible         =   0   'False
@@ -428,9 +430,9 @@ Begin VB.Form frmMain
       Height          =   240
       Index           =   0
       Left            =   11430
-      MouseIcon       =   "frmMain.frx":062B
+      MouseIcon       =   "frmMain.frx":3A6DC
       MousePointer    =   99  'Custom
-      Picture         =   "frmMain.frx":077D
+      Picture         =   "frmMain.frx":3A82E
       Top             =   3480
       Visible         =   0   'False
       Width           =   225
@@ -439,9 +441,9 @@ Begin VB.Form frmMain
       Height          =   240
       Index           =   1
       Left            =   11430
-      MouseIcon       =   "frmMain.frx":0AC1
+      MouseIcon       =   "frmMain.frx":3AB72
       MousePointer    =   99  'Custom
-      Picture         =   "frmMain.frx":0C13
+      Picture         =   "frmMain.frx":3ACC4
       Top             =   3225
       Visible         =   0   'False
       Width           =   225
@@ -560,7 +562,7 @@ Begin VB.Form frmMain
    Begin VB.Image CmdLanzar 
       Height          =   375
       Left            =   8760
-      MouseIcon       =   "frmMain.frx":0F57
+      MouseIcon       =   "frmMain.frx":3B008
       MousePointer    =   99  'Custom
       Top             =   5280
       Visible         =   0   'False
@@ -579,7 +581,7 @@ Begin VB.Form frmMain
       EndProperty
       Height          =   435
       Left            =   8880
-      MouseIcon       =   "frmMain.frx":10A9
+      MouseIcon       =   "frmMain.frx":3B15A
       MousePointer    =   99  'Custom
       TabIndex        =   18
       Top             =   1920
@@ -752,14 +754,6 @@ Begin VB.Form frmMain
       MousePointer    =   99  'Custom
       Top             =   3225
       Width           =   225
-   End
-   Begin VB.Shape MainViewShp 
-      BorderColor     =   &H00404040&
-      Height          =   6240
-      Left            =   180
-      Top             =   2235
-      Visible         =   0   'False
-      Width           =   8160
    End
    Begin VB.Image InvEqu 
       Height          =   4230
@@ -1873,21 +1867,21 @@ Private Sub Form_DblClick()
 End Sub
 
 Private Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
-    MouseX = X - MainViewShp.Left
-    MouseY = Y - MainViewShp.Top
+    MouseX = X - MainViewPic.Left
+    MouseY = Y - MainViewPic.Top
     
     'Trim to fit screen
     If MouseX < 0 Then
         MouseX = 0
-    ElseIf MouseX > MainViewShp.Width Then
-        MouseX = MainViewShp.Width
+    ElseIf MouseX > MainViewPic.Width Then
+        MouseX = MainViewPic.Width
     End If
     
     'Trim to fit screen
     If MouseY < 0 Then
         MouseY = 0
-    ElseIf MouseY > MainViewShp.Height Then
-        MouseY = MainViewShp.Height
+    ElseIf MouseY > MainViewPic.Height Then
+        MouseY = MainViewPic.Height
     End If
     
     LastPressed.ToggleToNormal

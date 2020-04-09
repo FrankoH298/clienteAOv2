@@ -1531,7 +1531,7 @@ Public Sub DirectXInit()
     Set DirectDevice = DirectD3D.CreateDevice( _
                         D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, _
                         D3DWindow.hDeviceWindow, _
-                        D3DCREATE_HARDWARE_VERTEXPROCESSING, _
+                        D3DCREATE_MIXED_VERTEXPROCESSING, _
                         D3DWindow)
 
     'Seteamos la matriz de proyeccion.
