@@ -1441,11 +1441,11 @@ DoFogataFx
 End Function
 
 Public Sub DesvanecerTecho()
-        If bTecho Then
-            If Alpha_Techo - 5 * (deltaTime) > 0 Then Alpha_Techo = Alpha_Techo - 5 * (deltaTime)
-        Else
-            If Alpha_Techo + 5 * (deltaTime) < 255 Then Alpha_Techo = Alpha_Techo + 5 * (deltaTime)
-        End If
+    If bTecho Then
+        If Alpha_Techo - 30 * timerTicksPerFrame > 0 Then Alpha_Techo = Alpha_Techo - 30 * timerTicksPerFrame
+    Else
+        If Alpha_Techo + 30 * timerTicksPerFrame < 255 Then Alpha_Techo = Alpha_Techo + 30 * timerTicksPerFrame
+    End If
 End Sub
 
 
@@ -1759,34 +1759,6 @@ Private Function GetElapsedTime() As Single
     
     'Get next end time
     Call QueryPerformanceCounter(End_Time)
-End Function
-
-Public Function SetElapsedTime(ByVal Start As Boolean) As Single
-'**************************************************************
-'Author: Aaron Perkins
-'Last Modify Date: 23/05/2011 By MaTeO
-'Gets the time that past since the last call
-'[MaTeO] Agrego cambios a la funcion
-'**************************************************************
-    Dim Start_Time As Currency
-    Static End_Time As Currency
-    Static Timer_Freq As Currency
-    'Get the timer frequency
-    If Timer_Freq = 0 Then
-        QueryPerformanceFrequency Timer_Freq
-    End If
-    
-    'Get current time
-    Call QueryPerformanceCounter(Start_Time)
-    
-    If Not Start Then
-        'Calculate elapsed time
-        SetElapsedTime = (Start_Time - End_Time) / Timer_Freq * 1000
-    
-        'Get next end time
-    Else
-        Call QueryPerformanceCounter(End_Time)
-    End If
 End Function
 
 Private Sub CharRender(ByVal CharIndex As Long, ByVal PixelOffsetX As Integer, ByVal PixelOffsetY As Integer)

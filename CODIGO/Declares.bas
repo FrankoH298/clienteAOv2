@@ -66,9 +66,7 @@ Public Projection As D3DMATRIX
 Public View As D3DMATRIX
 
 'Desvanecimientos
-Public Alpha_Techo As Byte
-
-Public deltaTime As Single
+Public Alpha_Techo As Single
 
 Public CustomKeys As New clsCustomKeys
 Public CustomMessages As New clsCustomMessages

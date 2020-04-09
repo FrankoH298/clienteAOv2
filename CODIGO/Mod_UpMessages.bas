@@ -10,12 +10,12 @@ Option Explicit
 Public Type textUp
     
     Text            As String
-    Alpha           As Byte
+    Alpha           As Single
     R               As Byte
     G               As Byte
     B               As Byte
     startTickCount  As Long
-    Sube            As Long
+    Sube            As Single
     active          As Byte
 End Type
 
@@ -25,9 +25,8 @@ Private Enum TipoMsgUp
     Trabajo = 3
 End Enum
 
-Private Const subidaMessage As Long = 6
-Private Const bajadaAlpha As Long = 4
-Private Const delayTime As Long = 40
+Private Const subidaMessage As Long = 2
+Private Const bajadaAlpha As Long = 30
 
 Public Sub createMessageUp(ByVal Text As String, ByVal tipo As Byte, ByVal CharIndex As Integer)
 '***************************************************************
@@ -77,10 +76,10 @@ Public Sub renderMessageUp(ByVal CharIndex As Integer, ByVal PixelOffsetX As Int
 
     With charlist(CharIndex)
         If .messageUp.active = 1 Then
-            Call DrawText(PixelOffsetX + 10, PixelOffsetY - 20 - (.messageUp.Sube * 0.1), .messageUp.Text, D3DColorARGB(.messageUp.Alpha, .messageUp.R, .messageUp.G, .messageUp.B), , 2)
-            If .messageUp.Sube + subidaMessage * deltaTime < 200 Then
-                If .messageUp.Alpha - bajadaAlpha * deltaTime > 0 Then .messageUp.Alpha = .messageUp.Alpha - bajadaAlpha * deltaTime
-                .messageUp.Sube = .messageUp.Sube + subidaMessage * deltaTime
+            Call DrawText(PixelOffsetX + 10, PixelOffsetY - 20 - .messageUp.Sube, .messageUp.Text, D3DColorARGB(.messageUp.Alpha, .messageUp.R, .messageUp.G, .messageUp.B), , 2)
+            If .messageUp.Sube + subidaMessage * timerTicksPerFrame < 20 Then
+                If .messageUp.Alpha - bajadaAlpha * timerTicksPerFrame > 0 Then .messageUp.Alpha = .messageUp.Alpha - bajadaAlpha * timerTicksPerFrame
+                .messageUp.Sube = .messageUp.Sube + subidaMessage * timerTicksPerFrame
             Else
                 .messageUp.active = 0
             End If

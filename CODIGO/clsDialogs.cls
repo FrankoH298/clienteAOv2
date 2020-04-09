@@ -82,7 +82,7 @@ Private Type dialog
     B           As Byte
     Alpha       As Byte
     renderable  As Boolean
-    Sube        As Integer
+    Sube        As Single
 End Type
 
 ''
@@ -201,7 +201,7 @@ Public Sub CreateDialog(ByRef chat As String, ByVal CharIndex As Integer, ByVal 
         .renderable = False
         .startTime = timeGetTime() + MS_ADD_EXTRA + (MS_PER_CHAR * Len(chat))
         .textLine = FormatChat(chat)
-        .Sube = 120
+        .Sube = 12
     End With
 End Sub
 
@@ -334,18 +334,18 @@ Public Sub Render()
                 offset = -(usedFont.Size + 2) * UBound(.textLine())
                 
                 'Letras suben desde la cabeza.
-                If .Sube - 10 * deltaTime > 0 Then
-                    .Sube = .Sube - 10 * deltaTime
-                    If .Alpha + 20 * deltaTime < 255 Then .Alpha = .Alpha + 20 * deltaTime
+                If .Sube - 3 * timerTicksPerFrame > 0 Then
+                    .Sube = .Sube - 3 * timerTicksPerFrame
+                    If .Alpha + 80 * timerTicksPerFrame < 255 Then .Alpha = .Alpha + 80 * timerTicksPerFrame
                 Else
                     If timeGetTime() >= .startTime - 500 Then
-                        If .Alpha - 10 * deltaTime > 4 Then .Alpha = .Alpha - 10 * deltaTime
+                        If .Alpha - 85 * timerTicksPerFrame > 0 Then .Alpha = .Alpha - 85 * timerTicksPerFrame
                     End If
                 End If
                 
                 'Render it
                 For j = 0 To UBound(.textLine())
-                    Call DrawText(.X, .Y + offset + (.Sube * 0.1), .textLine(j), D3DColorARGB(.Alpha, .R, .G, .B))
+                    Call DrawText(.X, .Y + offset + .Sube, .textLine(j), D3DColorARGB(.Alpha, .R, .G, .B))
                     offset = offset + usedFont.Size + 5
                 Next j
                 
