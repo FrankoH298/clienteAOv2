@@ -264,7 +264,6 @@ Begin VB.Form frmMain
       _ExtentY        =   2619
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       DisableNoScroll =   -1  'True
@@ -993,7 +992,7 @@ Public picSkillStar As Picture
 
 Private Sub Form_Load()
     
-    If NoRes Then
+    If ClientSetup.bNoRes Then
         ' Handles Form movement (drag and drop).
         Set clsFormulario = New clsFormMovementManager
         clsFormulario.Initialize Me, 120
@@ -1400,7 +1399,7 @@ Private Sub imgAsignarSkill_Click()
     LlegaronSkills = False
     
     For i = 1 To NUMSKILLS
-        frmSkills3.Text1(i).Caption = UserSkills(i)
+        frmSkills3.text1(i).Caption = UserSkills(i)
     Next i
     
     Alocados = SkillPoints
@@ -1609,8 +1608,8 @@ Private Sub SendTxt_KeyUp(KeyCode As Integer, Shift As Integer)
         KeyCode = 0
         SendTxt.Visible = False
         
-        If picInv.Visible Then
-            picInv.SetFocus
+        If PicInv.Visible Then
+            PicInv.SetFocus
         Else
             hlst.SetFocus
         End If
@@ -1915,7 +1914,7 @@ Private Sub Label4_Click()
     InvEqu.Picture = LoadPicture(path(Graficos) & "Centroinventario.jpg")
 
     ' Activo controles de inventario
-    picInv.Visible = True
+    PicInv.Visible = True
     imgInvScrollUp.Visible = True
     imgInvScrollDown.Visible = True
 
@@ -1945,7 +1944,7 @@ Private Sub Label7_Click()
     cmdMoverHechi(1).Visible = True
     
     ' Desactivo controles de inventario
-    picInv.Visible = False
+    PicInv.Visible = False
     imgInvScrollUp.Visible = False
     imgInvScrollDown.Visible = False
 
@@ -1977,8 +1976,8 @@ On Error Resume Next  'el .SetFocus causaba errores al salir y volver a entrar
         (Not frmMSG.Visible) And (Not MirandoForo) And _
         (Not frmEstadisticas.Visible) And (Not frmCantidad.Visible) Then
          
-        If picInv.Visible Then
-            picInv.SetFocus
+        If PicInv.Visible Then
+            PicInv.SetFocus
         ElseIf hlst.Visible Then
             hlst.SetFocus
         End If
@@ -1986,8 +1985,8 @@ On Error Resume Next  'el .SetFocus causaba errores al salir y volver a entrar
 End Sub
 
 Private Sub RecTxt_KeyDown(KeyCode As Integer, Shift As Integer)
-    If picInv.Visible Then
-        picInv.SetFocus
+    If PicInv.Visible Then
+        PicInv.SetFocus
     Else
         hlst.SetFocus
     End If
@@ -2043,8 +2042,8 @@ Private Sub SendCMSTXT_KeyUp(KeyCode As Integer, Shift As Integer)
         KeyCode = 0
         Me.SendCMSTXT.Visible = False
         
-        If picInv.Visible Then
-            picInv.SetFocus
+        If PicInv.Visible Then
+            PicInv.SetFocus
         Else
             hlst.SetFocus
         End If

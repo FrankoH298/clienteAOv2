@@ -561,7 +561,7 @@ Public Function FullScreenCapture(ByVal File As String) As Boolean
     
     frmScreenshots.Picture1.AutoRedraw = True
     
-    If NoRes Then
+    If ClientSetup.bNoRes Then
         frmScreenshots.Picture1.Width = Screen.Width
         frmScreenshots.Picture1.Height = Screen.Height
         
