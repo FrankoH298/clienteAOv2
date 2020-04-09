@@ -77,7 +77,10 @@ Private Type dialog
     Y           As Integer
     startTime   As Long
     CharIndex   As Integer
-    Color       As Long
+    R           As Byte
+    G           As Byte
+    B           As Byte
+    Alpha       As Byte
     renderable  As Boolean
     Sube        As Integer
     startTickCount As Long
@@ -165,7 +168,7 @@ End Function
 ' @remarks  If there are no more free slots, and the char didn't have a previous dialog,
 '           the chat is ignored.
 
-Public Sub CreateDialog(ByRef chat As String, ByVal CharIndex As Integer, ByVal Color As Long)
+Public Sub CreateDialog(ByRef chat As String, ByVal CharIndex As Integer, ByVal Red As Byte, ByVal Green As Byte, ByVal Blue As Byte)
 '**************************************************************
 'Author: Juan Martín Sotuyo Dodero
 'Last Modification: 08/29/07 by Rapsodius
@@ -192,7 +195,10 @@ Public Sub CreateDialog(ByRef chat As String, ByVal CharIndex As Integer, ByVal 
     
     With dialogs(slot)
         .CharIndex = CharIndex
-        .Color = ColorToDX8(Color)
+        .R = Red
+        .G = Green
+        .B = Blue
+        .Alpha = 0
         .renderable = False
         .startTime = timeGetTime() + MS_ADD_EXTRA + (MS_PER_CHAR * Len(chat))
         .textLine = FormatChat(chat)
@@ -331,14 +337,21 @@ Public Sub Render()
                 
                 'Letras suben desde la cabeza.
                 If timeGetTime > .startTickCount Then
-                    .Sube = .Sube - 1
+                    If .Sube > 0 Then
+                        .Sube = .Sube - 1
+                        If .Alpha + 21 < 255 Then .Alpha = .Alpha + 21
+                    Else
+                        If timeGetTime() >= .startTime - 1000 Then
+                            If .Alpha > 4 Then .Alpha = .Alpha - 4
+                        End If
+                    End If
                     .startTickCount = timeGetTime + 12
                 End If
-                If .Sube > 0 Then .Y = .Y + .Sube
+                'If .Sube > 0 Then .Y = .Y + .Sube
                 
                 'Render it
                 For j = 0 To UBound(.textLine())
-                    Call DrawText(.X, .Y + offset, .textLine(j), .Color)
+                    Call DrawText(.X, .Y + offset + .Sube, .textLine(j), D3DColorARGB(.Alpha, .R, .G, .B))
                     offset = offset + usedFont.Size + 5
                 Next j
                 

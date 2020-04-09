@@ -1251,7 +1251,7 @@ Private Sub HandleBankInit()
     BankGold = incomingData.ReadLong
     
     Call InvBanco(0).Initialize(DirectD3D8, frmBancoObj.PicBancoInv, MAX_BANCOINVENTORY_SLOTS)
-    Call InvBanco(1).Initialize(DirectD3D8, frmBancoObj.picInv, Inventario.MaxObjs)
+    Call InvBanco(1).Initialize(DirectD3D8, frmBancoObj.PicInv, Inventario.MaxObjs)
     
     For i = 1 To Inventario.MaxObjs
         With Inventario
@@ -2090,7 +2090,7 @@ On Error GoTo ErrHandler
 
     'Only add the chat if the character exists (a CharacterRemove may have been sent to the PC / NPC area before the buffer was flushed)
     If charlist(CharIndex).active Then _
-        Call Dialogos.CreateDialog(Trim$(chat), CharIndex, RGB(R, G, B))
+        Call Dialogos.CreateDialog(Trim$(chat), CharIndex, R, G, B)
     
     'If we got here then packet is complete, copy data back to original queue
     Call incomingData.CopyBuffer(Buffer)
