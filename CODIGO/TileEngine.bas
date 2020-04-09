@@ -328,8 +328,11 @@ Public MapData() As MapBlock ' Mapa
 Public MapInfo As MapInfo ' Info acerca del mapa en uso
 '¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?
 
-Public Normal_RGBList(3) As Long
-Public Alpha_RGBList(3) As Long
+Public Type ARGBList
+    RGBList(3) As Long
+End Type
+
+Public Normal_RGBList(255) As ARGBList
 
 Public bRain        As Boolean 'está raineando?
 Public bTecho       As Boolean 'hay techo?
@@ -865,16 +868,16 @@ Function NextOpenChar() As Integer
 '*****************************************************************
 'Finds next open char slot in CharList
 '*****************************************************************
-    Dim loopc As Long
+    Dim loopC As Long
     Dim Dale As Boolean
     
-    loopc = 1
-    Do While charlist(loopc).active And Dale
-        loopc = loopc + 1
-        Dale = (loopc <= UBound(charlist))
+    loopC = 1
+    Do While charlist(loopC).active And Dale
+        loopC = loopC + 1
+        Dale = (loopC <= UBound(charlist))
     Loop
     
-    NextOpenChar = loopc
+    NextOpenChar = loopC
 End Function
 
 ''
@@ -1068,7 +1071,7 @@ Function InMapBounds(ByVal X As Integer, ByVal Y As Integer) As Boolean
     InMapBounds = True
 End Function
 
-Sub Draw_GrhIndex(ByVal GrhIndex As Integer, ByVal X As Integer, ByVal Y As Integer, ByVal Center As Byte, ByRef Color_List() As Long, Optional ByVal angle As Single = 0, Optional ByVal Alpha As Boolean = False)
+Sub Draw_GrhIndex(ByVal GrhIndex As Integer, ByVal X As Integer, ByVal Y As Integer, ByVal Center As Byte, ByRef Color_List() As Long, Optional ByVal angle As Single = 0, Optional ByVal alpha As Boolean = False)
     Dim SourceRect As RECT
     
     With GrhData(GrhIndex)
@@ -1089,7 +1092,7 @@ Sub Draw_GrhIndex(ByVal GrhIndex As Integer, ByVal X As Integer, ByVal Y As Inte
     
 End Sub
 
-Sub Draw_Grh(ByRef Grh As Grh, ByVal X As Integer, ByVal Y As Integer, ByVal Center As Byte, ByRef Color_List() As Long, ByVal Animate As Byte, Optional ByVal Alpha As Boolean = False, Optional ByVal angle As Single = 0)
+Sub Draw_Grh(ByRef Grh As Grh, ByVal X As Integer, ByVal Y As Integer, ByVal Center As Byte, ByRef Color_List() As Long, ByVal Animate As Byte, Optional ByVal alpha As Boolean = False, Optional ByVal angle As Single = 0)
 '*****************************************************************
 'Draws a GRH transparently to a X and Y position
 '*****************************************************************
@@ -1132,7 +1135,7 @@ On Error GoTo error
             End If
         End If
 
-        Call Device_Textured_Render(X, Y, .pixelWidth, .pixelHeight, .sX, .sY, .FileNum, Color_List(), Alpha, angle)
+        Call Device_Textured_Render(X, Y, .pixelWidth, .pixelHeight, .sX, .sY, .FileNum, Color_List(), alpha, angle)
         
     End With
     
@@ -1328,7 +1331,7 @@ Sub RenderScreen(ByVal tilex As Integer, ByVal tiley As Integer, ByVal PixelOffs
                 Call Draw_Grh(MapData(X, Y).Graphic(1), _
                     PixelOffsetXTemp, _
                     PixelOffsetYTemp, _
-                    0, Normal_RGBList, 1)
+                    0, Normal_RGBList(255).RGBList, 1)
             '******************************************
             
             'Layer 2 **********************************
@@ -1336,7 +1339,7 @@ Sub RenderScreen(ByVal tilex As Integer, ByVal tiley As Integer, ByVal PixelOffs
                 Call Draw_Grh(MapData(X, Y).Graphic(2), _
                         PixelOffsetXTemp, _
                         PixelOffsetYTemp, _
-                        1, Normal_RGBList, 1)
+                        1, Normal_RGBList(255).RGBList, 1)
             '******************************************
             ScreenX = ScreenX + 1
         Next X
@@ -1358,7 +1361,7 @@ Sub RenderScreen(ByVal tilex As Integer, ByVal tiley As Integer, ByVal PixelOffs
                 'Object Layer **********************************
                 If .ObjGrh.GrhIndex <> 0 Then
                     Call Draw_Grh(.ObjGrh, _
-                            PixelOffsetXTemp, PixelOffsetYTemp, 1, Normal_RGBList, 1)
+                            PixelOffsetXTemp, PixelOffsetYTemp, 1, Normal_RGBList(255).RGBList, 1)
                 End If
                 '***********************************************
                 
@@ -1374,7 +1377,7 @@ Sub RenderScreen(ByVal tilex As Integer, ByVal tiley As Integer, ByVal PixelOffs
                 If .Graphic(3).GrhIndex <> 0 Then
                     'Draw
                     Call Draw_Grh(.Graphic(3), _
-                            PixelOffsetXTemp, PixelOffsetYTemp, 1, Normal_RGBList, 1)
+                            PixelOffsetXTemp, PixelOffsetYTemp, 1, Normal_RGBList(255).RGBList, 1)
                 End If
                 '************************************************
             End With
@@ -1401,8 +1404,9 @@ Sub RenderScreen(ByVal tilex As Integer, ByVal tiley As Integer, ByVal PixelOffs
         Next X
         ScreenY = ScreenY + 1
     Next Y
-        
-    If Not bTecho Then
+    
+    Call Desvanecer(Alpha_Techo)
+    If Alpha_Techo <> 0 Then
         'Draw blocked tiles and grid
         ScreenY = minYOffset - TileBufferSize
         For Y = minY To maxY
@@ -1416,7 +1420,7 @@ Sub RenderScreen(ByVal tilex As Integer, ByVal tiley As Integer, ByVal PixelOffs
                     Call Draw_Grh(MapData(X, Y).Graphic(4), _
                         ScreenX * TilePixelWidth + PixelOffsetX, _
                         ScreenY * TilePixelHeight + PixelOffsetY, _
-                        1, Alpha_RGBList, 1)
+                        1, Normal_RGBList(Alpha_Techo).RGBList, 1)
                 End If
                 '**********************************
                 
@@ -1430,6 +1434,18 @@ End Sub
 Public Function RenderSounds()
 DoFogataFx
 End Function
+
+Public Sub Desvanecer(ByRef alpha As Byte)
+    Static lastDesvanecimiento As Long
+    If timeGetTime > lastDesvanecimiento Then
+        If bTecho Then
+            If alpha > 0 Then alpha = alpha - 1
+        Else
+            If alpha < 255 Then alpha = alpha + 1
+        End If
+        lastDesvanecimiento = timeGetTime + 1
+    End If
+End Sub
 
 Function HayUserAbajo(ByVal X As Integer, ByVal Y As Integer, ByVal GrhIndex As Integer) As Boolean
     If GrhIndex > 0 Then
@@ -1512,7 +1528,7 @@ End Function
 Public Sub DirectXInit()
     Dim DispMode As D3DDISPLAYMODE
     Dim D3DWindow As D3DPRESENT_PARAMETERS
-    
+    Dim loopC As Long
     Set DirectX = New DirectX8
     Set DirectD3D = DirectX.Direct3DCreate
     Set DirectD3D8 = New D3DX8
@@ -1551,8 +1567,12 @@ Public Sub DirectXInit()
     Set SpriteBatch = New clsBatch
     Call SpriteBatch.Initialise(2000)
     
-    Call Engine_Long_To_RGB_List(Normal_RGBList, -1)
-    Call Engine_Long_To_RGB_List(Alpha_RGBList, D3DColorARGB(120, 255, 255, 255))
+    
+    For loopC = 0 To 255
+        Call Engine_Long_To_RGB_List(Normal_RGBList(loopC).RGBList, D3DColorARGB(loopC, 255, 255, 255))
+    Next loopC
+    
+    Alpha_Techo = 255
     
     Call CargarParticulas
     
@@ -1820,9 +1840,9 @@ Private Sub CharRender(ByVal CharIndex As Long, ByVal PixelOffsetX As Integer, B
                 
                 Movement_Speed = 0.5
                 If .iHead = CASPER_HEAD Then
-                    Call Engine_Long_To_RGB_List(RGBList, Alpha_RGBList(0))
+                    Call Engine_Long_To_RGB_List(RGBList, Normal_RGBList(120).RGBList(0))
                 Else
-                    Call Engine_Long_To_RGB_List(RGBList, Normal_RGBList(0))
+                    Call Engine_Long_To_RGB_List(RGBList, Normal_RGBList(255).RGBList(0))
                 End If
                 'Draw Body
                 If .Body.Walk(.Heading).GrhIndex Then _
@@ -1881,7 +1901,7 @@ Private Sub CharRender(ByVal CharIndex As Long, ByVal PixelOffsetX As Integer, B
         Else
             'Draw Body
             If .Body.Walk(.Heading).GrhIndex Then _
-                Call Draw_Grh(.Body.Walk(.Heading), PixelOffsetX, PixelOffsetY, 1, Normal_RGBList, 1)
+                Call Draw_Grh(.Body.Walk(.Heading), PixelOffsetX, PixelOffsetY, 1, Normal_RGBList(255).RGBList, 1)
         End If
 
         
@@ -1900,7 +1920,7 @@ Private Sub CharRender(ByVal CharIndex As Long, ByVal PixelOffsetX As Integer, B
         
         'Draw FX
         If .FxIndex <> 0 Then
-            Call Draw_Grh(.fX, PixelOffsetX + FxData(.FxIndex).OffsetX, PixelOffsetY + FxData(.FxIndex).OffsetY, 1, Normal_RGBList, 1)
+            Call Draw_Grh(.fX, PixelOffsetX + FxData(.FxIndex).OffsetX, PixelOffsetY + FxData(.FxIndex).OffsetY, 1, Normal_RGBList(255).RGBList, 1)
             
             'Check if animation is over
             If .fX.Started = 0 Then _
@@ -1941,7 +1961,7 @@ Public Sub Device_Textured_Render(ByVal X As Single, ByVal Y As Single, _
                                   ByVal sX As Integer, ByVal sY As Integer, _
                                   ByVal tex As Long, _
                                   ByRef Color() As Long, _
-                                  Optional ByVal Alpha As Boolean = False, _
+                                  Optional ByVal alpha As Boolean = False, _
                                   Optional ByVal angle As Single = 0)
 
     Dim Texture As Direct3DTexture8
@@ -1951,7 +1971,7 @@ Public Sub Device_Textured_Render(ByVal X As Single, ByVal Y As Single, _
     
     With SpriteBatch
         Call .SetTexture(Texture)
-        Call .SetAlpha(Alpha)
+        Call .SetAlpha(alpha)
         If TextureWidth <> 0 And TextureHeight <> 0 Then
             Call .Draw(X, Y, Width, Height, Color, sX / TextureWidth, sY / TextureHeight, (sX + Width) / TextureWidth, (sY + Height) / TextureHeight, angle)
         Else

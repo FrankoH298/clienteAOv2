@@ -87,7 +87,7 @@ Sub DibujarCartel()
     X = (frmMain.MainViewPic.ScaleWidth - GrhData(textura).pixelWidth) / 2
     Y = frmMain.MainViewPic.ScaleHeight / 2
 
-    Call Draw_GrhIndex(textura, X, Y - GrhData(textura).pixelHeight / 2, 0, Normal_RGBList)
+    Call Draw_GrhIndex(textura, X, Y - GrhData(textura).pixelHeight / 2, 0, Normal_RGBList(255).RGBList)
     Dim j As Integer, desp As Integer
     
     X = X + 30

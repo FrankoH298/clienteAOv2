@@ -354,7 +354,7 @@ Private Sub DrawInventory()
 'Last Modify Date: 27/07/04
 'Renders the inventory to the given PictureBox
 '***************************************************
-    Dim loopc As Long
+    Dim loopC As Long
     Dim TempRect As RECT
     
     With TempRect
@@ -364,33 +364,33 @@ Private Sub DrawInventory()
     
     'Clear the inventory window
         Call Engine_BeginScene
-        For loopc = InventoryOffset * (InventoryWindow.ScaleWidth \ ownTilePixelWidth) + 1 To UBound(Inventory)
+        For loopC = InventoryOffset * (InventoryWindow.ScaleWidth \ ownTilePixelWidth) + 1 To UBound(Inventory)
             
-            startdX = ((loopc - 1) Mod (frmMain.PicInv.Width / 32)) * 32
-            startdY = ((loopc - 1) \ (frmMain.PicInv.Width / 32)) * 32
+            startdX = ((loopC - 1) Mod (frmMain.PicInv.Width / 32)) * 32
+            startdY = ((loopC - 1) \ (frmMain.PicInv.Width / 32)) * 32
             
-            Call Draw_GrhIndex(23979, startdX, startdY, 1, Normal_RGBList)
+            Call Draw_GrhIndex(23979, startdX, startdY, 1, Normal_RGBList(255).RGBList)
             
-            If Inventory(loopc).GrhIndex Then
+            If Inventory(loopC).GrhIndex Then
                 
                 'Render a box around the selected item
-                If InvSelectedItem = loopc Then
+                If InvSelectedItem = loopC Then
                     If ImgContainer Then
-                        Call Draw_GrhIndex(23980, startdX, startdY, 1, Normal_RGBList)
+                        Call Draw_GrhIndex(23980, startdX, startdY, 1, Normal_RGBList(255).RGBList)
                     End If
                 End If
-                Call Draw_GrhIndex(Inventory(loopc).GrhIndex, startdX, startdY, 1, Normal_RGBList)
+                Call Draw_GrhIndex(Inventory(loopC).GrhIndex, startdX, startdY, 1, Normal_RGBList(255).RGBList)
                 'If equipped we render "E"
                 
-                If Inventory(loopc).Equipped Then
+                If Inventory(loopC).Equipped Then
                     DrawText startdX + 20, startdY + 18, "E", -256
                 End If
                 
                 'Render the item grh and the amount
-                DrawText startdX + 1, startdY, Inventory(loopc).Amount, -1
+                DrawText startdX + 1, startdY, Inventory(loopC).Amount, -1
                 
             End If
-        Next loopc
+        Next loopC
         
         InventoryWindow.AutoRedraw = False
 

@@ -1902,7 +1902,7 @@ Private Sub HandlePosUpdate()
     bTecho = IIf(MapData(UserPos.X, UserPos.Y).Trigger = 1 Or _
             MapData(UserPos.X, UserPos.Y).Trigger = 2 Or _
             MapData(UserPos.X, UserPos.Y).Trigger = 4, True, False)
-                
+    
     'Update pos label
     frmMain.Coord.Caption = UserMap & " X: " & UserPos.X & " Y: " & UserPos.Y
 End Sub

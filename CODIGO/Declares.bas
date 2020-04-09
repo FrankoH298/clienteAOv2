@@ -64,7 +64,7 @@ Public SpriteBatch As clsBatch
 
 Public Projection As D3DMATRIX
 Public View As D3DMATRIX
-
+Public Alpha_Techo As Byte
 Public CustomKeys As New clsCustomKeys
 Public CustomMessages As New clsCustomMessages
 Public Declare Function timeGetTime Lib "winmm.dll" () As Long
