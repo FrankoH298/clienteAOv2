@@ -38,7 +38,7 @@ Public Sub createMessageUp(ByVal Text As String, ByVal tipo As Byte, ByVal CharI
         Select Case tipo
         
             Case TipoMsgUp.Damage
-                .R = 255
+                .R = 220
                 .G = 0
                 .B = 0
                 .Alpha = 255
@@ -46,18 +46,18 @@ Public Sub createMessageUp(ByVal Text As String, ByVal tipo As Byte, ByVal CharI
                 .Sube = 0
                 
             Case TipoMsgUp.Gold
-                .R = 220
-                .G = 250
+                .R = 250
+                .G = 240
                 .B = 5
                 .Alpha = 255
                 .startTickCount = timeGetTime + delayTime
                 .Sube = 0
     
             Case TipoMsgUp.Trabajo
-                .R = 255
-                .G = 0
-                .B = 0
-                .Alpha = 255
+                .R = 10
+                .G = 190
+                .B = 190
+                .Alpha = 210
                 .startTickCount = timeGetTime + delayTime
                 .Sube = 0
             Case Else
@@ -81,7 +81,7 @@ Public Sub renderMessageUp(ByVal CharIndex As Integer, ByVal PixelOffsetX As Int
             Call DrawText(PixelOffsetX + 10, PixelOffsetY - 20 - .messageUp.Sube, .messageUp.Text, D3DColorARGB(.messageUp.Alpha, .messageUp.R, .messageUp.G, .messageUp.B))
             If .messageUp.Sube < 20 Then
                 If timeGetTime > .messageUp.startTickCount Then
-                    .messageUp.Alpha = .messageUp.Alpha - 6
+                    .messageUp.Alpha = .messageUp.Alpha - 5
                     .messageUp.Sube = .messageUp.Sube + 1
                     .messageUp.startTickCount = timeGetTime + delayTime
                 End If
