@@ -1452,6 +1452,13 @@ Public Sub DesvanecerTecho()
     End If
 End Sub
 
+Public Sub DesvanecerNombreMapa()
+    Static lastDesvanecimiento As Long
+    If timeGetTime > lastDesvanecimiento Then
+        Alpha_MapName = Alpha_MapName - 1
+        lastDesvanecimiento = timeGetTime + 4
+    End If
+End Sub
 
 Function HayUserAbajo(ByVal X As Integer, ByVal Y As Integer, ByVal GrhIndex As Integer) As Boolean
     If GrhIndex > 0 Then
@@ -1721,6 +1728,11 @@ Sub ShowNextFrame(ByVal DisplayFormTop As Integer, ByVal DisplayFormLeft As Inte
         Call DibujarCartel
         
         Call DialogosClanes.Draw
+        
+        If Alpha_MapName > 0 Then
+            Call DesvanecerNombreMapa
+            Call DrawText((frmMain.ScaleWidth * 0.5) - 100, (frmMain.ScaleHeight * 0.5) - 200, UserMapName, Normal_RGBList(Alpha_MapName).RGBList(0), 1, 3)
+        End If
         
         'FPS update
         If timeGetTime > fpsLastCheck Then

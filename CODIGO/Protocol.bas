@@ -1836,19 +1836,26 @@ Private Sub HandleChangeMap()
 'Last Modification: 05/17/06
 '
 '***************************************************
-    If incomingData.length < 5 Then
+    If incomingData.length < 7 Then
         Err.Raise incomingData.NotEnoughDataErrCode
         Exit Sub
     End If
     
-    'Remove packet ID
-    Call incomingData.ReadByte
+    On Error GoTo ErrHandler
+    'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+    Dim Buffer As New clsByteQueue
+    Call Buffer.CopyBuffer(incomingData)
     
-    UserMap = incomingData.ReadInteger()
+    'Remove packet ID
+    Call Buffer.ReadByte
+    
+    UserMap = Buffer.ReadInteger()
+    UserMapName = Buffer.ReadASCIIString()
+    Alpha_MapName = 255
     
 'TODO: Once on-the-fly editor is implemented check for map version before loading....
 'For now we just drop it
-    Call incomingData.ReadInteger
+    Call Buffer.ReadInteger
     
     If FileExist(path(Mapas) & "Mapa" & UserMap & ".map", vbNormal) Then
         Call SwitchMap(UserMap)
@@ -1865,6 +1872,19 @@ Private Sub HandleChangeMap()
         
         Call CloseClient
     End If
+'If we got here then packet is complete, copy data back to original queue
+    Call incomingData.CopyBuffer(Buffer)
+
+ErrHandler:
+    Dim error As Long
+    error = Err.number
+On Error GoTo 0
+    
+    'Destroy auxiliar buffer
+    Set Buffer = Nothing
+    
+    If error <> 0 Then _
+        Err.Raise error
 End Sub
 
 ''

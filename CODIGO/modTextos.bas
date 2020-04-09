@@ -51,7 +51,7 @@ Private Type CustomFont
     TextureSize As POINTAPI     'Size of the texture
 End Type
 
-Private cfonts(1 To 2) As CustomFont ' _Default2 As CustomFont
+Private cfonts(1 To 3) As CustomFont ' _Default2 As CustomFont
 
 Public Function ColorToDX8(ByVal long_color As Long) As Long
     Dim temp_color As String
@@ -142,7 +142,7 @@ End Sub
 Public Function ARGBtoD3DCOLORVALUE(ByVal ARGB As Long, ByRef Color As D3DCOLORVALUE)
 Dim dest(3) As Byte
 CopyMemory dest(0), ARGB, 4
-Color.a = dest(3)
+Color.A = dest(3)
 Color.R = dest(2)
 Color.G = dest(1)
 Color.B = dest(0)

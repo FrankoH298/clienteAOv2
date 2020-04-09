@@ -67,6 +67,7 @@ Public View As D3DMATRIX
 
 'Desvanecimientos
 Public Alpha_Techo As Byte
+Public Alpha_MapName As Byte
 
 Public CustomKeys As New clsCustomKeys
 Public CustomMessages As New clsCustomMessages
@@ -837,13 +838,11 @@ Public Enum eTrigger
 End Enum
 
 'Server stuff
-Public RequestPosTimer As Integer 'Used in main loop
 Public stxtbuffer As String 'Holds temp raw data from server
 Public stxtbuffercmsg As String 'Holds temp raw data from server
-Public SendNewChar As Boolean 'Used during login
 Public Connected As Boolean 'True when connected to server
-Public DownloadingMap As Boolean 'Currently downloading a map from server
 Public UserMap As Integer
+Public UserMapName As String
 
 'Control
 Public prgRun As Boolean 'When true the program ends
