@@ -51,7 +51,7 @@ Private Type CustomFont
     TextureSize As POINTAPI     'Size of the texture
 End Type
 
-Private cfonts(1 To 1) As CustomFont ' _Default2 As CustomFont
+Private cfonts(1 To 2) As CustomFont ' _Default2 As CustomFont
 
 Public Function ColorToDX8(ByVal long_color As Long) As Long
     Dim temp_color As String
@@ -89,7 +89,7 @@ Private Sub Engine_Render_Text(ByRef Batch As clsBatch, _
     Dim Count As Integer
     Dim ascii() As Byte
     Dim i As Long
-    Dim J As Long
+    Dim j As Long
     Dim yOffset As Single
     Dim TempColor As Long
     Dim ResetColor As Byte
@@ -120,9 +120,9 @@ Private Sub Engine_Render_Text(ByRef Batch As clsBatch, _
             ascii() = StrConv(tempstr(i), vbFromUnicode)
         
             'Loop through the characters
-            For J = 1 To Len(tempstr(i))
+            For j = 1 To Len(tempstr(i))
 
-                Call CopyMemory(TempVA, UseFont.HeaderInfo.CharVA(ascii(J - 1)), 24) 'this number represents the size of "CharVA" struct
+                Call CopyMemory(TempVA, UseFont.HeaderInfo.CharVA(ascii(j - 1)), 24) 'this number represents the size of "CharVA" struct
                 
                 TempVA.X = X + Count
                 TempVA.Y = Y + yOffset
@@ -130,9 +130,9 @@ Private Sub Engine_Render_Text(ByRef Batch As clsBatch, _
                 Call Batch.Draw(TempVA.X, TempVA.Y, TempVA.W, TempVA.H, Color, TempVA.Tx1, TempVA.Ty1, TempVA.Tx2, TempVA.Ty2)
 
                 'Shift over the the position to render the next character
-                Count = Count + UseFont.HeaderInfo.CharWidth(ascii(J - 1))
+                Count = Count + UseFont.HeaderInfo.CharWidth(ascii(j - 1))
                 
-            Next J
+            Next j
             
         End If
     Next i
@@ -143,30 +143,9 @@ Public Function ARGBtoD3DCOLORVALUE(ByVal ARGB As Long, ByRef Color As D3DCOLORV
 Dim dest(3) As Byte
 CopyMemory dest(0), ARGB, 4
 Color.a = dest(3)
-Color.r = dest(2)
-Color.g = dest(1)
-Color.b = dest(0)
-End Function
-
-Public Function ARGB(ByVal r As Long, ByVal g As Long, ByVal b As Long, ByVal a As Long) As Long
-        
-    Dim c As Long
-        
-    If a > 127 Then
-        a = a - 128
-        c = a * 2 ^ 24 Or &H80000000
-        c = c Or r * 2 ^ 16
-        c = c Or g * 2 ^ 8
-        c = c Or b
-    Else
-        c = a * 2 ^ 24
-        c = c Or r * 2 ^ 16
-        c = c Or g * 2 ^ 8
-        c = c Or b
-    End If
-    
-    ARGB = c
-
+Color.R = dest(2)
+Color.G = dest(1)
+Color.B = dest(0)
 End Function
 
 Private Function Engine_GetTextWidth(ByRef UseFont As CustomFont, ByVal Text As String) As Integer
