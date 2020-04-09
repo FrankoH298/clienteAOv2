@@ -31,6 +31,7 @@ Public Type tSetupMods
     bActive     As Boolean
     bGldMsgConsole As Boolean
     bCantMsgs   As Byte
+    bNombres As Byte
 End Type
 
 Public ClientSetup As tSetupMods
@@ -47,27 +48,27 @@ Public Sub IniciarCabecera()
     End With
 End Sub
 
-Public Function Path(ByVal PathType As ePath) As String
+Public Function path(ByVal PathType As ePath) As String
 
     Select Case PathType
         
         Case ePath.INIT
-            Path = App.Path & "\INIT\"
+            path = App.path & "\INIT\"
         
         Case ePath.Graficos
-            Path = App.Path & "\GRAFICOS\"
+            path = App.path & "\GRAFICOS\"
             
         Case ePath.Mapas
-            Path = App.Path & "\MAPAS\"
+            path = App.path & "\MAPAS\"
             
         Case ePath.MIDI
-            Path = App.Path & "\MIDI\"
+            path = App.path & "\MIDI\"
             
         Case ePath.WAV
-            Path = App.Path & "\WAV\"
+            path = App.path & "\WAV\"
             
         Case ePath.EXTRAS
-            Path = App.Path & "\Extras\"
+            path = App.path & "\Extras\"
     
     End Select
 
@@ -78,13 +79,15 @@ Public Sub LeerConfiguracion()
     Call IniciarCabecera
     
     Set Lector = New clsIniManager
-    Call Lector.Initialize(Path(INIT) & CLIENT_FILE)
+    Call Lector.Initialize(path(INIT) & CLIENT_FILE)
     
     With ClientSetup
         
         ' VIDEO
         .byMemory = Lector.GetValue("VIDEO", "DINAMIC_MEMORY")
         .bNoRes = CBool(Lector.GetValue("VIDEO", "DISABLE_RESOLUTION_CHANGE"))
+        .bNombres = CByte(Lector.GetValue("VIDEO", "NOMBRES"))
+        If .bNombres > 2 Or .bNombres < 0 Then .bNombres = 0
         
         ' AUDIO
         .bMusic = CBool(Lector.GetValue("AUDIO", "MIDI"))
@@ -109,13 +112,14 @@ Public Sub GuardarConfiguracion()
     On Local Error GoTo fileErr:
     
     Set Lector = New clsIniManager
-    Call Lector.Initialize(Path(INIT) & CLIENT_FILE)
+    Call Lector.Initialize(path(INIT) & CLIENT_FILE)
     
     With ClientSetup
         
         ' VIDEO
         Call Lector.ChangeValue("VIDEO", "DINAMIC_MEMORY", .byMemory)
         Call Lector.ChangeValue("VIDEO", "DISABLE_RESOLUTION_CHANGE", CInt(.bNoRes))
+        Call Lector.ChangeValue("VIDEO", "NOMBRES", CByte(.bNombres))
         
         ' AUDIO
         Call Lector.ChangeValue("AUDIO", "MIDI", CInt(.bMusic))
@@ -135,7 +139,7 @@ Public Sub GuardarConfiguracion()
 
     End With
     
-    Call Lector.DumpFile(Path(INIT) & CLIENT_FILE)
+    Call Lector.DumpFile(path(INIT) & CLIENT_FILE)
     
 fileErr:
     

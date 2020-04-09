@@ -868,16 +868,16 @@ Function NextOpenChar() As Integer
 '*****************************************************************
 'Finds next open char slot in CharList
 '*****************************************************************
-    Dim loopC As Long
+    Dim loopc As Long
     Dim Dale As Boolean
     
-    loopC = 1
-    Do While charlist(loopC).active And Dale
-        loopC = loopC + 1
-        Dale = (loopC <= UBound(charlist))
+    loopc = 1
+    Do While charlist(loopc).active And Dale
+        loopc = loopc + 1
+        Dale = (loopc <= UBound(charlist))
     Loop
     
-    NextOpenChar = loopC
+    NextOpenChar = loopc
 End Function
 
 ''
@@ -1071,7 +1071,7 @@ Function InMapBounds(ByVal X As Integer, ByVal Y As Integer) As Boolean
     InMapBounds = True
 End Function
 
-Sub Draw_GrhIndex(ByVal GrhIndex As Integer, ByVal X As Integer, ByVal Y As Integer, ByVal Center As Byte, ByRef Color_List() As Long, Optional ByVal angle As Single = 0, Optional ByVal alpha As Boolean = False)
+Sub Draw_GrhIndex(ByVal GrhIndex As Integer, ByVal X As Integer, ByVal Y As Integer, ByVal Center As Byte, ByRef Color_List() As Long, Optional ByVal angle As Single = 0, Optional ByVal Alpha As Boolean = False)
     Dim SourceRect As RECT
     
     With GrhData(GrhIndex)
@@ -1092,7 +1092,7 @@ Sub Draw_GrhIndex(ByVal GrhIndex As Integer, ByVal X As Integer, ByVal Y As Inte
     
 End Sub
 
-Sub Draw_Grh(ByRef Grh As Grh, ByVal X As Integer, ByVal Y As Integer, ByVal Center As Byte, ByRef Color_List() As Long, ByVal Animate As Byte, Optional ByVal alpha As Boolean = False, Optional ByVal angle As Single = 0)
+Sub Draw_Grh(ByRef Grh As Grh, ByVal X As Integer, ByVal Y As Integer, ByVal Center As Byte, ByRef Color_List() As Long, ByVal Animate As Byte, Optional ByVal Alpha As Boolean = False, Optional ByVal angle As Single = 0)
 '*****************************************************************
 'Draws a GRH transparently to a X and Y position
 '*****************************************************************
@@ -1135,7 +1135,7 @@ On Error GoTo error
             End If
         End If
 
-        Call Device_Textured_Render(X, Y, .pixelWidth, .pixelHeight, .sX, .sY, .FileNum, Color_List(), alpha, angle)
+        Call Device_Textured_Render(X, Y, .pixelWidth, .pixelHeight, .sX, .sY, .FileNum, Color_List(), Alpha, angle)
         
     End With
     
@@ -1375,9 +1375,14 @@ Sub RenderScreen(ByVal tilex As Integer, ByVal tiley As Integer, ByVal PixelOffs
                 
                 'Layer 3 *****************************************
                 If .Graphic(3).GrhIndex <> 0 Then
+                    ' Transparencia de Arboles
+                    If .Graphic(3).GrhIndex = 735 Or .Graphic(3).GrhIndex >= 6994 And .Graphic(3).GrhIndex <= 7002 And (Abs(UserPos.X - X) < 3 And (Abs(UserPos.Y - Y)) < 8 And (Abs(UserPos.Y) < Y)) Then
+                        Call Draw_Grh(.Graphic(3), PixelOffsetXTemp, PixelOffsetYTemp, 1, Normal_RGBList(100).RGBList, 1)
+                    Else
+                        Call Draw_Grh(.Graphic(3), PixelOffsetXTemp, PixelOffsetYTemp, 1, Normal_RGBList(255).RGBList, 1)
+                    End If
                     'Draw
-                    Call Draw_Grh(.Graphic(3), _
-                            PixelOffsetXTemp, PixelOffsetYTemp, 1, Normal_RGBList(255).RGBList, 1)
+
                 End If
                 '************************************************
             End With
@@ -1405,7 +1410,7 @@ Sub RenderScreen(ByVal tilex As Integer, ByVal tiley As Integer, ByVal PixelOffs
         ScreenY = ScreenY + 1
     Next Y
     
-    Call Desvanecer(Alpha_Techo)
+    Call DesvanecerTecho
     If Alpha_Techo <> 0 Then
         'Draw blocked tiles and grid
         ScreenY = minYOffset - TileBufferSize
@@ -1435,17 +1440,18 @@ Public Function RenderSounds()
 DoFogataFx
 End Function
 
-Public Sub Desvanecer(ByRef alpha As Byte)
+Public Sub DesvanecerTecho()
     Static lastDesvanecimiento As Long
     If timeGetTime > lastDesvanecimiento Then
         If bTecho Then
-            If alpha > 0 Then alpha = alpha - 1
+            If Alpha_Techo > 0 Then Alpha_Techo = Alpha_Techo - 1
         Else
-            If alpha < 255 Then alpha = alpha + 1
+            If Alpha_Techo < 255 Then Alpha_Techo = Alpha_Techo + 1
         End If
         lastDesvanecimiento = timeGetTime + 1
     End If
 End Sub
+
 
 Function HayUserAbajo(ByVal X As Integer, ByVal Y As Integer, ByVal GrhIndex As Integer) As Boolean
     If GrhIndex > 0 Then
@@ -1528,7 +1534,7 @@ End Function
 Public Sub DirectXInit()
     Dim DispMode As D3DDISPLAYMODE
     Dim D3DWindow As D3DPRESENT_PARAMETERS
-    Dim loopC As Long
+    Dim loopc As Long
     Set DirectX = New DirectX8
     Set DirectD3D = DirectX.Direct3DCreate
     Set DirectD3D8 = New D3DX8
@@ -1568,10 +1574,11 @@ Public Sub DirectXInit()
     Call SpriteBatch.Initialise(2000)
     
     
-    For loopC = 0 To 255
-        Call Engine_Long_To_RGB_List(Normal_RGBList(loopC).RGBList, D3DColorARGB(loopC, 255, 255, 255))
-    Next loopC
+    For loopc = 0 To 255
+        Call Engine_Long_To_RGB_List(Normal_RGBList(loopc).RGBList, D3DColorARGB(loopc, 255, 255, 255))
+    Next loopc
     
+    ' Desvanecimientos // Por default = 255
     Alpha_Techo = 255
     
     Call CargarParticulas
@@ -1867,7 +1874,7 @@ Private Sub CharRender(ByVal CharIndex As Long, ByVal PixelOffsetX As Integer, B
                 
                     'Draw name over head
                     If LenB(.Nombre) > 0 Then
-                        If ((Nombres = 1) And (esGM(UserCharIndex) Or Abs(MouseTileX - .Pos.X) < 2 And (Abs(MouseTileY - .Pos.Y)) < 2) Or Nombres = 2) Then
+                        If (ClientSetup.bNombres = 1 And (esGM(UserCharIndex) Or Abs(MouseTileX - .Pos.X) < 2 And (Abs(MouseTileY - .Pos.Y)) < 2)) Or ClientSetup.bNombres = 2 Then
                             Pos = getTagPosition(.Nombre)
                             'Pos = InStr(.Nombre, "<")
                             'If Pos = 0 Then Pos = Len(.Nombre) + 2
@@ -1961,7 +1968,7 @@ Public Sub Device_Textured_Render(ByVal X As Single, ByVal Y As Single, _
                                   ByVal sX As Integer, ByVal sY As Integer, _
                                   ByVal tex As Long, _
                                   ByRef Color() As Long, _
-                                  Optional ByVal alpha As Boolean = False, _
+                                  Optional ByVal Alpha As Boolean = False, _
                                   Optional ByVal angle As Single = 0)
 
     Dim Texture As Direct3DTexture8
@@ -1971,7 +1978,7 @@ Public Sub Device_Textured_Render(ByVal X As Single, ByVal Y As Single, _
     
     With SpriteBatch
         Call .SetTexture(Texture)
-        Call .SetAlpha(alpha)
+        Call .SetAlpha(Alpha)
         If TextureWidth <> 0 And TextureHeight <> 0 Then
             Call .Draw(X, Y, Width, Height, Color, sX / TextureWidth, sY / TextureHeight, (sX + Width) / TextureWidth, (sY + Height) / TextureHeight, angle)
         Else

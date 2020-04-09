@@ -1013,7 +1013,6 @@ Private Sub HandleLogged()
     
     ' Variable initialization
     EngineRun = True
-    Nombres = True
     
     'Set connected state
     Call SetConnected
@@ -1252,7 +1251,7 @@ Private Sub HandleBankInit()
     BankGold = incomingData.ReadLong
     
     Call InvBanco(0).Initialize(DirectD3D8, frmBancoObj.PicBancoInv, MAX_BANCOINVENTORY_SLOTS)
-    Call InvBanco(1).Initialize(DirectD3D8, frmBancoObj.PicInv, Inventario.MaxObjs)
+    Call InvBanco(1).Initialize(DirectD3D8, frmBancoObj.picInv, Inventario.MaxObjs)
     
     For i = 1 To Inventario.MaxObjs
         With Inventario
