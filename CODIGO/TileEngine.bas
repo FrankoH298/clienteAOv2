@@ -189,6 +189,8 @@ Public Type Char
     Particle_Count As Integer
     Particle_Group() As Long
     
+    messageUp As textUp
+    
 End Type
 
 'Info de un objeto
@@ -327,6 +329,7 @@ Public MapInfo As MapInfo ' Info acerca del mapa en uso
 '¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?
 
 Public Normal_RGBList(3) As Long
+Public Alpha_RGBList(3) As Long
 
 Public bRain        As Boolean 'está raineando?
 Public bTecho       As Boolean 'hay techo?
@@ -1413,7 +1416,7 @@ Sub RenderScreen(ByVal tilex As Integer, ByVal tiley As Integer, ByVal PixelOffs
                     Call Draw_Grh(MapData(X, Y).Graphic(4), _
                         ScreenX * TilePixelWidth + PixelOffsetX, _
                         ScreenY * TilePixelHeight + PixelOffsetY, _
-                        1, Normal_RGBList, 1)
+                        1, Alpha_RGBList, 1)
                 End If
                 '**********************************
                 
@@ -1548,7 +1551,8 @@ Public Sub DirectXInit()
     Set SpriteBatch = New clsBatch
     Call SpriteBatch.Initialise(2000)
     
-    Call Engine_Long_To_RGB_List(Normal_RGBList(), -1)
+    Call Engine_Long_To_RGB_List(Normal_RGBList, -1)
+    Call Engine_Long_To_RGB_List(Alpha_RGBList, D3DColorARGB(120, 255, 255, 255))
     
     Call CargarParticulas
     
@@ -1812,27 +1816,33 @@ Private Sub CharRender(ByVal CharIndex As Long, ByVal PixelOffsetX As Integer, B
         
         If .Head.Head(.Heading).GrhIndex Then
             If Not .invisible Then
+                Dim RGBList(3) As Long
+                
                 Movement_Speed = 0.5
-
+                If .iHead = CASPER_HEAD Then
+                    Call Engine_Long_To_RGB_List(RGBList, Alpha_RGBList(0))
+                Else
+                    Call Engine_Long_To_RGB_List(RGBList, Normal_RGBList(0))
+                End If
                 'Draw Body
                 If .Body.Walk(.Heading).GrhIndex Then _
-                    Call Draw_Grh(.Body.Walk(.Heading), PixelOffsetX, PixelOffsetY, 1, Normal_RGBList, 1)
+                    Call Draw_Grh(.Body.Walk(.Heading), PixelOffsetX, PixelOffsetY, 1, RGBList, 1)
             
                 'Draw Head
                 If .Head.Head(.Heading).GrhIndex Then
-                    Call Draw_Grh(.Head.Head(.Heading), PixelOffsetX + .Body.HeadOffset.X, PixelOffsetY + .Body.HeadOffset.Y, 1, Normal_RGBList, 0)
+                    Call Draw_Grh(.Head.Head(.Heading), PixelOffsetX + .Body.HeadOffset.X, PixelOffsetY + .Body.HeadOffset.Y, 1, RGBList, 0)
                     
                     'Draw Helmet
                     If .Casco.Head(.Heading).GrhIndex Then _
-                        Call Draw_Grh(.Casco.Head(.Heading), PixelOffsetX + .Body.HeadOffset.X, PixelOffsetY + .Body.HeadOffset.Y + OFFSET_HEAD, 1, Normal_RGBList, 0)
+                        Call Draw_Grh(.Casco.Head(.Heading), PixelOffsetX + .Body.HeadOffset.X, PixelOffsetY + .Body.HeadOffset.Y + OFFSET_HEAD, 1, RGBList, 0)
                     
                     'Draw Weapon
                     If .Arma.WeaponWalk(.Heading).GrhIndex Then _
-                        Call Draw_Grh(.Arma.WeaponWalk(.Heading), PixelOffsetX, PixelOffsetY, 1, Normal_RGBList, 1)
+                        Call Draw_Grh(.Arma.WeaponWalk(.Heading), PixelOffsetX, PixelOffsetY, 1, RGBList, 1)
                     
                     'Draw Shield
                     If .Escudo.ShieldWalk(.Heading).GrhIndex Then _
-                        Call Draw_Grh(.Escudo.ShieldWalk(.Heading), PixelOffsetX, PixelOffsetY, 1, Normal_RGBList, 1)
+                        Call Draw_Grh(.Escudo.ShieldWalk(.Heading), PixelOffsetX, PixelOffsetY, 1, RGBList, 1)
                 
                 
                     'Draw name over head
@@ -1863,6 +1873,7 @@ Private Sub CharRender(ByVal CharIndex As Long, ByVal PixelOffsetX As Integer, B
                             'Clan
                             line = mid$(.Nombre, Pos)
                             Call DrawText(PixelOffsetX - (Len(line) * 6 / 2) + 28, PixelOffsetY + 45, line, Color)
+                            
                         End If
                     End If
                 End If
@@ -1876,6 +1887,7 @@ Private Sub CharRender(ByVal CharIndex As Long, ByVal PixelOffsetX As Integer, B
         
         'Update dialogs
         Call Dialogos.UpdateDialogPos(PixelOffsetX + .Body.HeadOffset.X, PixelOffsetY + .Body.HeadOffset.Y + OFFSET_HEAD, CharIndex)   '34 son los pixeles del grh de la cabeza que quedan superpuestos al cuerpo
+        Call renderMessageUp(CharIndex, PixelOffsetX, PixelOffsetY)
         Movement_Speed = 1
         Dim ij As Long
         If charlist(CharIndex).Particle_Count > 0 Then
@@ -1920,7 +1932,7 @@ Private Sub CleanViewPort()
 'Last Modify Date: 12/03/04
 'Fills the viewport with black.
 '***************************************************
-    Dim r As RECT
+    Dim R As RECT
     'Call BackBufferSurface.BltColorFill(r, vbBlack)
 End Sub
 

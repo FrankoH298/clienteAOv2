@@ -153,9 +153,9 @@ Public Const MP3_Inicio As Byte = 101
 Public RawServersList As String
 
 Public Type tColor
-    r As Byte
-    g As Byte
-    b As Byte
+    R As Byte
+    G As Byte
+    B As Byte
     l As Long
 End Type
 
