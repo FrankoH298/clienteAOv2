@@ -25,6 +25,8 @@ Private Enum TipoMsgUp
     Trabajo = 3
 End Enum
 
+Private Const subidaMessage As Long = 6
+Private Const bajadaAlpha As Long = 4
 Private Const delayTime As Long = 40
 
 Public Sub createMessageUp(ByVal Text As String, ByVal tipo As Byte, ByVal CharIndex As Integer)
@@ -42,7 +44,6 @@ Public Sub createMessageUp(ByVal Text As String, ByVal tipo As Byte, ByVal CharI
                 .G = 0
                 .B = 0
                 .Alpha = 255
-                .startTickCount = timeGetTime + delayTime
                 .Sube = 0
                 
             Case TipoMsgUp.Gold
@@ -50,7 +51,6 @@ Public Sub createMessageUp(ByVal Text As String, ByVal tipo As Byte, ByVal CharI
                 .G = 240
                 .B = 5
                 .Alpha = 255
-                .startTickCount = timeGetTime + delayTime
                 .Sube = 0
     
             Case TipoMsgUp.Trabajo
@@ -58,7 +58,6 @@ Public Sub createMessageUp(ByVal Text As String, ByVal tipo As Byte, ByVal CharI
                 .G = 190
                 .B = 190
                 .Alpha = 210
-                .startTickCount = timeGetTime + delayTime
                 .Sube = 0
             Case Else
                 
@@ -78,13 +77,10 @@ Public Sub renderMessageUp(ByVal CharIndex As Integer, ByVal PixelOffsetX As Int
 
     With charlist(CharIndex)
         If .messageUp.active = 1 Then
-            Call DrawText(PixelOffsetX + 10, PixelOffsetY - 20 - .messageUp.Sube, .messageUp.Text, D3DColorARGB(.messageUp.Alpha, .messageUp.R, .messageUp.G, .messageUp.B), , 2)
-            If .messageUp.Sube < 20 Then
-                If timeGetTime > .messageUp.startTickCount Then
-                    .messageUp.Alpha = .messageUp.Alpha - 10
-                    .messageUp.Sube = .messageUp.Sube + 1
-                    .messageUp.startTickCount = timeGetTime + delayTime
-                End If
+            Call DrawText(PixelOffsetX + 10, PixelOffsetY - 20 - (.messageUp.Sube * 0.1), .messageUp.Text, D3DColorARGB(.messageUp.Alpha, .messageUp.R, .messageUp.G, .messageUp.B), , 2)
+            If .messageUp.Sube + subidaMessage * deltaTime < 200 Then
+                If .messageUp.Alpha - bajadaAlpha * deltaTime > 0 Then .messageUp.Alpha = .messageUp.Alpha - bajadaAlpha * deltaTime
+                .messageUp.Sube = .messageUp.Sube + subidaMessage * deltaTime
             Else
                 .messageUp.active = 0
             End If

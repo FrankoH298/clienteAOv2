@@ -83,7 +83,6 @@ Private Type dialog
     Alpha       As Byte
     renderable  As Boolean
     Sube        As Integer
-    startTickCount As Long
 End Type
 
 ''
@@ -202,8 +201,7 @@ Public Sub CreateDialog(ByRef chat As String, ByVal CharIndex As Integer, ByVal 
         .renderable = False
         .startTime = timeGetTime() + MS_ADD_EXTRA + (MS_PER_CHAR * Len(chat))
         .textLine = FormatChat(chat)
-        .Sube = 12
-        .startTickCount = timeGetTime()
+        .Sube = 120
     End With
 End Sub
 
@@ -336,22 +334,18 @@ Public Sub Render()
                 offset = -(usedFont.Size + 2) * UBound(.textLine())
                 
                 'Letras suben desde la cabeza.
-                If timeGetTime > .startTickCount Then
-                    If .Sube > 0 Then
-                        .Sube = .Sube - 1
-                        If .Alpha + 21 < 255 Then .Alpha = .Alpha + 21
-                    Else
-                        If timeGetTime() >= .startTime - 1000 Then
-                            If .Alpha > 4 Then .Alpha = .Alpha - 4
-                        End If
+                If .Sube - 10 * deltaTime > 0 Then
+                    .Sube = .Sube - 10 * deltaTime
+                    If .Alpha + 20 * deltaTime < 255 Then .Alpha = .Alpha + 20 * deltaTime
+                Else
+                    If timeGetTime() >= .startTime - 500 Then
+                        If .Alpha - 10 * deltaTime > 4 Then .Alpha = .Alpha - 10 * deltaTime
                     End If
-                    .startTickCount = timeGetTime + 12
                 End If
-                'If .Sube > 0 Then .Y = .Y + .Sube
                 
                 'Render it
                 For j = 0 To UBound(.textLine())
-                    Call DrawText(.X, .Y + offset + .Sube, .textLine(j), D3DColorARGB(.Alpha, .R, .G, .B))
+                    Call DrawText(.X, .Y + offset + (.Sube * 0.1), .textLine(j), D3DColorARGB(.Alpha, .R, .G, .B))
                     offset = offset + usedFont.Size + 5
                 Next j
                 

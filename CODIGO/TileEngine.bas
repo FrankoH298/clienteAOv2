@@ -1539,7 +1539,7 @@ Public Sub DirectXInit()
     
     With D3DWindow
         .Windowed = True
-        .SwapEffect = D3DSWAPEFFECT_COPY
+        .SwapEffect = D3DSWAPEFFECT_COPY_VSYNC
         .BackBufferFormat = DispMode.Format
         .BackBufferWidth = frmMain.MainViewPic.ScaleWidth
         .BackBufferHeight = frmMain.MainViewPic.ScaleHeight
