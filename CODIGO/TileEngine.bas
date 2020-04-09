@@ -1441,15 +1441,11 @@ DoFogataFx
 End Function
 
 Public Sub DesvanecerTecho()
-    Static lastDesvanecimiento As Long
-    If timeGetTime > lastDesvanecimiento Then
         If bTecho Then
-            If Alpha_Techo > 0 Then Alpha_Techo = Alpha_Techo - 1
+            If Alpha_Techo - 5 * (deltaTime) > 0 Then Alpha_Techo = Alpha_Techo - 5 * (deltaTime)
         Else
-            If Alpha_Techo < 255 Then Alpha_Techo = Alpha_Techo + 1
+            If Alpha_Techo + 5 * (deltaTime) < 255 Then Alpha_Techo = Alpha_Techo + 5 * (deltaTime)
         End If
-        lastDesvanecimiento = timeGetTime + 1
-    End If
 End Sub
 
 
@@ -1538,7 +1534,7 @@ Public Sub DirectXInit()
     Set DirectX = New DirectX8
     Set DirectD3D = DirectX.Direct3DCreate
     Set DirectD3D8 = New D3DX8
-    
+
     Call DirectD3D.GetAdapterDisplayMode(D3DADAPTER_DEFAULT, DispMode)
     
     With D3DWindow
@@ -1746,23 +1742,51 @@ Private Function GetElapsedTime() As Single
 'Last Modify Date: 10/07/2002
 'Gets the time that past since the last call
 '**************************************************************
-    Dim start_time As Currency
-    Static end_time As Currency
-    Static timer_freq As Currency
+    Dim Start_Time As Currency
+    Static End_Time As Currency
+    Static Timer_Freq As Currency
 
     'Get the timer frequency
-    If timer_freq = 0 Then
-        QueryPerformanceFrequency timer_freq
+    If Timer_Freq = 0 Then
+        QueryPerformanceFrequency Timer_Freq
     End If
     
     'Get current time
-    Call QueryPerformanceCounter(start_time)
+    Call QueryPerformanceCounter(Start_Time)
     
     'Calculate elapsed time
-    GetElapsedTime = (start_time - end_time) / timer_freq * 1000
+    GetElapsedTime = (Start_Time - End_Time) / Timer_Freq * 1000
     
     'Get next end time
-    Call QueryPerformanceCounter(end_time)
+    Call QueryPerformanceCounter(End_Time)
+End Function
+
+Public Function SetElapsedTime(ByVal Start As Boolean) As Single
+'**************************************************************
+'Author: Aaron Perkins
+'Last Modify Date: 23/05/2011 By MaTeO
+'Gets the time that past since the last call
+'[MaTeO] Agrego cambios a la funcion
+'**************************************************************
+    Dim Start_Time As Currency
+    Static End_Time As Currency
+    Static Timer_Freq As Currency
+    'Get the timer frequency
+    If Timer_Freq = 0 Then
+        QueryPerformanceFrequency Timer_Freq
+    End If
+    
+    'Get current time
+    Call QueryPerformanceCounter(Start_Time)
+    
+    If Not Start Then
+        'Calculate elapsed time
+        SetElapsedTime = (Start_Time - End_Time) / Timer_Freq * 1000
+    
+        'Get next end time
+    Else
+        Call QueryPerformanceCounter(End_Time)
+    End If
 End Function
 
 Private Sub CharRender(ByVal CharIndex As Long, ByVal PixelOffsetX As Integer, ByVal PixelOffsetY As Integer)

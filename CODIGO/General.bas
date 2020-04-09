@@ -750,7 +750,6 @@ Public Function CurServerPort() As Integer
 End Function
 
 Sub Main()
-
     Call WriteClientVer
     
     Call LeerConfiguracion
@@ -833,7 +832,7 @@ Sub Main()
     Audio.SoundActivated = ClientSetup.bSound
     Audio.SoundEffectsActivated = ClientSetup.bSoundEffects
     'Inicializamos el inventario gráfico
-    Call Inventario.Initialize(DirectD3D8, frmMain.picInv, MAX_INVENTORY_SLOTS)
+    Call Inventario.Initialize(DirectD3D8, frmMain.PicInv, MAX_INVENTORY_SLOTS)
     
     Call Audio.MusicMP3Play(App.path & "\MP3\" & MP3_Inicio & ".mp3")
     
@@ -887,6 +886,7 @@ Sub Main()
     Call Load(frmScreenshots)
         
     Do While prgRun
+        Call SetElapsedTime(True)
         'Sólo dibujamos si la ventana no está minimizada
         If frmMain.WindowState <> 1 And frmMain.Visible Then
             Call ShowNextFrame(frmMain.Top, frmMain.Left, frmMain.MouseX, frmMain.MouseY)
@@ -915,6 +915,7 @@ Sub Main()
             timerFlush = timeGetTime + 12
         End If
         DoEvents
+        deltaTime = (SetElapsedTime(False) * 0.1)
     Loop
     
     Call CloseClient

@@ -68,6 +68,8 @@ Public View As D3DMATRIX
 'Desvanecimientos
 Public Alpha_Techo As Byte
 
+Public deltaTime As Single
+
 Public CustomKeys As New clsCustomKeys
 Public CustomMessages As New clsCustomMessages
 Public Declare Function timeGetTime Lib "winmm.dll" () As Long
