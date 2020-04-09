@@ -107,29 +107,29 @@ On Error Resume Next
     Dim i As Long
     
     For i = 0 To 48 '49 y 50 reservados para ciudadano y criminal
-        ColoresPJ(i).r = CByte(Lector.GetValue(CStr(i), "R"))
-        ColoresPJ(i).g = CByte(Lector.GetValue(CStr(i), "G"))
-        ColoresPJ(i).b = CByte(Lector.GetValue(CStr(i), "B"))
-        ColoresPJ(i).l = D3DColorXRGB(ColoresPJ(i).r, ColoresPJ(i).g, ColoresPJ(i).b)
+        ColoresPJ(i).R = CByte(Lector.GetValue(CStr(i), "R"))
+        ColoresPJ(i).G = CByte(Lector.GetValue(CStr(i), "G"))
+        ColoresPJ(i).B = CByte(Lector.GetValue(CStr(i), "B"))
+        ColoresPJ(i).l = D3DColorXRGB(ColoresPJ(i).R, ColoresPJ(i).G, ColoresPJ(i).B)
     Next i
     
     ' Crimi
-    ColoresPJ(50).r = CByte(Lector.GetValue("CR", "R"))
-    ColoresPJ(50).g = CByte(Lector.GetValue("CR", "G"))
-    ColoresPJ(50).b = CByte(Lector.GetValue("CR", "B"))
-    ColoresPJ(50).l = D3DColorXRGB(ColoresPJ(50).r, ColoresPJ(50).g, ColoresPJ(50).b)
+    ColoresPJ(50).R = CByte(Lector.GetValue("CR", "R"))
+    ColoresPJ(50).G = CByte(Lector.GetValue("CR", "G"))
+    ColoresPJ(50).B = CByte(Lector.GetValue("CR", "B"))
+    ColoresPJ(50).l = D3DColorXRGB(ColoresPJ(50).R, ColoresPJ(50).G, ColoresPJ(50).B)
     
     ' Ciuda
-    ColoresPJ(49).r = CByte(Lector.GetValue("CI", "R"))
-    ColoresPJ(49).g = CByte(Lector.GetValue("CI", "G"))
-    ColoresPJ(49).b = CByte(Lector.GetValue("CI", "B"))
-    ColoresPJ(49).l = D3DColorXRGB(ColoresPJ(49).r, ColoresPJ(49).g, ColoresPJ(49).b)
+    ColoresPJ(49).R = CByte(Lector.GetValue("CI", "R"))
+    ColoresPJ(49).G = CByte(Lector.GetValue("CI", "G"))
+    ColoresPJ(49).B = CByte(Lector.GetValue("CI", "B"))
+    ColoresPJ(49).l = D3DColorXRGB(ColoresPJ(49).R, ColoresPJ(49).G, ColoresPJ(49).B)
     
     ' Atacable
-    ColoresPJ(48).r = CByte(Lector.GetValue("AT", "R"))
-    ColoresPJ(48).g = CByte(Lector.GetValue("AT", "G"))
-    ColoresPJ(48).b = CByte(Lector.GetValue("AT", "B"))
-    ColoresPJ(48).l = D3DColorXRGB(ColoresPJ(48).r, ColoresPJ(48).g, ColoresPJ(48).b)
+    ColoresPJ(48).R = CByte(Lector.GetValue("AT", "R"))
+    ColoresPJ(48).G = CByte(Lector.GetValue("AT", "G"))
+    ColoresPJ(48).B = CByte(Lector.GetValue("AT", "B"))
+    ColoresPJ(48).l = D3DColorXRGB(ColoresPJ(48).R, ColoresPJ(48).G, ColoresPJ(48).B)
     
 End Sub
 
@@ -581,8 +581,10 @@ Sub SwitchMap(ByVal Map As Integer)
       MapInfo.Music = vbNullString
    
       CurMap = Map
-      Call General_Particle_Create(1, 45, 45)
-      Call General_Particle_Create(1, 50, 45)
+      If Map = 1 Then
+        Call General_Particle_Create(1, 45, 45)
+        Call General_Particle_Create(1, 50, 45)
+      End If
 End Sub
 
 Function ReadField(ByVal Pos As Integer, ByRef Text As String, ByVal SepASCII As Byte) As String

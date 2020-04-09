@@ -33,8 +33,6 @@ Attribute VB_Name = "Carteles"
 
 Option Explicit
 
-Const XPosCartel = 360
-Const YPosCartel = 335
 Const MAXLONG = 40
 
 'Carteles
@@ -84,16 +82,20 @@ End Function
 
 
 Sub DibujarCartel()
-If Not Cartel Then Exit Sub
-Dim X As Integer, Y As Integer
-X = XPosCartel + 20
-Y = YPosCartel + 60
-Call Draw_GrhIndex(textura, XPosCartel, YPosCartel, 0, Normal_RGBList)
-Dim j As Integer, desp As Integer
+    If Not Cartel Then Exit Sub
+    Dim X As Integer, Y As Integer
+    X = (frmMain.MainViewPic.ScaleWidth - GrhData(textura).pixelWidth) / 2
+    Y = frmMain.MainViewPic.ScaleHeight / 2
 
-For j = 0 To UBound(LeyendaFormateada)
-    DrawText X, Y + desp, LeyendaFormateada(j), -1
-    desp = desp + (frmMain.Font.Size) + 5
-Next
+    Call Draw_GrhIndex(textura, X, Y - GrhData(textura).pixelHeight / 2, 0, Normal_RGBList)
+    Dim j As Integer, desp As Integer
+    
+    X = X + 30
+    Y = Y - (frmMain.Font.Size + 5) * (UBound(LeyendaFormateada) + 1) / 2
+    
+    For j = 0 To UBound(LeyendaFormateada)
+        DrawText X, Y + desp, LeyendaFormateada(j), -1
+        desp = desp + (frmMain.Font.Size) + 5
+    Next
 End Sub
 
