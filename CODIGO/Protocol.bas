@@ -160,6 +160,7 @@ Private Enum ServerPacketID
     CancelOfferItem
     CharParticleCreate
     DestCharParticle
+    CharMessageUpCreate
 End Enum
 
 Private Enum ClientPacketID
@@ -791,6 +792,9 @@ On Error Resume Next
         Case ServerPacketID.DestCharParticle
             Call HandleDestCharParticle
             
+        Case ServerPacketID.CharMessageUpCreate
+            Call HandleCharMessageUpCreate
+            
         Case Else
             'ERROR : Abort!
             Exit Sub
@@ -1248,7 +1252,7 @@ Private Sub HandleBankInit()
     BankGold = incomingData.ReadLong
     
     Call InvBanco(0).Initialize(DirectD3D8, frmBancoObj.PicBancoInv, MAX_BANCOINVENTORY_SLOTS)
-    Call InvBanco(1).Initialize(DirectD3D8, frmBancoObj.picInv, Inventario.MaxObjs)
+    Call InvBanco(1).Initialize(DirectD3D8, frmBancoObj.PicInv, Inventario.MaxObjs)
     
     For i = 1 To Inventario.MaxObjs
         With Inventario
@@ -1706,7 +1710,6 @@ Private Sub HandleUpdateGold()
         'Changes color
         frmMain.GldLbl.ForeColor = &HFFFF& 'Yellow
     End If
-    Call Mod_MessagesUp.createMessageUp(UserGLD - frmMain.GldLbl.Caption, 2, UserCharIndex)
     frmMain.GldLbl.Caption = UserGLD
 End Sub
 
@@ -2973,6 +2976,10 @@ Private Sub HandleRainToggle()
 End Sub
 
 Private Sub HandleCharParticle()
+    If incomingData.length < 5 Then
+        Err.Raise incomingData.NotEnoughDataErrCode
+        Exit Sub
+    End If
     'Remove packet ID
     Call incomingData.ReadByte
     
@@ -2988,6 +2995,11 @@ Private Sub HandleCharParticle()
 End Sub
 
 Private Sub HandleDestCharParticle()
+    If incomingData.length < 5 Then
+        Err.Raise incomingData.NotEnoughDataErrCode
+        Exit Sub
+    End If
+    
     'Remove packet ID
     Call incomingData.ReadByte
     
@@ -3000,6 +3012,37 @@ Private Sub HandleDestCharParticle()
     If Not Particula < 1 And Not Particula > TotalStreams Then
         Call Char_Particle_Group_Remove(CharIndex, Particula)
     End If
+End Sub
+Private Sub HandleCharMessageUpCreate()
+
+    If incomingData.length < 6 Then
+        Err.Raise incomingData.NotEnoughDataErrCode
+        Exit Sub
+    End If
+    
+On Error GoTo ErrHandler
+
+    'This packet contains strings, make a copy of the data to prevent losses if it's not complete yet...
+    Dim Buffer As New clsByteQueue
+    Call Buffer.CopyBuffer(incomingData)
+    
+    'Remove packet ID
+    Call Buffer.ReadByte
+    Call Mod_MessagesUp.createMessageUp(Buffer.ReadASCIIString, Buffer.ReadByte, Buffer.ReadInteger)
+    
+    
+    'If we got here then packet is complete, copy data back to original queue
+    Call incomingData.CopyBuffer(Buffer)
+    
+ErrHandler:
+    Dim error As Long
+    error = Err.number
+    On Error GoTo 0
+    
+    'Destroy auxiliar buffer
+    Set Buffer = Nothing
+
+    If error <> 0 Then Err.Raise error
 End Sub
 
 ''

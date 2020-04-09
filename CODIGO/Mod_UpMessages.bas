@@ -1,4 +1,11 @@
 Attribute VB_Name = "Mod_MessagesUp"
+'***************************************************************
+'Component        : Mod_MessagesUp
+'Author           : FrankoH298
+'Description      : Utilizado para renderizar mensajes que suben al pegar, agarrar oro, o al trabajar.
+'***************************************************************
+
+Option Explicit
 
 Public Type textUp
     
@@ -18,7 +25,15 @@ Private Enum TipoMsgUp
     Trabajo = 3
 End Enum
 
+Private Const delayTime As Long = 40
+
 Public Sub createMessageUp(ByVal Text As String, ByVal tipo As Byte, ByVal CharIndex As Integer)
+'***************************************************************
+'Author           : FrankoH298
+'Description      : Sirve para crear el mensaje.
+'Last Modification: 08/04/2020
+'***************************************************************
+
     With charlist(CharIndex).messageUp
         Select Case tipo
         
@@ -27,7 +42,7 @@ Public Sub createMessageUp(ByVal Text As String, ByVal tipo As Byte, ByVal CharI
                 .G = 0
                 .B = 0
                 .Alpha = 255
-                .startTickCount = timeGetTime + 20
+                .startTickCount = timeGetTime + delayTime
                 .Sube = 0
                 
             Case TipoMsgUp.Gold
@@ -35,7 +50,7 @@ Public Sub createMessageUp(ByVal Text As String, ByVal tipo As Byte, ByVal CharI
                 .G = 250
                 .B = 5
                 .Alpha = 255
-                .startTickCount = timeGetTime + 20
+                .startTickCount = timeGetTime + delayTime
                 .Sube = 0
     
             Case TipoMsgUp.Trabajo
@@ -43,7 +58,7 @@ Public Sub createMessageUp(ByVal Text As String, ByVal tipo As Byte, ByVal CharI
                 .G = 0
                 .B = 0
                 .Alpha = 255
-                .startTickCount = timeGetTime + 20
+                .startTickCount = timeGetTime + delayTime
                 .Sube = 0
             Case Else
                 
@@ -55,15 +70,20 @@ Public Sub createMessageUp(ByVal Text As String, ByVal tipo As Byte, ByVal CharI
 End Sub
 
 Public Sub renderMessageUp(ByVal CharIndex As Integer, ByVal PixelOffsetX As Integer, ByVal PixelOffsetY As Integer)
+'***************************************************************
+'Author           : FrankoH298
+'Description      : Metodo que renderiza el mensaje, le aumenta su posicion en eje Y, y le baja su alpha.
+'Last Modification: 08/04/2020
+'***************************************************************
 
     With charlist(CharIndex)
         If .messageUp.active = 1 Then
             Call DrawText(PixelOffsetX + 10, PixelOffsetY - 20 - .messageUp.Sube, .messageUp.Text, D3DColorARGB(.messageUp.Alpha, .messageUp.R, .messageUp.G, .messageUp.B))
             If .messageUp.Sube < 20 Then
                 If timeGetTime > .messageUp.startTickCount Then
-                    .messageUp.Alpha = .messageUp.Alpha - 12
+                    .messageUp.Alpha = .messageUp.Alpha - 6
                     .messageUp.Sube = .messageUp.Sube + 1
-                    .messageUp.startTickCount = timeGetTime + 20
+                    .messageUp.startTickCount = timeGetTime + delayTime
                 End If
             Else
                 .messageUp.active = 0
