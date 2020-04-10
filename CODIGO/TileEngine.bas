@@ -45,7 +45,7 @@ Private Declare Function GlobalAlloc Lib "kernel32" (ByVal uFlags As Long, ByVal
 Private Declare Function GlobalLock Lib "kernel32" (ByVal hMem As Long) As Long
 Private Declare Function GlobalUnlock Lib "kernel32" (ByVal hMem As Long) As Long
 Private Declare Function OleLoadPicture Lib "olepro32" (pStream As Any, ByVal lSize As Long, ByVal fRunmode As Long, riid As Any, ppvObj As Any) As Long
-Public Declare Sub CopyMemory Lib "kernel32.dll" Alias "RtlMoveMemory" (ByRef destination As Any, ByRef source As Any, ByVal length As Long)
+Public Declare Sub CopyMemory Lib "kernel32.dll" Alias "RtlMoveMemory" (ByRef Destination As Any, ByRef Source As Any, ByVal Length As Long)
 Private Declare Function SetBitmapBits Lib "gdi32" (ByVal hBitmap As Long, ByVal dwCount As Long, lpBits As Any) As Long
 
 
@@ -218,7 +218,7 @@ End Type
 'Info de cada mapa
 Public Type MapInfo
     Music As String
-    name As String
+    Name As String
     StartPos As WorldPos
     MapVersion As Integer
 End Type
@@ -846,14 +846,14 @@ Sub MoveScreen(ByVal nHeading As E_Heading)
 End Sub
 
 Private Function HayFogata(ByRef location As Position) As Boolean
-    Dim j As Long
+    Dim J As Long
     Dim k As Long
     
-    For j = UserPos.X - 8 To UserPos.X + 8
+    For J = UserPos.X - 8 To UserPos.X + 8
         For k = UserPos.Y - 6 To UserPos.Y + 6
-            If InMapBounds(j, k) Then
-                If MapData(j, k).ObjGrh.GrhIndex = GrhFogata Then
-                    location.X = j
+            If InMapBounds(J, k) Then
+                If MapData(J, k).ObjGrh.GrhIndex = GrhFogata Then
+                    location.X = J
                     location.Y = k
                     
                     HayFogata = True
@@ -861,7 +861,7 @@ Private Function HayFogata(ByRef location As Position) As Boolean
                 End If
             End If
         Next k
-    Next j
+    Next J
 End Function
 
 Function NextOpenChar() As Integer
@@ -1534,23 +1534,35 @@ Public Sub DirectXInit()
     Set DirectX = New DirectX8
     Set DirectD3D = DirectX.Direct3DCreate
     Set DirectD3D8 = New D3DX8
-
+    Dim vertexProcessing As CONST_D3DCREATEFLAGS
+    
     Call DirectD3D.GetAdapterDisplayMode(D3DADAPTER_DEFAULT, DispMode)
     
     With D3DWindow
         .Windowed = True
-        .SwapEffect = D3DSWAPEFFECT_COPY
+        .SwapEffect = IIf(ClientSetup.bVSync, D3DSWAPEFFECT_COPY_VSYNC, D3DSWAPEFFECT_COPY)
         .BackBufferFormat = DispMode.Format
         .BackBufferWidth = frmMain.MainViewPic.ScaleWidth
         .BackBufferHeight = frmMain.MainViewPic.ScaleHeight
         .hDeviceWindow = frmMain.MainViewPic.hWnd
     End With
-
+    
+    Select Case ClientSetup.bVertexProcessing
+        Case 0
+            vertexProcessing = D3DCREATE_SOFTWARE_VERTEXPROCESSING
+        Case 1
+            vertexProcessing = D3DCREATE_HARDWARE_VERTEXPROCESSING
+        Case 2
+            vertexProcessing = D3DCREATE_MIXED_VERTEXPROCESSING
+        Case Else
+            vertexProcessing = D3DCREATE_SOFTWARE_VERTEXPROCESSING
+    End Select
+    
     Set DirectDevice = DirectD3D.CreateDevice( _
-                        D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, _
-                        D3DWindow.hDeviceWindow, _
-                        D3DCREATE_MIXED_VERTEXPROCESSING, _
-                        D3DWindow)
+        D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, _
+        D3DWindow.hDeviceWindow, _
+        vertexProcessing, _
+        D3DWindow)
 
     'Seteamos la matriz de proyeccion.
     Call D3DXMatrixOrthoOffCenterLH(Projection, 0, D3DWindow.BackBufferWidth, D3DWindow.BackBufferHeight, 0, -1#, 1#)
@@ -1590,7 +1602,7 @@ Public Sub DirectXInit()
     End If
     
     If DirectDevice Is Nothing Then
-        MsgBox "No se puede inicializar DirectDevice. Por favor asegurese de tener la ultima version correctamente instalada."
+        MsgBox "No se puede inicializar DirectDevice. Intente desactivar el VSync y/o cambiar el VertexProccesing desde INIT/Config.ini"
         Exit Sub
     End If
 End Sub
@@ -1983,11 +1995,11 @@ Public Sub Device_Textured_Render(ByVal X As Single, ByVal Y As Single, _
     End With
         
 End Sub
-Public Sub ArrayToPicturePNG(ByRef byteArray() As Byte, ByRef imgDest As IPicture) ' GSZAO
-    Call SetBitmapBits(imgDest.handle, UBound(byteArray), byteArray(0))
+Public Sub ArrayToPicturePNG(ByRef ByteArray() As Byte, ByRef imgDest As IPicture) ' GSZAO
+    Call SetBitmapBits(imgDest.handle, UBound(ByteArray), ByteArray(0))
 End Sub
 
-Public Function ArrayToPicture(inArray() As Byte, offset As Long, Size As Long) As IPicture
+Public Function ArrayToPicture(inArray() As Byte, Offset As Long, Size As Long) As IPicture
     
     Dim o_hMem  As Long
     Dim o_lpMem  As Long
@@ -2003,7 +2015,7 @@ Public Function ArrayToPicture(inArray() As Byte, offset As Long, Size As Long) 
     If Not o_hMem = 0& Then
         o_lpMem = GlobalLock(o_hMem)
         If Not o_lpMem = 0& Then
-            CopyMemory ByVal o_lpMem, inArray(offset), Size
+            CopyMemory ByVal o_lpMem, inArray(Offset), Size
             Call GlobalUnlock(o_hMem)
             If CreateStreamOnHGlobal(o_hMem, 1&, IIStream) = 0& Then
                   Call OleLoadPicture(ByVal ObjPtr(IIStream), 0&, 0&, aGUID(0), ArrayToPicture)

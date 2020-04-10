@@ -2,9 +2,9 @@ Attribute VB_Name = "GameIni"
 Option Explicit
 
 Public Type tCabecera 'Cabecera de los con
-    Desc As String * 255
-    CRC As Long
-    MagicWord As Long
+    Desc        As String * 255
+    CRC         As Long
+    MagicWord   As Long
 End Type
 
 Public Enum ePath
@@ -17,21 +17,21 @@ Public Enum ePath
 End Enum
 
 Public Type tSetupMods
-    bDinamic    As Boolean
-    byMemory    As Byte
-    bUseVideo   As Boolean
-    bMusic    As Boolean
-    bSound    As Boolean
-    bNoRes      As Boolean ' 24/06/2006 - ^[GS]^
-    bSoundEffects As Boolean
-    bGuildNews  As Boolean ' 11/19/09
-    bDie        As Boolean ' 11/23/09 - FragShooter
-    bKill       As Boolean ' 11/23/09 - FragShooter
-    byMurderedLevel As Byte ' 11/23/09 - FragShooter
-    bActive     As Boolean
-    bGldMsgConsole As Boolean
-    bCantMsgs   As Byte
-    bNombres As Byte
+    byMemory            As Byte
+    bNoRes              As Boolean  ' 24/06/2006 - ^[GS]^
+    bVertexProcessing   As Byte
+    bVSync              As Boolean
+    bMusic              As Boolean
+    bSound              As Boolean
+    bSoundEffects       As Boolean
+    bGuildNews          As Boolean  ' 11/19/09
+    bDie                As Boolean  ' 11/23/09 - FragShooter
+    bKill               As Boolean  ' 11/23/09 - FragShooter
+    byMurderedLevel     As Byte     ' 11/23/09 - FragShooter
+    bActive             As Boolean
+    bGldMsgConsole      As Boolean
+    bCantMsgs           As Byte
+    bNombres            As Byte
 End Type
 
 Public ClientSetup As tSetupMods
@@ -88,6 +88,8 @@ Public Sub LeerConfiguracion()
         .bNoRes = CBool(Lector.GetValue("VIDEO", "DISABLE_RESOLUTION_CHANGE"))
         .bNombres = CByte(Lector.GetValue("VIDEO", "NOMBRES"))
         If .bNombres > 2 Or .bNombres < 0 Then .bNombres = 0
+        .bVSync = CBool(Lector.GetValue("VIDEO", "VSYNC"))
+        .bVertexProcessing = CByte(Lector.GetValue("VIDEO", "VERTEX_PROCESSING"))
         
         ' AUDIO
         .bMusic = CBool(Lector.GetValue("AUDIO", "MIDI"))
@@ -119,7 +121,9 @@ Public Sub GuardarConfiguracion()
         ' VIDEO
         Call Lector.ChangeValue("VIDEO", "DINAMIC_MEMORY", .byMemory)
         Call Lector.ChangeValue("VIDEO", "DISABLE_RESOLUTION_CHANGE", CInt(.bNoRes))
-        Call Lector.ChangeValue("VIDEO", "NOMBRES", CByte(.bNombres))
+        Call Lector.ChangeValue("VIDEO", "NOMBRES", .bNombres)
+        Call Lector.ChangeValue("VIDEO", "VSYNC", CInt(.bVSync))
+        Call Lector.ChangeValue("VIDEO", "VERTEX_PROCESSING", .bVertexProcessing)
         
         ' AUDIO
         Call Lector.ChangeValue("AUDIO", "MIDI", CInt(.bMusic))

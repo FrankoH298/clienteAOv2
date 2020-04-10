@@ -8,8 +8,6 @@ Codigo/*.log
 *.lvw
 *.OBJ
 INIT/Personajes.ini
-INIT/sinfo.dat
-INIT/Config.ini
 INIT/messages.txt
 Argentum.exe
 
