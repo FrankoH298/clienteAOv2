@@ -1,0 +1,22 @@
+Se reemplazaron los getTickCount por timeGetTime para mas precision
+Se creo una clase "clsArrayList" para poder movernos con mas libertad (Estilo IAO)
+Ahora se pueden agregar fuentes nuevas con gran facilidad.
+Se implemento un SpriteBatch
+Se removio el Inicio.con y AO.dat
+Se implemento clsIniManager y se reemplazo por todos los getVar
+Ahora la configuracion se carga desde Config.ini
+Se implementaron particulas ore y se las dejo totalmente funcional con el batch
+Ahora el inventario no borra al ser pisado por otra ventana
+Ahora las letras suben desde la cabeza
+Ahora hay 3 modos distintos para mostrar los nombres de los jugadores
+Ahora se utiliza un String de colores para poder utilizar alpha sin tener que calcularlo
+Se creo un modulo para poder renderizar mensajes encima de los char (Daño, Oro, Trabajo)
+Ahora los fantasmas son transparentes
+Ahora los techos tienen desvanecimiento
+Ahora se utiliza timerTicksPerFrame para todos los efectos de desvanecimiento
+Ahora los carteles se acomodan al tamaño de la ventana
+El frmMain se ajusto y ahora no aparecen bordes de mas
+Ahora se utiliza el "clsFormMovementManager" para el frmMain
+La eleccion del tipo de nombre se carga y guarda desde "Config.ini"
+Ahora al escribir las letras empiezan y terminan con un desvanecimiento
+Se arreglaron la posicion de los nombres de clanes, [CONSULTA] y se hicieron arreglos en los desvanecimientos
