@@ -22,6 +22,14 @@ Begin VB.Form frmConnect
    ScaleWidth      =   800
    StartUpPosition =   2  'CenterScreen
    Visible         =   0   'False
+   Begin VB.CheckBox chkRecordarPassword 
+      Caption         =   "Recordar Contraseña"
+      Height          =   285
+      Left            =   5160
+      TabIndex        =   6
+      Top             =   3435
+      Width           =   1935
+   End
    Begin VB.TextBox txtPasswd 
       BackColor       =   &H00000000&
       BorderStyle     =   0  'None
@@ -275,6 +283,7 @@ Private cBotonTeclas As clsGraphicalButton
 
 Public LastPressed As clsGraphicalButton
 
+
 Private Sub Form_Activate()
 'On Error Resume Next
 
@@ -336,7 +345,7 @@ Private Sub CheckLicenseAgreement()
     Dim i As Long
     
     For i = 0 To Me.Controls.Count - 1
-        If Me.Controls(i).name = "imgCodigoFuente" Then
+        If Me.Controls(i).Name = "imgCodigoFuente" Then
             Exit For
         End If
     Next i
@@ -459,6 +468,9 @@ Private Sub imgCodigoFuente_Click()
 End Sub
 
 Private Sub imgConectarse_Click()
+    
+    Call Mod_RecordarPassword.savePassword(frmConnect.txtNombre, frmConnect.txtPasswd, frmConnect.chkRecordarPassword)
+    
     Call CheckServers
 
 #If UsarWrench = 1 Then
@@ -475,11 +487,11 @@ Private Sub imgConectarse_Click()
 #End If
     
     'update user info
-    UserName = txtNombre.Text
+    userName = txtNombre.Text
     
     Dim aux As String
     aux = txtPasswd.Text
-    UserPassword = aux
+    userPassword = aux
     If CheckUserData(False) = True Then
         EstadoLogin = Normal
         
@@ -560,6 +572,10 @@ End Sub
 
 Private Sub imgVerForo_Click()
     Call ShellExecute(0, "Open", "http://www.alkon.com.ar/foro/argentum-online.53/", "", App.path, SW_SHOWNORMAL)
+End Sub
+
+Private Sub txtNombre_Change()
+    frmConnect.txtPasswd = Mod_RecordarPassword.loadPassword(frmConnect.txtNombre)
 End Sub
 
 Private Sub txtPasswd_KeyUp(KeyCode As Integer, Shift As Integer)

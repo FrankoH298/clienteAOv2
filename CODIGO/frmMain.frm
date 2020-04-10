@@ -264,7 +264,6 @@ Begin VB.Form frmMain
       _ExtentY        =   2619
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       DisableNoScroll =   -1  'True
@@ -2098,8 +2097,8 @@ End Sub
 Private Sub Socket1_Connect()
     
     'Clean input and output buffers
-    Call incomingData.ReadASCIIStringFixed(incomingData.length)
-    Call outgoingData.ReadASCIIStringFixed(outgoingData.length)
+    Call incomingData.ReadASCIIStringFixed(incomingData.Length)
+    Call outgoingData.ReadASCIIStringFixed(outgoingData.Length)
     
     Second.Enabled = True
 
@@ -2129,7 +2128,7 @@ Private Sub Socket1_Disconnect()
     Do While i < Forms.Count - 1
         i = i + 1
         
-        If Forms(i).name <> Me.name And Forms(i).name <> frmConnect.name And Forms(i).name <> frmCrearPersonaje.name Then
+        If Forms(i).Name <> Me.Name And Forms(i).Name <> frmConnect.Name And Forms(i).Name <> frmCrearPersonaje.Name Then
             Unload Forms(i)
         End If
     Loop
@@ -2263,7 +2262,7 @@ Private Sub Winsock1_Close()
     Do While i < Forms.Count - 1
         i = i + 1
         
-        If Forms(i).name <> Me.name And Forms(i).name <> frmConnect.name And Forms(i).name <> frmCrearPersonaje.name Then
+        If Forms(i).Name <> Me.Name And Forms(i).Name <> frmConnect.Name And Forms(i).Name <> frmCrearPersonaje.Name Then
             Unload Forms(i)
         End If
     Loop
@@ -2302,8 +2301,8 @@ Private Sub Winsock1_Connect()
     Debug.Print "Winsock Connect"
     
     'Clean input and output buffers
-    Call incomingData.ReadASCIIStringFixed(incomingData.length)
-    Call outgoingData.ReadASCIIStringFixed(outgoingData.length)
+    Call incomingData.ReadASCIIStringFixed(incomingData.Length)
+    Call outgoingData.ReadASCIIStringFixed(outgoingData.Length)
     
     Second.Enabled = True
     
@@ -2337,7 +2336,7 @@ Private Sub Winsock1_DataArrival(ByVal bytesTotal As Long)
     Call HandleIncomingData
 End Sub
 
-Private Sub Winsock1_Error(ByVal number As Integer, Description As String, ByVal Scode As Long, ByVal source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+Private Sub Winsock1_Error(ByVal number As Integer, Description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
     '*********************************************
     'Handle socket errors
     '*********************************************
