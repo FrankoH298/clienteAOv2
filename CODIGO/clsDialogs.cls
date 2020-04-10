@@ -334,9 +334,9 @@ Public Sub Render()
                 offset = -(usedFont.Size + 2) * UBound(.textLine())
                 
                 'Letras suben desde la cabeza.
+                If .Alpha + 80 * timerTicksPerFrame < 255 Then .Alpha = .Alpha + 80 * timerTicksPerFrame
                 If .Sube - 3 * timerTicksPerFrame > 0 Then
                     .Sube = .Sube - 3 * timerTicksPerFrame
-                    If .Alpha + 80 * timerTicksPerFrame < 255 Then .Alpha = .Alpha + 80 * timerTicksPerFrame
                 Else
                     If timeGetTime() >= .startTime - 500 Then
                         If .Alpha - 85 * timerTicksPerFrame > 0 Then .Alpha = .Alpha - 85 * timerTicksPerFrame

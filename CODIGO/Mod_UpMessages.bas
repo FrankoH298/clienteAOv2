@@ -77,8 +77,8 @@ Public Sub renderMessageUp(ByVal CharIndex As Integer, ByVal PixelOffsetX As Int
     With charlist(CharIndex)
         If .messageUp.active = 1 Then
             Call DrawText(PixelOffsetX + 10, PixelOffsetY - 20 - .messageUp.Sube, .messageUp.Text, D3DColorARGB(.messageUp.Alpha, .messageUp.R, .messageUp.G, .messageUp.B), , 2)
+            If .messageUp.Alpha - bajadaAlpha * timerTicksPerFrame > 0 Then .messageUp.Alpha = .messageUp.Alpha - bajadaAlpha * timerTicksPerFrame
             If .messageUp.Sube + subidaMessage * timerTicksPerFrame < 20 Then
-                If .messageUp.Alpha - bajadaAlpha * timerTicksPerFrame > 0 Then .messageUp.Alpha = .messageUp.Alpha - bajadaAlpha * timerTicksPerFrame
                 .messageUp.Sube = .messageUp.Sube + subidaMessage * timerTicksPerFrame
             Else
                 .messageUp.active = 0

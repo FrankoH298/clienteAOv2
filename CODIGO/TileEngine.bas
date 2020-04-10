@@ -1895,7 +1895,7 @@ Private Sub CharRender(ByVal CharIndex As Long, ByVal PixelOffsetX As Integer, B
                             
                             'Clan
                             line = mid$(.Nombre, Pos)
-                            Call DrawText(PixelOffsetX - (Len(line) * 6 / 2) + 28, PixelOffsetY + 45, line, Color)
+                            Call DrawText(PixelOffsetX - (Len(line) * 6 / 2) + 14, PixelOffsetY + 45, line, Color)
                             
                         End If
                     End If
