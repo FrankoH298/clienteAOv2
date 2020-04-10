@@ -20,3 +20,5 @@ Ahora se utiliza el "clsFormMovementManager" para el frmMain
 La eleccion del tipo de nombre se carga y guarda desde "Config.ini"
 Ahora al escribir las letras empiezan y terminan con un desvanecimiento
 Se arreglaron la posicion de los nombres de clanes, [CONSULTA] y se hicieron arreglos en los desvanecimientos
+Se agrego recordar contraseña con encriptado de nombre y contraseña
+Se removio todo lo referido a carga de servidores desde .dat y ahora la ip esta oculta

@@ -20,7 +20,7 @@ Begin VB.Form frmCrearPersonaje
       BackColor       =   &H00000000&
       Enabled         =   0   'False
       BeginProperty Font 
-         Name            =   "MS Sans Serif"
+         Name            =   "Arial"
          Size            =   8.25
          Charset         =   0
          Weight          =   700
@@ -43,7 +43,7 @@ Begin VB.Form frmCrearPersonaje
       BackColor       =   &H80000012&
       BorderStyle     =   0  'None
       BeginProperty Font 
-         Name            =   "MS Sans Serif"
+         Name            =   "Arial"
          Size            =   8.25
          Charset         =   0
          Weight          =   700
@@ -62,7 +62,7 @@ Begin VB.Form frmCrearPersonaje
       BackColor       =   &H80000012&
       BorderStyle     =   0  'None
       BeginProperty Font 
-         Name            =   "Courier"
+         Name            =   "Arial"
          Size            =   9.75
          Charset         =   0
          Weight          =   700
@@ -83,7 +83,7 @@ Begin VB.Form frmCrearPersonaje
       BackColor       =   &H80000012&
       BorderStyle     =   0  'None
       BeginProperty Font 
-         Name            =   "Courier"
+         Name            =   "Arial"
          Size            =   9.75
          Charset         =   0
          Weight          =   700
@@ -107,7 +107,7 @@ Begin VB.Form frmCrearPersonaje
    Begin VB.ComboBox lstProfesion 
       BackColor       =   &H00000000&
       BeginProperty Font 
-         Name            =   "MS Sans Serif"
+         Name            =   "Arial"
          Size            =   8.25
          Charset         =   0
          Weight          =   700
@@ -128,7 +128,7 @@ Begin VB.Form frmCrearPersonaje
    Begin VB.ComboBox lstGenero 
       BackColor       =   &H00000000&
       BeginProperty Font 
-         Name            =   "MS Sans Serif"
+         Name            =   "Arial"
          Size            =   8.25
          Charset         =   0
          Weight          =   700
@@ -149,7 +149,7 @@ Begin VB.Form frmCrearPersonaje
    Begin VB.ComboBox lstRaza 
       BackColor       =   &H00000000&
       BeginProperty Font 
-         Name            =   "MS Sans Serif"
+         Name            =   "Arial"
          Size            =   8.25
          Charset         =   0
          Weight          =   700
@@ -170,7 +170,7 @@ Begin VB.Form frmCrearPersonaje
    Begin VB.ComboBox lstHogar 
       BackColor       =   &H00000000&
       BeginProperty Font 
-         Name            =   "MS Sans Serif"
+         Name            =   "Arial"
          Size            =   8.25
          Charset         =   0
          Weight          =   700
@@ -192,7 +192,7 @@ Begin VB.Form frmCrearPersonaje
       BackColor       =   &H80000012&
       BorderStyle     =   0  'None
       BeginProperty Font 
-         Name            =   "MS Sans Serif"
+         Name            =   "Arial"
          Size            =   8.25
          Charset         =   0
          Weight          =   700
@@ -534,7 +534,7 @@ Begin VB.Form frmCrearPersonaje
    Begin VB.Label lblEspecialidad 
       BackStyle       =   0  'Transparent
       BeginProperty Font 
-         Name            =   "MS Sans Serif"
+         Name            =   "Arial"
          Size            =   8.25
          Charset         =   0
          Weight          =   700
@@ -593,7 +593,7 @@ Begin VB.Form frmCrearPersonaje
       BackStyle       =   0  'Transparent
       Caption         =   "18"
       BeginProperty Font 
-         Name            =   "MS Sans Serif"
+         Name            =   "Arial"
          Size            =   8.25
          Charset         =   0
          Weight          =   700
@@ -613,7 +613,7 @@ Begin VB.Form frmCrearPersonaje
       BackStyle       =   0  'Transparent
       Caption         =   "18"
       BeginProperty Font 
-         Name            =   "MS Sans Serif"
+         Name            =   "Arial"
          Size            =   8.25
          Charset         =   0
          Weight          =   700
@@ -633,7 +633,7 @@ Begin VB.Form frmCrearPersonaje
       BackStyle       =   0  'Transparent
       Caption         =   "18"
       BeginProperty Font 
-         Name            =   "MS Sans Serif"
+         Name            =   "Arial"
          Size            =   8.25
          Charset         =   0
          Weight          =   700
@@ -653,7 +653,7 @@ Begin VB.Form frmCrearPersonaje
       BackStyle       =   0  'Transparent
       Caption         =   "18"
       BeginProperty Font 
-         Name            =   "MS Sans Serif"
+         Name            =   "Arial"
          Size            =   8.25
          Charset         =   0
          Weight          =   700
@@ -673,7 +673,7 @@ Begin VB.Form frmCrearPersonaje
       BackStyle       =   0  'Transparent
       Caption         =   "18"
       BeginProperty Font 
-         Name            =   "MS Sans Serif"
+         Name            =   "Arial"
          Size            =   8.25
          Charset         =   0
          Weight          =   700
@@ -694,7 +694,7 @@ Begin VB.Form frmCrearPersonaje
       BackStyle       =   0  'Transparent
       Caption         =   "+0"
       BeginProperty Font 
-         Name            =   "MS Sans Serif"
+         Name            =   "Arial"
          Size            =   8.25
          Charset         =   0
          Weight          =   700
@@ -715,7 +715,7 @@ Begin VB.Form frmCrearPersonaje
       BackStyle       =   0  'Transparent
       Caption         =   "+0"
       BeginProperty Font 
-         Name            =   "MS Sans Serif"
+         Name            =   "Arial"
          Size            =   8.25
          Charset         =   0
          Weight          =   700
@@ -736,7 +736,7 @@ Begin VB.Form frmCrearPersonaje
       BackStyle       =   0  'Transparent
       Caption         =   "+0"
       BeginProperty Font 
-         Name            =   "MS Sans Serif"
+         Name            =   "Arial"
          Size            =   8.25
          Charset         =   0
          Weight          =   700
@@ -757,7 +757,7 @@ Begin VB.Form frmCrearPersonaje
       BackStyle       =   0  'Transparent
       Caption         =   "+0"
       BeginProperty Font 
-         Name            =   "MS Sans Serif"
+         Name            =   "Arial"
          Size            =   8.25
          Charset         =   0
          Weight          =   700
@@ -778,7 +778,7 @@ Begin VB.Form frmCrearPersonaje
       BackStyle       =   0  'Transparent
       Caption         =   "+0"
       BeginProperty Font 
-         Name            =   "MS Sans Serif"
+         Name            =   "Arial"
          Size            =   8.25
          Charset         =   0
          Weight          =   700
@@ -1046,7 +1046,7 @@ Begin VB.Form frmCrearPersonaje
       BackStyle       =   0  'Transparent
       Caption         =   "18"
       BeginProperty Font 
-         Name            =   "MS Sans Serif"
+         Name            =   "Arial"
          Size            =   8.25
          Charset         =   0
          Weight          =   700
@@ -1067,7 +1067,7 @@ Begin VB.Form frmCrearPersonaje
       BackStyle       =   0  'Transparent
       Caption         =   "18"
       BeginProperty Font 
-         Name            =   "MS Sans Serif"
+         Name            =   "Arial"
          Size            =   8.25
          Charset         =   0
          Weight          =   700
@@ -1088,7 +1088,7 @@ Begin VB.Form frmCrearPersonaje
       BackStyle       =   0  'Transparent
       Caption         =   "18"
       BeginProperty Font 
-         Name            =   "MS Sans Serif"
+         Name            =   "Arial"
          Size            =   8.25
          Charset         =   0
          Weight          =   700
@@ -1109,7 +1109,7 @@ Begin VB.Form frmCrearPersonaje
       BackStyle       =   0  'Transparent
       Caption         =   "18"
       BeginProperty Font 
-         Name            =   "MS Sans Serif"
+         Name            =   "Arial"
          Size            =   8.25
          Charset         =   0
          Weight          =   700
@@ -1130,7 +1130,7 @@ Begin VB.Form frmCrearPersonaje
       BackStyle       =   0  'Transparent
       Caption         =   "18"
       BeginProperty Font 
-         Name            =   "MS Sans Serif"
+         Name            =   "Arial"
          Size            =   8.25
          Charset         =   0
          Weight          =   700
@@ -1285,7 +1285,7 @@ Private currentGrh As Long
 Private Dir As E_Heading
 
 Private Sub Form_Load()
-    Me.Picture = LoadPicture(Path(Graficos) & "VentanaCrearPersonaje.jpg")
+    Me.Picture = LoadPicture(path(Graficos) & "VentanaCrearPersonaje.jpg")
     
     Cargando = True
     Call LoadCharInfo
@@ -1328,7 +1328,7 @@ End Sub
 Private Sub IniciarGraficos()
 
     Dim GrhPath As String
-    GrhPath = Path(Graficos)
+    GrhPath = path(Graficos)
     
     Set cBotonPasswd = New clsGraphicalButton
     Set cBotonTirarDados = New clsGraphicalButton
@@ -1600,10 +1600,10 @@ Private Sub imgCrear_Click()
     UserHogar = lstHogar.ListIndex + 1
     
     If Not CheckData Then Exit Sub
-    UserPassword = txtPasswd.Text
+    userPassword = txtPasswd.Text
     
-    For i = 1 To Len(UserPassword)
-        CharAscii = Asc(mid$(UserPassword, i, 1))
+    For i = 1 To Len(userPassword)
+        CharAscii = Asc(mid$(userPassword, i, 1))
         If Not LegalCharacter(CharAscii) Then
             MsgBox ("Password inválido. El caractér " & Chr$(CharAscii) & " no está permitido.")
             Exit Sub
@@ -1613,8 +1613,8 @@ Private Sub imgCrear_Click()
     UserEmail = txtMail.Text
     
 #If UsarWrench = 1 Then
-    frmMain.Socket1.HostName = CurServerIp
-    frmMain.Socket1.RemotePort = CurServerPort
+    frmMain.Socket1.HostName = IPdelServer
+    frmMain.Socket1.RemotePort = PORTdelServer
 #End If
     
     EstadoLogin = E_MODO.CrearNuevoPj
@@ -1983,7 +1983,7 @@ Private Sub DarCuerpoYCabeza()
     
     currentGrh = BodyData(UserBody).Walk(Dir).GrhIndex
     If currentGrh > 0 Then _
-        tAnimacion.Interval = Round(GrhData(currentGrh).Speed / GrhData(currentGrh).NumFrames)
+        tAnimacion.Interval = Round(GrhData(currentGrh).speed / GrhData(currentGrh).NumFrames)
 End Sub
 
 Private Function CheckCabeza(ByVal Head As Integer) As Integer
@@ -2107,7 +2107,7 @@ Private Function CheckDir(ByRef Dir As E_Heading) As E_Heading
     
     currentGrh = BodyData(UserBody).Walk(Dir).GrhIndex
     If currentGrh > 0 Then _
-        tAnimacion.Interval = Round(GrhData(currentGrh).Speed / GrhData(currentGrh).NumFrames)
+        tAnimacion.Interval = Round(GrhData(currentGrh).speed / GrhData(currentGrh).NumFrames)
 
 End Function
 
@@ -2278,7 +2278,7 @@ Private Sub LoadCharInfo()
     Dim i As Integer
     Dim Lector As clsIniManager
     Set Lector = New clsIniManager
-    Call Lector.Initialize(Path(INIT) & "CharInfo.dat")
+    Call Lector.Initialize(path(INIT) & "CharInfo.dat")
     
     NroRazas = UBound(ListaRazas())
     NroClases = UBound(ListaClases())

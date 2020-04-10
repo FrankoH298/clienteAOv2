@@ -109,27 +109,27 @@ On Error Resume Next
     For i = 0 To 48 '49 y 50 reservados para ciudadano y criminal
         ColoresPJ(i).R = CByte(Lector.GetValue(CStr(i), "R"))
         ColoresPJ(i).G = CByte(Lector.GetValue(CStr(i), "G"))
-        ColoresPJ(i).B = CByte(Lector.GetValue(CStr(i), "B"))
-        ColoresPJ(i).l = D3DColorXRGB(ColoresPJ(i).R, ColoresPJ(i).G, ColoresPJ(i).B)
+        ColoresPJ(i).b = CByte(Lector.GetValue(CStr(i), "B"))
+        ColoresPJ(i).l = D3DColorXRGB(ColoresPJ(i).R, ColoresPJ(i).G, ColoresPJ(i).b)
     Next i
     
     ' Crimi
     ColoresPJ(50).R = CByte(Lector.GetValue("CR", "R"))
     ColoresPJ(50).G = CByte(Lector.GetValue("CR", "G"))
-    ColoresPJ(50).B = CByte(Lector.GetValue("CR", "B"))
-    ColoresPJ(50).l = D3DColorXRGB(ColoresPJ(50).R, ColoresPJ(50).G, ColoresPJ(50).B)
+    ColoresPJ(50).b = CByte(Lector.GetValue("CR", "B"))
+    ColoresPJ(50).l = D3DColorXRGB(ColoresPJ(50).R, ColoresPJ(50).G, ColoresPJ(50).b)
     
     ' Ciuda
     ColoresPJ(49).R = CByte(Lector.GetValue("CI", "R"))
     ColoresPJ(49).G = CByte(Lector.GetValue("CI", "G"))
-    ColoresPJ(49).B = CByte(Lector.GetValue("CI", "B"))
-    ColoresPJ(49).l = D3DColorXRGB(ColoresPJ(49).R, ColoresPJ(49).G, ColoresPJ(49).B)
+    ColoresPJ(49).b = CByte(Lector.GetValue("CI", "B"))
+    ColoresPJ(49).l = D3DColorXRGB(ColoresPJ(49).R, ColoresPJ(49).G, ColoresPJ(49).b)
     
     ' Atacable
     ColoresPJ(48).R = CByte(Lector.GetValue("AT", "R"))
     ColoresPJ(48).G = CByte(Lector.GetValue("AT", "G"))
-    ColoresPJ(48).B = CByte(Lector.GetValue("AT", "B"))
-    ColoresPJ(48).l = D3DColorXRGB(ColoresPJ(48).R, ColoresPJ(48).G, ColoresPJ(48).B)
+    ColoresPJ(48).b = CByte(Lector.GetValue("AT", "B"))
+    ColoresPJ(48).l = D3DColorXRGB(ColoresPJ(48).R, ColoresPJ(48).G, ColoresPJ(48).b)
     
 End Sub
 
@@ -228,13 +228,13 @@ Function CheckUserData(ByVal checkemail As Boolean) As Boolean
         Exit Function
     End If
     
-    If UserPassword = "" Then
+    If userPassword = "" Then
         MsgBox ("Ingrese un password.")
         Exit Function
     End If
     
-    For loopc = 1 To Len(UserPassword)
-        CharAscii = Asc(mid$(UserPassword, loopc, 1))
+    For loopc = 1 To Len(userPassword)
+        CharAscii = Asc(mid$(userPassword, loopc, 1))
         If Not LegalCharacter(CharAscii) Then
             MsgBox ("Password inválido. El caractér " & Chr$(CharAscii) & " no está permitido.")
             Exit Function
@@ -577,7 +577,7 @@ Sub SwitchMap(ByVal Map As Integer)
      
       Set fileBuff = Nothing ' @@ Tanto te costaba Destruir el buff una ves que se termino de usar?
       
-      MapInfo.name = vbNullString
+      MapInfo.Name = vbNullString
       MapInfo.Music = vbNullString
    
       CurMap = Map
@@ -656,99 +656,6 @@ Sub WriteClientVer()
     Close #hFile
 End Sub
 
-Public Function IsIp(ByVal Ip As String) As Boolean
-    Dim i As Long
-    
-    For i = 1 To UBound(ServersLst)
-        If ServersLst(i).Ip = Ip Then
-            IsIp = True
-            Exit Function
-        End If
-    Next i
-End Function
-
-Public Sub CargarServidores()
-'********************************
-'Author: Unknown
-'Last Modification: 07/26/07
-'Last Modified by: Rapsodius
-'Added Instruction "CloseClient" before End so the mutex is cleared
-'********************************
-On Error GoTo errorH
-    Dim c As Integer
-    Dim i As Long
-    
-    c = Val(GetVar(path(INIT) & "sinfo.dat", "INIT", "Cant"))
-    
-    ReDim ServersLst(1 To c) As tServerInfo
-    For i = 1 To c
-        ServersLst(i).Desc = GetVar(path(INIT) & "sinfo.dat", "S" & i, "Desc")
-        ServersLst(i).Ip = Trim$(GetVar(path(INIT) & "sinfo.dat", "S" & i, "Ip"))
-        ServersLst(i).PassRecPort = CInt(GetVar(path(INIT) & "sinfo.dat", "S" & i, "P2"))
-        ServersLst(i).Puerto = CInt(GetVar(path(INIT) & "sinfo.dat", "S" & i, "PJ"))
-    Next i
-    CurServer = 1
-    
-Exit Sub
-
-errorH:
-    
-    Call MsgBox("Error cargando los servidores, actualicelos de la web", vbCritical + vbOKOnly, "Argentum Online")
-    
-    Call CloseClient
-End Sub
-
-Public Sub InitServersList()
-On Error Resume Next
-    Dim NumServers As Integer
-    Dim i As Integer
-    Dim Cont As Integer
-    
-    i = 1
-    
-    Do While (ReadField(i, RawServersList, Asc(";")) <> "")
-        i = i + 1
-        Cont = Cont + 1
-    Loop
-    
-    ReDim ServersLst(1 To Cont) As tServerInfo
-    
-    For i = 1 To Cont
-        Dim cur$
-        cur$ = ReadField(i, RawServersList, Asc(";"))
-        ServersLst(i).Ip = ReadField(1, cur$, Asc(":"))
-        ServersLst(i).Puerto = ReadField(2, cur$, Asc(":"))
-        ServersLst(i).Desc = ReadField(4, cur$, Asc(":"))
-        ServersLst(i).PassRecPort = ReadField(3, cur$, Asc(":"))
-    Next i
-    
-    CurServer = 1
-End Sub
-
-Public Function CurServerPasRecPort() As Integer
-    If CurServer <> 0 Then
-        CurServerPasRecPort = 7667
-    Else
-        CurServerPasRecPort = CInt(frmConnect.PortTxt)
-    End If
-End Function
-
-Public Function CurServerIp() As String
-    If CurServer <> 0 Then
-        CurServerIp = ServersLst(CurServer).Ip
-    Else
-        CurServerIp = frmConnect.IPTxt
-    End If
-End Function
-
-Public Function CurServerPort() As Integer
-    If CurServer <> 0 Then
-        CurServerPort = ServersLst(CurServer).Puerto
-    Else
-        CurServerPort = Val(frmConnect.PortTxt)
-    End If
-End Function
-
 Sub Main()
     Call WriteClientVer
     
@@ -782,10 +689,6 @@ Sub Main()
     
     frmConnect.version = "v" & App.Major & "." & App.Minor & " Build: " & App.Revision
     Call AddtoRichTextBox(frmCargando.status, "Buscando servidores... ", 255, 255, 255, True, False, True)
-
-    Call CargarServidores
-'TODO : esto de ServerRecibidos no se podría sacar???
-    ServersRecibidos = True
     
     Call AddtoRichTextBox(frmCargando.status, "Hecho", 255, 0, 0, True, False, False)
     Call AddtoRichTextBox(frmCargando.status, "Iniciando constantes... ", 255, 255, 255, True, False, True)
@@ -1168,10 +1071,10 @@ M = 255 / MAXATRIBUTOS
 getDexterityColor = RGB(255, M * UserAgilidad, 0)
 End Function
 
-Public Function getCharIndexByName(ByVal name As String) As Integer
+Public Function getCharIndexByName(ByVal Name As String) As Integer
 Dim i As Long
 For i = 1 To LastChar
-    If charlist(i).Nombre = name Then
+    If charlist(i).Nombre = Name Then
         getCharIndexByName = i
         Exit Function
     End If

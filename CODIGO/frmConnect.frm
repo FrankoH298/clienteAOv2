@@ -26,7 +26,7 @@ Begin VB.Form frmConnect
       Caption         =   "Recordar Contraseña"
       Height          =   285
       Left            =   5160
-      TabIndex        =   6
+      TabIndex        =   4
       Top             =   3435
       Width           =   1935
    End
@@ -70,54 +70,10 @@ Begin VB.Form frmConnect
       Top             =   3210
       Width           =   2460
    End
-   Begin VB.TextBox PortTxt 
-      Alignment       =   2  'Center
-      Appearance      =   0  'Flat
-      BackColor       =   &H00000000&
-      BorderStyle     =   0  'None
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      ForeColor       =   &H0000FF00&
-      Height          =   195
-      Left            =   4890
-      TabIndex        =   2
-      Text            =   "7666"
-      Top             =   2760
-      Width           =   825
-   End
-   Begin VB.TextBox IPTxt 
-      Alignment       =   2  'Center
-      Appearance      =   0  'Flat
-      BackColor       =   &H00000000&
-      BorderStyle     =   0  'None
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      ForeColor       =   &H0000FF00&
-      Height          =   195
-      Left            =   5760
-      TabIndex        =   4
-      Text            =   "localhost"
-      Top             =   2760
-      Width           =   1575
-   End
    Begin SHDocVwCtl.WebBrowser WebAuxiliar 
       Height          =   360
       Left            =   960
-      TabIndex        =   5
+      TabIndex        =   3
       Top             =   0
       Visible         =   0   'False
       Width           =   330
@@ -218,7 +174,7 @@ Begin VB.Form frmConnect
       ForeColor       =   &H000000FF&
       Height          =   195
       Left            =   240
-      TabIndex        =   3
+      TabIndex        =   2
       Top             =   240
       Width           =   555
    End
@@ -283,52 +239,14 @@ Private cBotonTeclas As clsGraphicalButton
 
 Public LastPressed As clsGraphicalButton
 
-
-Private Sub Form_Activate()
-'On Error Resume Next
-
-If ServersRecibidos Then
-    If CurServer <> 0 Then
-        IPTxt = ServersLst(1).Ip
-        PortTxt = ServersLst(1).Puerto
-    Else
-        IPTxt = IPdelServidor
-        PortTxt = PuertoDelServidor
-    End If
-End If
-End Sub
-
 Private Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
     If KeyCode = 27 Then
         prgRun = False
     End If
 End Sub
 
-Private Sub Form_KeyUp(KeyCode As Integer, Shift As Integer)
-
-'Make Server IP and Port box visible
-If KeyCode = vbKeyI And Shift = vbCtrlMask Then
-    
-    'Port
-    PortTxt.Visible = True
-    'Label4.Visible = True
-    
-    'Server IP
-    PortTxt.Text = "7666"
-    IPTxt.Text = "192.168.0.2"
-    IPTxt.Visible = True
-    'Label5.Visible = True
-    
-    KeyCode = 0
-    Exit Sub
-End If
-
-End Sub
-
 Private Sub Form_Load()
     EngineRun = False
-    
-    PortTxt.Text = "7666"
 
     version.Caption = "v" & App.Major & "." & App.Minor & " Build: " & App.Revision
     
@@ -420,26 +338,6 @@ Private Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, Y A
     LastPressed.ToggleToNormal
 End Sub
 
-Private Sub CheckServers()
-    If ServersRecibidos Then
-        If Not IsIp(IPTxt) And CurServer <> 0 Then
-            If MsgBox("Atencion, está intentando conectarse a un servidor no oficial, NoLand Studios no se hace responsable de los posibles problemas que estos servidores presenten. ¿Desea continuar?", vbYesNo) = vbNo Then
-                If CurServer <> 0 Then
-                    IPTxt = ServersLst(CurServer).Ip
-                    PortTxt = ServersLst(CurServer).Puerto
-                Else
-                    IPTxt = IPdelServidor
-                    PortTxt = PuertoDelServidor
-                End If
-                Exit Sub
-            End If
-        End If
-    End If
-    CurServer = 0
-    IPdelServidor = IPTxt
-    PuertoDelServidor = PortTxt
-End Sub
-
 Private Sub imgBorrarPj_Click()
 
 On Error GoTo errH
@@ -470,8 +368,6 @@ End Sub
 Private Sub imgConectarse_Click()
     
     Call Mod_RecordarPassword.savePassword(frmConnect.txtNombre, frmConnect.txtPasswd, frmConnect.chkRecordarPassword)
-    
-    Call CheckServers
 
 #If UsarWrench = 1 Then
     If frmMain.Socket1.Connected Then
@@ -487,7 +383,7 @@ Private Sub imgConectarse_Click()
 #End If
     
     'update user info
-    userName = txtNombre.Text
+    UserName = txtNombre.Text
     
     Dim aux As String
     aux = txtPasswd.Text
@@ -496,11 +392,11 @@ Private Sub imgConectarse_Click()
         EstadoLogin = Normal
         
 #If UsarWrench = 1 Then
-    frmMain.Socket1.HostName = CurServerIp
-    frmMain.Socket1.RemotePort = CurServerPort
+    frmMain.Socket1.HostName = IPdelServer
+    frmMain.Socket1.RemotePort = PORTdelServer
     frmMain.Socket1.Connect
 #Else
-    frmMain.Winsock1.Connect CurServerIp, CurServerPort
+    frmMain.Winsock1.Connect IPdelServer, PORTdelServer
 #End If
 
     End If
@@ -509,8 +405,6 @@ End Sub
 
 Private Sub imgCrearPj_Click()
     
-    Call CheckServers
-    
     EstadoLogin = E_MODO.Dados
 #If UsarWrench = 1 Then
     If frmMain.Socket1.Connected Then
@@ -518,15 +412,15 @@ Private Sub imgCrearPj_Click()
         frmMain.Socket1.Cleanup
         DoEvents
     End If
-    frmMain.Socket1.HostName = CurServerIp
-    frmMain.Socket1.RemotePort = CurServerPort
+    frmMain.Socket1.HostName = IPdelServer
+    frmMain.Socket1.RemotePort = PORTdelServer
     frmMain.Socket1.Connect
 #Else
     If frmMain.Winsock1.State <> sckClosed Then
         frmMain.Winsock1.Close
         DoEvents
     End If
-    frmMain.Winsock1.Connect CurServerIp, CurServerPort
+    frmMain.Winsock1.Connect IPdelServer, PORTdelServer
 #End If
 
 End Sub
@@ -555,12 +449,6 @@ End Sub
 
 Private Sub imgSalir_Click()
     prgRun = False
-End Sub
-
-Private Sub imgServArgentina_Click()
-    Call Audio.PlayWave(SND_CLICK)
-    IPTxt.Text = IPdelServidor
-    PortTxt.Text = PuertoDelServidor
 End Sub
 
 Private Sub imgTeclas_Click()

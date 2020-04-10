@@ -158,7 +158,7 @@ Public RawServersList As String
 Public Type tColor
     R As Byte
     G As Byte
-    B As Byte
+    b As Byte
     l As Long
 End Type
 
@@ -173,7 +173,6 @@ Public Type tServerInfo
 End Type
 
 Public ServersLst() As tServerInfo
-Public ServersRecibidos As Boolean
 
 Public CurServer As Integer
 
@@ -618,7 +617,7 @@ End Enum
 'Inventario
 Type Inventory
     OBJIndex As Integer
-    name As String
+    Name As String
     GrhIndex As Integer
     '[Alejo]: tipo de datos ahora es Long
     Amount As Long
@@ -634,7 +633,7 @@ End Type
 
 Type NpCinV
     OBJIndex As Integer
-    name As String
+    Name As String
     GrhIndex As Integer
     Amount As Integer
     Valor As Single
@@ -673,7 +672,7 @@ Type tEstadisticasUsu
 End Type
 
 Type tItemsConstruibles
-    name As String
+    Name As String
     OBJIndex As Integer
     GrhIndex As Integer
     LinH As Integer
@@ -694,7 +693,7 @@ Public UserHechizos(1 To MAXHECHI) As Integer
 Public NPCInventory(1 To MAX_NPC_INVENTORY_SLOTS) As NpCinV
 Public UserMeditar As Boolean
 Public UserName As String
-Public UserPassword As String
+Public userPassword As String
 Public UserMaxHP As Integer
 Public UserMinHP As Integer
 Public UserMaxMAN As Integer
@@ -848,8 +847,8 @@ Public UserMap As Integer
 'Control
 Public prgRun As Boolean 'When true the program ends
 
-Public IPdelServidor As String
-Public PuertoDelServidor As String
+Public Const IPdelServer As String = "127.0.0.1"
+Public Const PORTdelServer As Integer = 7666
 
 '
 '********** FUNCIONES API ***********
