@@ -245,7 +245,7 @@ Public Property Get ItemName(ByVal slot As Byte) As String
 'Last Modify Date: 27/07/04
 'Retrieves the selected item's name
 '***************************************************
-    ItemName = Inventory(slot).name
+    ItemName = Inventory(slot).Name
 End Property
 
 Public Property Get Equipped(ByVal slot As Byte) As Boolean
@@ -301,7 +301,7 @@ Public Sub SetItem(ByVal slot As Byte, ByVal eOBJIndex As Integer, ByVal eAmount
 'Sets all data for a given inventory slot
 '***************************************************
     If slot < 1 Or slot > UBound(Inventory) Then Exit Sub
-    
+
     With Inventory(slot)
         .Amount = eAmount
         .MaxDef = MaxDef
@@ -310,7 +310,7 @@ Public Sub SetItem(ByVal slot As Byte, ByVal eOBJIndex As Integer, ByVal eAmount
         .GrhIndex = eGrhIndex
         .MaxHit = eMaxHit
         .MinHit = eMinHit
-        .name = eName
+        .Name = eName
         .OBJIndex = eOBJIndex
         .OBJType = eObjType
         .Valor = eValor
@@ -354,7 +354,7 @@ Private Sub DrawInventory()
 'Last Modify Date: 27/07/04
 'Renders the inventory to the given PictureBox
 '***************************************************
-    Dim loopC As Long
+    Dim loopc As Long
     Dim TempRect As RECT
     
     With TempRect
@@ -364,33 +364,33 @@ Private Sub DrawInventory()
     
     'Clear the inventory window
         Call Engine_BeginScene
-        For loopC = InventoryOffset * (InventoryWindow.ScaleWidth \ ownTilePixelWidth) + 1 To UBound(Inventory)
+        For loopc = InventoryOffset * (InventoryWindow.ScaleWidth \ ownTilePixelWidth) + 1 To UBound(Inventory)
             
-            startdX = ((loopC - 1) Mod (frmMain.PicInv.Width / 32)) * 32
-            startdY = ((loopC - 1) \ (frmMain.PicInv.Width / 32)) * 32
+            startdX = ((loopc - 1) Mod (frmMain.PicInv.Width / 32)) * 32
+            startdY = ((loopc - 1) \ (frmMain.PicInv.Width / 32)) * 32
             
             Call Draw_GrhIndex(23979, startdX, startdY, 1, Normal_RGBList(255).RGBList)
             
-            If Inventory(loopC).GrhIndex Then
+            If Inventory(loopc).GrhIndex Then
                 
                 'Render a box around the selected item
-                If InvSelectedItem = loopC Then
+                If InvSelectedItem = loopc Then
                     If ImgContainer Then
                         Call Draw_GrhIndex(23980, startdX, startdY, 1, Normal_RGBList(255).RGBList)
                     End If
                 End If
-                Call Draw_GrhIndex(Inventory(loopC).GrhIndex, startdX, startdY, 1, Normal_RGBList(255).RGBList)
+                Call Draw_GrhIndex(Inventory(loopc).GrhIndex, startdX, startdY, 1, Normal_RGBList(255).RGBList)
                 'If equipped we render "E"
                 
-                If Inventory(loopC).Equipped Then
+                If Inventory(loopc).Equipped Then
                     DrawText startdX + 20, startdY + 18, "E", -256
                 End If
                 
                 'Render the item grh and the amount
-                DrawText startdX + 1, startdY, Inventory(loopC).Amount, -1
+                DrawText startdX + 1, startdY, Inventory(loopc).Amount, -1
                 
             End If
-        Next loopC
+        Next loopc
         
         InventoryWindow.AutoRedraw = False
 
@@ -454,7 +454,7 @@ Public Sub Initialize(ByRef DirectD3D As D3DX8, ByRef InvPic As PictureBox, ByVa
     Dim Font As New StdFont
     Dim Ifnt As IFont
     
-    Font.name = "Verdana"
+    Font.Name = "Verdana"
     Font.bold = True
     Font.italic = False
     Font.Size = FontSize
@@ -491,7 +491,7 @@ Private Sub InventoryWindow_MouseMove(Button As Integer, Shift As Integer, X As 
     TempItem = temp_x + (temp_y + InventoryOffset) * (InventoryWindow.ScaleWidth \ ownTilePixelWidth) + 1
     
     If TempItem <= UBound(Inventory) Then
-        InventoryWindow.ToolTipText = Inventory(TempItem).name
+        InventoryWindow.ToolTipText = Inventory(TempItem).Name
     End If
 End Sub
 
