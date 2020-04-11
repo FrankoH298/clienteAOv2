@@ -23,3 +23,4 @@ Se arreglaron la posicion de los nombres de clanes, [CONSULTA] y se hicieron arr
 Se agrego recordar contraseña con encriptado de nombre y contraseña
 Se removio todo lo referido a carga de servidores desde .dat y ahora la ip esta oculta
 Ahora se puede elegir si tener activado el VSync o no, y tambien el VERTEXPROCCESING
+Removidos paquetes de comercio innecesarios y optimizado el codigo
