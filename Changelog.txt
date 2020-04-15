@@ -24,3 +24,5 @@ Se agrego recordar contraseña con encriptado de nombre y contraseña
 Se removio todo lo referido a carga de servidores desde .dat y ahora la ip esta oculta
 Ahora se puede elegir si tener activado el VSync o no, y tambien el VERTEXPROCCESING
 Removidos paquetes de comercio innecesarios y optimizado el codigo
+Paquete del IncomingData ahora es casteado a Long
+Se arrego un error en el desvanecimiento de los techos

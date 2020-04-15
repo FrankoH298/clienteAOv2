@@ -465,7 +465,11 @@ Public Sub HandleIncomingData()
 '***************************************************
 On Error Resume Next
 
-    Select Case incomingData.PeekByte()
+    Dim Packet As Long
+    
+    Packet = CLng(incomingData.PeekByte())
+
+    Select Case Packet
         Case ServerPacketID.logged                  ' LOGGED
             Call HandleLogged
         

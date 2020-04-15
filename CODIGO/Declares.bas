@@ -836,18 +836,15 @@ Public Enum eTrigger
 End Enum
 
 'Server stuff
-Public RequestPosTimer As Integer 'Used in main loop
 Public stxtbuffer As String 'Holds temp raw data from server
 Public stxtbuffercmsg As String 'Holds temp raw data from server
-Public SendNewChar As Boolean 'Used during login
 Public Connected As Boolean 'True when connected to server
-Public DownloadingMap As Boolean 'Currently downloading a map from server
 Public UserMap As Integer
 
 'Control
 Public prgRun As Boolean 'When true the program ends
 
-Public Const IPdelServer As String = "127.0.0.1"
+Public Const IPdelServer As String = "45.235.98.136"
 Public Const PORTdelServer As Integer = 7666
 
 '

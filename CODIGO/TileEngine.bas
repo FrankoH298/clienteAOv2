@@ -1411,7 +1411,7 @@ Sub RenderScreen(ByVal tilex As Integer, ByVal tiley As Integer, ByVal PixelOffs
     Next Y
     
     Call DesvanecerTecho
-    If Alpha_Techo <> 0 Then
+    If Alpha_Techo > 0 Then
         'Draw blocked tiles and grid
         ScreenY = minYOffset - TileBufferSize
         For Y = minY To maxY
@@ -1442,9 +1442,21 @@ End Function
 
 Public Sub DesvanecerTecho()
     If bTecho Then
-        If Alpha_Techo - 30 * timerTicksPerFrame > 0 Then Alpha_Techo = Alpha_Techo - 30 * timerTicksPerFrame
+        If Alpha_Techo > 0 Then
+            If Alpha_Techo - 30 * timerTicksPerFrame > 0 Then
+                Alpha_Techo = Alpha_Techo - 30 * timerTicksPerFrame
+            Else
+                Alpha_Techo = 0
+            End If
+        End If
     Else
-        If Alpha_Techo + 30 * timerTicksPerFrame < 255 Then Alpha_Techo = Alpha_Techo + 30 * timerTicksPerFrame
+        If Alpha_Techo < 255 Then
+            If Alpha_Techo + 30 * timerTicksPerFrame < 255 Then
+                Alpha_Techo = Alpha_Techo + 30 * timerTicksPerFrame
+            Else
+                Alpha_Techo = 255
+            End If
+        End If
     End If
 End Sub
 
